@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yVmPMjws/WUo6d9W7S49BGCQx1cDargSn1+eVAsz9GE=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-D4E6WzlkYdsqMyiBt9e4Ut5CFEHqyW3cGAXA1GpPal0=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25">
 <link rel="manifest" href="manifest.webmanifest">
@@ -2478,41 +2478,50 @@ function consentPillHTML(c){
   const s = consentState(c);
   return s === 'given' ? '' : s === 'withdrawn' ? ' <span class="pill bad">Consent withdrawn</span>' : ' <span class="pill warn">No consent recorded</span>';
 }
-function consentPanelHTML(c, cid){
+/* Consent is recorded on the Edit Client page and is required before changes there can be saved. */
+function consentSummaryHTML(c){
   const k = c.consent || {}, s = consentState(c);
-  const methods = { verbal:'Verbal', written:'Written', signed:'Signed form', digital:'Digital (message or email)' };
-  const text = s === 'given' ? `Consent recorded on <strong>${esc(k.date)}</strong> (${esc(methods[k.method] || k.method || 'method not noted')}). ${k.outsideKenya ? 'They agreed that synced copies may be stored outside Kenya.' : 'They did <strong>not</strong> agree to storage outside Kenya, so do not sync their data.'}${k.note ? '<br><span class="muted">' + esc(k.note) + '</span>' : ''}`
-    : s === 'withdrawn' ? `Consent was withdrawn on <strong>${esc(k.withdrawnAt)}</strong>. Stop recording new data about them; archive or delete them (below).`
+  const text = s === 'given' ? `Recorded on <strong>${esc(k.date)}</strong>. ${k.outsideKenya ? 'They agreed that synced copies may be stored outside Kenya.' : 'Not agreed to storage outside Kenya, so their data stays on this device.'}`
+    : s === 'withdrawn' ? `Withdrawn on <strong>${esc(k.withdrawnAt)}</strong>. Stop recording new data about them; archive or delete them.`
+    : 'Not recorded yet. Open Edit Client to record it.';
+  return `<div class="dash-row"><span class="dash-label">Consent</span><span class="dash-value small">${text}</span></div>`;
+}
+function consentFieldsHTML(c, cid){
+  const k = c.consent || {}, s = consentState(c), given = s === 'given';
+  const intro = given ? `Consent recorded on <strong>${esc(k.date)}</strong>. Update the details below if they changed.`
+    : s === 'withdrawn' ? `Consent was withdrawn on <strong>${esc(k.withdrawnAt)}</strong>. To keep recording data about this client, record their consent again.`
     : 'No consent has been recorded for this client yet. Record it once you have explained what is stored and why.';
-  return `<div class="panel" id="consentPanel"><h3>Consent and privacy</h3>
-    <p class="small">${text}</p>${syncNoteHTML(c)}
-    <div class="row tight">
-      ${s === 'given' ? `<button type="button" class="btn ghost sm" data-consent="record" data-cid="${esc(cid)}">Update consent</button><button type="button" class="btn ghost sm" data-consent="withdraw" data-cid="${esc(cid)}">Withdraw consent</button>` : `<button type="button" class="btn primary sm" data-consent="record" data-cid="${esc(cid)}">Record consent</button>`}
-      <button type="button" class="btn ghost sm" data-privacy-notice="1">Privacy notice</button>
-    </div></div>`;
+  return `<div class="stack" id="consentPanel" style="border-top:1px solid var(--line);padding-top:.9rem">
+    <h3>Consent and privacy <span class="pill ${given ? 'ok' : 'warn'}">${given ? 'Recorded' : 'Required to save'}</span></h3>
+    <p class="small">${intro}</p>${syncNoteHTML(c)}
+    <div class="inline-fields">
+      <label class="field"><span>Date given</span><input type="date" id="cs_date" value="${esc(k.date || todayISO())}"></label>
+      <label class="field"><span>How was it given?</span><select id="cs_method">${[['verbal','Verbal'],['written','Written'],['signed','Signed form'],['digital','Digital (message or email)']].map(([v, l]) => `<option value="${v}" ${k.method === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+    </div>
+    <label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="cs_explained" style="width:auto;margin-top:.2rem" ${given && k.explained ? 'checked' : ''}><span style="flex:1;min-width:0"><strong>Required.</strong> I explained what is stored (contact details, goal, health notes, attendance, training records), why, how long it is kept, and their rights (see, correct, export, delete, withdraw), and they agreed.</span></label>
+    <label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="cs_outside" style="width:auto;margin-top:.2rem" ${given && k.outsideKenya ? 'checked' : ''}><span style="flex:1;min-width:0">They agree that copies kept in my online account may be stored outside Kenya, in ${esc(dataRegion())}. Leave this unticked to keep this client's data on this device only (it will not sync to your other devices).</span></label>
+    <label class="field"><span>Note (optional)</span><input type="text" id="cs_note" value="${esc(k.note || '')}"></label>
+    <div class="row tight"><button type="button" class="btn ghost sm" data-privacy-notice="1">View privacy notice</button>${given ? `<button type="button" class="btn ghost sm" data-consent="withdraw" data-cid="${esc(cid)}">Withdraw consent</button>` : ''}</div></div>`;
 }
-function consentDialog(cid){
-  const c = S.clients[cid], k = c.consent || {};
-  dialog('Consent: ' + c.name,
-    `<label class="field"><span>Date given</span><input type="date" id="cs_date" value="${esc(k.date || todayISO())}"></label>
-     <label class="field"><span>How was it given?</span><select id="cs_method">${[['verbal','Verbal'],['written','Written'],['signed','Signed form'],['digital','Digital (message or email)']].map(([v, l]) => `<option value="${v}" ${k.method === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
-     <label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="cs_explained" style="width:auto;margin-top:.2rem" ${k.explained ? 'checked' : ''}> I explained what is stored (contact details, goal, health notes, attendance, training records), why, how long it is kept, and their rights (see, correct, export, delete, withdraw).</label>
-     <label class="row tight small" style="gap:.4rem;align-items:flex-start;margin-top:.5rem"><input type="checkbox" id="cs_outside" style="width:auto;margin-top:.2rem" ${k.outsideKenya ? 'checked' : ''}> They agree that copies kept in my online account may be stored outside Kenya, in ${esc(dataRegion())}.</label>
-     <label class="field" style="margin-top:.5rem"><span>Note (optional)</span><input type="text" id="cs_note" value="${esc(k.note || '')}"></label>`,
-    [{label:'Cancel'},{label:'Save consent', kind:'primary', onClick: async () => {
-      if (!document.getElementById('cs_explained').checked){ toast('Tick that you explained what is stored and their rights'); return false; }
-      const consent = { given:true, date:val('cs_date') || todayISO(), method:val('cs_method'), explained:true, outsideKenya:document.getElementById('cs_outside').checked, note:val('cs_note'), recordedAt:new Date().toISOString() };
-      const next = { ...S.clients[cid], consent };
-      try { await Store.put('clients', cid, next); } catch(e){ showSaveError(e); return false; }
-      S.clients[cid] = next; toast('Consent saved'); render({ keepScroll:true });
-    }}]);
+/* Reads the consent fields on the Edit Client page. Returns the consent record to save, or null (with a message) when
+   consent has not been confirmed. Not shown to assistants, who keep what the coach recorded. */
+function readConsentFields(c){
+  const ex = document.getElementById('cs_explained');
+  if (!ex) return c.consent;
+  if (!ex.checked){ toast('Consent is required before you can save: tick that you explained what is stored and their rights'); try { ex.scrollIntoView({ block:'center' }); ex.focus(); } catch {} return null; }
+  const old = c.consent || {}, was = consentState(c) === 'given';
+  const next = { given:true, date:val('cs_date') || todayISO(), method:val('cs_method'), explained:true, outsideKenya:document.getElementById('cs_outside').checked, note:val('cs_note') };
+  const same = was && old.date === next.date && old.method === next.method && !!old.outsideKenya === next.outsideKenya && (old.note || '') === next.note;
+  return same ? old : { ...next, recordedAt:new Date().toISOString() };
 }
-async function withdrawConsent(cid){
-  const c = S.clients[cid], next = { ...c, consent:{ ...(c.consent || {}), given:false, withdrawnAt:todayISO() } };
-  try { await Store.put('clients', cid, next); } catch(e){ showSaveError(e); return; }
-  S.clients[cid] = next; toast('Consent withdrawn'); render({ keepScroll:true });
+function withdrawConsent(cid){
+  const c = S.clients[cid]; if (!c) return;
+  dialog('Withdraw consent?', `<p>${esc(c.name)} no longer agrees to their data being kept. Their data stays here until you archive or delete them, and it stops syncing to your account (the online copy is removed).</p><p class="small muted">Unsaved changes on this page are lost.</p>`, [{label:'Cancel'}, {label:'Withdraw consent', kind:'danger', onClick: async () => {
+    const cur = S.clients[cid], next = { ...cur, consent:{ ...(cur.consent || {}), given:false, withdrawnAt:todayISO() } };
+    try { await Store.put('clients', cid, next); } catch(e){ showSaveError(e); return false; }
+    S.clients[cid] = next; toast('Consent withdrawn'); render({ keepScroll:true });
+  }}]);
 }
-
 /* ---- right of access: everything held about one client, as a file they can keep ---- */
 function clientDataBundle(cid){
   const c = S.clients[cid];
@@ -2654,7 +2663,7 @@ function privacyPanelHTML(){
 }
 function wirePrivacy(m){
   m.querySelectorAll('[data-privacy-notice]').forEach(b => b.onclick = privacyNoticeDialog);
-  m.querySelectorAll('[data-consent]').forEach(b => b.onclick = () => { if (b.dataset.consent === 'withdraw') withdrawConsent(b.dataset.cid); else consentDialog(b.dataset.cid); });
+  m.querySelectorAll('[data-consent]').forEach(b => b.onclick = () => withdrawConsent(b.dataset.cid));
   m.querySelectorAll('[data-dlmydata]').forEach(b => b.onclick = () => downloadClientData(b.dataset.dlmydata));
   const save = document.getElementById('pvSave');
   if (save) save.onclick = async () => {
@@ -4859,10 +4868,10 @@ function clientDashboard(cid){
     ${c.packTotal ? `<div class="dash-row"><span class="dash-label">Sessions</span><span class="dash-value num">${esc(packUsedOf(c, cid))} / ${esc(c.packTotal)}</span></div>` : ''}
     <div class="dash-row"><span class="dash-label">Attendance</span><span class="dash-value num">${pct == null ? '—' : pct + '%'}${missedUnmarked ? `<span class="small muted"> · ${missedUnmarked} unmarked counted as missed</span>` : ''}</span></div>
     <div class="dash-row"><span class="dash-label">Last session</span><span class="dash-value">${lastSession ? esc(lastSession.date) : 'No sessions yet'}</span></div>
+    ${Sync.role === 'assistant' ? '' : consentSummaryHTML(c)}
+    ${syncNoteHTML(c)}
   </div>
   ${String(c.notes||'').trim() ? `<div class="panel client-notes-panel"><h3>Notes — injuries, preferences</h3><p>${esc(c.notes).replace(/\n/g,'<br>')}</p></div>` : ''}
-
-  ${consentPanelHTML(c, cid)}
 
   <div class="panel">
     <h3>Quick actions</h3>
@@ -4950,6 +4959,7 @@ function clientEditPanel(cid){
       <button class="btn sm ghost" data-renew="${esc(cid)}">Renew pack</button>
     </div>
     <label class="field"><span>Notes — injuries, preferences, anything you need on the floor</span><textarea id="c_notes">${esc(c.notes||'')}</textarea></label>
+    ${Sync.role === 'assistant' ? '' : consentFieldsHTML(c, cid)}
     <div class="row"><button class="btn primary" id="saveClient">Save changes</button>
       ${c.status === 'archived' ? `<button class="btn ghost" data-restoreclient="${esc(cid)}">Restore to active</button>` : `<button class="btn ghost" data-archiveclient="${esc(cid)}">Archive client</button>`}
       <button class="btn danger" data-delclient="${esc(cid)}">Delete permanently…</button></div>
@@ -6907,7 +6917,8 @@ function wire(){
     if (chosenGroup && chosenGroup !== c.groupId && groupMembers(chosenGroup).filter(m => m.id !== cid).length >= 2){
       toast('That pairing already has 2 clients — remove one first'); return;
     }
-    const next = { ...c,
+    const consent = readConsentFields(c); if (consent === null) return;   // consent is required before saving changes
+    const next = { ...c, ...(consent ? { consent } : {}),
       name: val('c_name') || c.name, phone: val('c_phone'), email: val('c_email'), goal: val('c_goal'),
       groupId: val('c_group'), programId: val('c_program'), currentWeek: numVal('c_week') || 1,
       recurDow, recurTime: timeFieldVal('c_recurtime'),
