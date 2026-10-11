@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-VyaPgMh2rN40PDfzfml/yf5cyyzB+FbT8KnKdgy8HHg=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-JCpiiSbAqMoCyC/8b2E03PNaxY/LLGpWOnz1naRyI2A=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25">
 <link rel="manifest" href="manifest.webmanifest">
@@ -2706,8 +2706,9 @@ Object.assign(Sync, {
     let done = false;
     if (this.keySupport !== false){
       try {
-        await this.api('/rest/v1/rpc/register_device', { method:'POST', body:{ p_device:this.deviceId, p_name:deviceLabel(), p_hash:await sha256Hex(this.deviceSecret) } });
+        const r = await this.api('/rest/v1/rpc/register_device', { method:'POST', body:{ p_device:this.deviceId, p_name:deviceLabel(), p_hash:await sha256Hex(this.deviceSecret) } });
         this.keySupport = true; done = true;
+        if (r === 'registered') Audit.log('device-register');   // so a device you did not add shows up in Recent activity
       } catch(e){ if (e.status === 404 || (e.data && e.data.code === 'PGRST202')) this.keySupport = false; else throw e; }
     }
     if (!done) await this.api('/rest/v1/device?on_conflict=coach_id,device_id', { method:'POST', headers:{ Prefer:'resolution=ignore-duplicates,return=minimal' }, body:{ device_id:this.deviceId, name:deviceLabel() } });   // server without device keys
@@ -2743,6 +2744,12 @@ Object.assign(Sync, {
       } catch(e){ if (e.status === 404 || (e.data && e.data.code === 'PGRST202')) this.keySupport = false; }
     }
     if (this.deviceStatus === 'approved' && this.keySupport) await this.bindDeviceKey();
+    // Does this account ask for approval of new devices? (undefined = the server has no such switch yet)
+    if (this.deviceStatus === 'approved' && this.keySupport && (forceLast || Date.now() - (this.settingAt || 0) > 10 * 60 * 1000)){
+      this.settingAt = Date.now();
+      try { const r = await this.api('/rest/v1/account_setting?select=require_device_approval'); this.requireApproval = !!(r && r[0] && r[0].require_device_approval); }
+      catch(e){ if (e.status === 404 || (e.data && e.data.code === 'PGRST205')) this.requireApproval = undefined; }
+    }
     if (this.deviceStatus === 'approved' && (forceLast || Date.now() - this.lastSeenAt > 10 * 60 * 1000)){
       this.lastSeenAt = Date.now();
       this.api('/rest/v1/device?device_id=eq.' + encodeURIComponent(this.deviceId), { method:'PATCH', headers:{ Prefer:'return=minimal' }, body:{ last_seen:new Date().toISOString() } }).catch(() => {});
@@ -2793,7 +2800,7 @@ const Audit = {
     return (((await Store.getMeta('auditLocal', null)) || { list:[] }).list).slice(-30).reverse();
   }
 };
-const AUDIT_TEXT = { 'lock-set':'Set or changed the app PIN', 'lock-off':'Turned off the app lock', 'invite-create':'Created an assistant invitation', 'assistant-accept':'Accepted an invitation', 'assistant-remove':'Removed an assistant', 'assistant-clients':'Changed an assistant\'s clients', 'sign-in':'Signed in', 'sign-out':'Signed out', export:'Exported data', import:'Imported a backup', 'delete-client':'Deleted a client', 'delete-all':'Deleted all data', restore:'Restored a snapshot', 'device-approve':'Approved a device', 'device-revoke':'Removed a device' };
+const AUDIT_TEXT = { 'lock-set':'Set or changed the app PIN', 'lock-off':'Turned off the app lock', 'invite-create':'Created an assistant invitation', 'assistant-accept':'Accepted an invitation', 'assistant-remove':'Removed an assistant', 'assistant-clients':'Changed an assistant\'s clients', 'sign-in':'Signed in', 'sign-out':'Signed out', export:'Exported data', import:'Imported a backup', 'delete-client':'Deleted a client', 'delete-all':'Deleted all data', restore:'Restored a snapshot', 'device-approve':'Approved a device', 'device-revoke':'Removed a device', 'device-register':'Added a new device', 'device-approval-on':'Turned on approval for new devices', 'device-approval-off':'Turned off approval for new devices' };
 function auditLineText(e){
   const d = e.detail || {}, extra = d.kind ? ' (' + d.kind + ')' : d.records != null ? ' (' + d.records + ' records)' : '';
   return (AUDIT_TEXT[e.action] || e.action) + extra;
@@ -2809,7 +2816,8 @@ function devicesPanelHTML(){
     ${list.map(d => `<div class="spread"><span class="small"><strong>${esc(d.name)}</strong>${d.device_id === mine ? ' · this device' : ''} ${status(d)}<br><span class="muted">Last seen ${d.last_seen ? esc(new Date(d.last_seen).toLocaleString()) : '—'}</span></span>
       <span class="row tight">${canManage && !d.approved_at && !d.revoked_at ? `<button type="button" class="btn sm primary" data-device-approve="${esc(d.device_id)}">Approve</button>` : ''}${canManage && !d.revoked_at ? `<button type="button" class="btn sm danger" data-device-revoke="${esc(d.device_id)}">Remove</button>` : ''}</span></div>`).join('') || '<p class="small muted">No devices listed yet.</p>'}
     <div class="row"><button type="button" class="btn ghost sm" id="signOutAll">Sign out everywhere</button><button type="button" class="btn danger sm" id="deleteAccount">Delete my account and online copy</button></div>
-    <p class="small muted">If you lose a device: remove it here from another one, then change your password. New devices must be approved from an approved device.</p></div>`;
+    ${canManage && Sync.role !== 'assistant' && Sync.requireApproval !== undefined ? `<label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="requireApproval" ${Sync.requireApproval ? 'checked' : ''} style="width:auto;margin-top:.2rem"> Ask me to approve each new device. Safer: someone who learns your password cannot add a device on their own. When this is off, any device that signs in to your account is trusted straight away.</label>` : ''}
+    <p class="small muted">If you lose a device: remove it here from another one, then change your password and use "Sign out everywhere".${Sync.requireApproval ? ' New devices must be approved from an approved device.' : ''}</p></div>`;
 }
 function activityPanelHTML(){
   const rows = S.activity || [];
@@ -2822,6 +2830,14 @@ async function refreshActivity(){
   const el = document.getElementById('activityPanel'); if (el){ const tmp = document.createElement('div'); tmp.innerHTML = activityPanelHTML(); el.replaceWith(tmp.firstElementChild); }
 }
 function wireDevices(m){
+  const ra = document.getElementById('requireApproval');
+  if (ra) ra.onchange = async () => {
+    try {
+      await Sync.api('/rest/v1/rpc/set_device_approval_required', { method:'POST', body:{ p:ra.checked } });
+      Sync.requireApproval = ra.checked; Audit.log(ra.checked ? 'device-approval-on' : 'device-approval-off');
+      toast(ra.checked ? 'New devices will need your approval' : 'New devices are trusted automatically'); render({ keepScroll:true });
+    } catch(e){ ra.checked = !ra.checked; toast(e.message); }
+  };
   m.querySelectorAll('[data-device-approve]').forEach(b => b.onclick = async () => {
     try { await Sync.setDevice(b.dataset.deviceApprove, { approved_at:new Date().toISOString() }); Audit.log('device-approve'); toast('Device approved'); render({ keepScroll:true }); }
     catch(e){ toast(e.message); }
