@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-JCpiiSbAqMoCyC/8b2E03PNaxY/LLGpWOnz1naRyI2A=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-yVmPMjws/WUo6d9W7S49BGCQx1cDargSn1+eVAsz9GE=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25">
 <link rel="manifest" href="manifest.webmanifest">
@@ -2051,7 +2051,7 @@ const Sync = {
     if (this.state === 'syncing') return 'Syncing…';
     if (this.state === 'offline') return 'Offline (' + this.pending + ' change' + (this.pending === 1 ? '' : 's') + ' waiting)';
     if (this.state === 'attention') return 'Needs attention: ' + (this.lastError || 'sync problem');
-    return this.pending ? 'Waiting to sync (' + this.pending + ')' : 'Synced';
+    return this.pending ? 'Waiting to sync (' + this.pending + ')' + (this.auto ? '' : ' · tap Sync now') : (this.auto ? 'Synced' : 'Synced · manual sync');
   },
   setState(s, err){ this.state = s; if (err !== undefined) this.lastError = err; refreshSyncUI(); },
 
@@ -2128,7 +2128,7 @@ const Sync = {
     this.linkedId = this.session.user.id;
     try { await this.registerDevice(); } catch(e){ console.warn('Could not register this device', e); }
     Audit.log('sign-in');
-    this.setState('idle'); this.schedule(300);
+    this.setState('idle'); this.schedule(300, true);   // signing in always syncs once, even in manual mode
     maybeOfferInvite();
   },
   async signOut(){
@@ -2160,7 +2160,9 @@ const Sync = {
       this.pending = await IDB.count('outbox'); refreshSyncUI(); this.schedule(1500);
     } catch(e){ console.warn('Could not queue a change for sync', e); }
   },
-  schedule(ms){ clearTimeout(this.timer); this.timer = setTimeout(() => this.run(), ms); },
+  /* Automatic sync is the default. In manual mode (Data > Online account) changes are only queued; "Sync now" sends and fetches them. */
+  auto:true,
+  schedule(ms, force){ clearTimeout(this.timer); if (!this.auto && !force){ refreshSyncUI(); return; } this.timer = setTimeout(() => this.run(), ms); },
   async run(){
     if (this.running || !this.enabled() || !this.signedIn()) return;
     if (!navigator.onLine){ this.setState('offline'); return; }
@@ -2425,46 +2427,32 @@ function syncPanelHTML(){
   if (Sync.signedIn()) return `<div class="panel stack"><h3>Account and sync</h3>
     <p class="small">Signed in as <strong>${esc(Sync.session.user.email || '')}</strong>. <span id="syncStatusText" aria-live="polite">${esc(Sync.label())}</span></p>
     <p class="small muted">${Sync.lastSyncAt ? 'Last synced ' + esc(new Date(Sync.lastSyncAt).toLocaleTimeString()) + '. ' : ''}A copy of your data is kept in your account. This device keeps working offline and catches up later.</p>
-    <div class="row"><button type="button" class="btn primary sm" id="syncNow">Sync now</button><button type="button" class="btn ghost sm" id="syncSignOut">Sign out</button></div></div>`;
+    <label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="syncAuto" ${Sync.auto ? 'checked' : ''} style="width:auto;margin-top:.2rem"><span style="flex:1;min-width:0">Sync automatically (recommended). Turn this off to sync only when you tap Sync now.</span></label>
+    <div class="row"><button type="button" class="btn ${Sync.auto ? 'ghost' : 'primary'} sm" id="syncNow">Sync now</button><button type="button" class="btn ghost sm" id="syncSignOut">Sign out</button></div></div>`;
   return `<div class="panel stack"><h3>Account and sync</h3>
-    <p class="small muted">Optional. Sign in to keep a copy of your data in your account and use it on more than one device. Signed out, everything stays on this device.</p>
-    <form id="syncForm" class="stack" autocomplete="on">
-      <label class="field"><span>Email</span><input type="email" id="syncEmail" autocomplete="username" required></label>
-      <label class="field"><span>Password</span><input type="password" id="syncPassword" autocomplete="current-password" minlength="8"></label>
-      <label class="row tight small" style="gap:.4rem"><input type="checkbox" id="syncKeep" style="width:auto"> Keep me signed in on this device</label>
-      <div class="row"><button type="submit" class="btn primary sm" id="syncSignIn">Sign in</button><button type="button" class="btn ghost sm" id="syncSignUp">Create account</button><button type="button" class="btn ghost sm" id="syncMagic">Email me a sign-in link</button><button type="button" class="btn ghost sm" id="syncReset">Forgot password</button></div>
-      <p class="small" id="syncMsg" role="status" aria-live="polite"></p>
-    </form></div>`;
+    <p class="small muted">Optional. Sign in to keep a copy of your data in your account and use it on your other devices; after that it syncs by itself. Signed out, everything stays on this device.</p>
+    <div class="row"><button type="button" class="btn primary sm" id="syncOpenLogin">Sign in or create an account</button></div>
+    <p class="small muted">The sign-in page has email and password, "Forgot password?" and Continue with Google.</p></div>`;
 }
 function wireSyncPanel(m){
-  const msg = t => { const el = document.getElementById('syncMsg'); if (el) el.textContent = t; };
-  const form = document.getElementById('syncForm');
-  if (form){
-    const creds = () => ({ email:val('syncEmail').trim(), password:document.getElementById('syncPassword').value });
-    form.onsubmit = async e => {
-      e.preventDefault(); const { email, password } = creds();
-      if (!email || !password){ msg('Enter your email and password.'); return; }
-      msg('Signing in…');
-      try { await Sync.signIn(email, password, document.getElementById('syncKeep').checked); toast('Signed in'); render({ keepScroll:true }); }
-      catch(err){ msg(err.status === 400 ? 'Email or password is wrong, or the email is not confirmed yet.' : err.message); }
-    };
-    document.getElementById('syncSignUp').onclick = async () => {
-      const { email, password } = creds();
-      if (!email || password.length < 8){ msg('Enter an email and a password of at least 8 characters.'); return; }
-      msg('Creating account…');
-      try { const r = await Sync.signUp(email, password); if (r === 'signed-in') render({ keepScroll:true }); else msg('Check your email and click the confirmation link, then sign in here.'); }
-      catch(err){ msg(err.message); }
-    };
-    document.getElementById('syncMagic').onclick = async () => { const { email } = creds(); if (!email){ msg('Enter your email first.'); return; } try { await Sync.magicLink(email); msg('If that account exists, a sign-in link is on its way.'); } catch(err){ msg(err.message); } };
-    document.getElementById('syncReset').onclick = async () => { const { email } = creds(); if (!email){ msg('Enter your email first.'); return; } try { await Sync.resetPassword(email); msg('If that account exists, a reset link is on its way.'); } catch(err){ msg(err.message); } };
-  }
+  const login = document.getElementById('syncOpenLogin'); if (login) login.onclick = () => Lock.show({ view:'credentials', closable:true });
   m.querySelectorAll('[data-resolve]').forEach(b => b.onclick = () => openConflict(b.dataset.resolve));
   const now = document.getElementById('syncNow'); if (now) now.onclick = () => { Sync.failed.clear(); Sync.run(); };
   const out = document.getElementById('syncSignOut'); if (out) out.onclick = async () => { await Sync.signOut(); render({ keepScroll:true }); };
+  const auto = document.getElementById('syncAuto');
+  if (auto) auto.onchange = async () => {
+    Sync.auto = auto.checked;
+    try { await Store.putMeta('syncAuto', { on:auto.checked }); } catch(e){ showSaveError(e); }
+    toast(auto.checked ? 'Syncing automatically' : 'Manual sync: tap Sync now when you want to sync');
+    if (auto.checked) Sync.schedule(300);
+    render({ keepScroll:true });
+  };
 }
 window.addEventListener('online', () => { if (Sync.signedIn()) Sync.schedule(500); });
 window.addEventListener('offline', () => { if (Sync.signedIn()) Sync.setState('offline'); });
-setInterval(() => { if (Sync.signedIn() && document.visibilityState === 'visible') Sync.run(); }, 60000);
+setInterval(() => { if (Sync.signedIn() && Sync.auto && document.visibilityState === 'visible') Sync.run(); }, 60000);
+// Coming back to the app (for example opening the phone again) syncs straight away, so a change made on another device shows up.
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && Sync.signedIn() && Sync.auto) Sync.schedule(400); });
 
 
 /* ---------------------------------------------------------------
@@ -2816,7 +2804,7 @@ function devicesPanelHTML(){
     ${list.map(d => `<div class="spread"><span class="small"><strong>${esc(d.name)}</strong>${d.device_id === mine ? ' · this device' : ''} ${status(d)}<br><span class="muted">Last seen ${d.last_seen ? esc(new Date(d.last_seen).toLocaleString()) : '—'}</span></span>
       <span class="row tight">${canManage && !d.approved_at && !d.revoked_at ? `<button type="button" class="btn sm primary" data-device-approve="${esc(d.device_id)}">Approve</button>` : ''}${canManage && !d.revoked_at ? `<button type="button" class="btn sm danger" data-device-revoke="${esc(d.device_id)}">Remove</button>` : ''}</span></div>`).join('') || '<p class="small muted">No devices listed yet.</p>'}
     <div class="row"><button type="button" class="btn ghost sm" id="signOutAll">Sign out everywhere</button><button type="button" class="btn danger sm" id="deleteAccount">Delete my account and online copy</button></div>
-    ${canManage && Sync.role !== 'assistant' && Sync.requireApproval !== undefined ? `<label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="requireApproval" ${Sync.requireApproval ? 'checked' : ''} style="width:auto;margin-top:.2rem"> Ask me to approve each new device. Safer: someone who learns your password cannot add a device on their own. When this is off, any device that signs in to your account is trusted straight away.</label>` : ''}
+    ${canManage && Sync.role !== 'assistant' && Sync.requireApproval !== undefined ? `<label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="requireApproval" ${Sync.requireApproval ? 'checked' : ''} style="width:auto;margin-top:.2rem"><span style="flex:1;min-width:0">Ask me to approve each new device. Safer: someone who learns your password cannot add a device on their own. When this is off, any device that signs in to your account is trusted straight away.</span></label>` : ''}
     <p class="small muted">If you lose a device: remove it here from another one, then change your password and use "Sign out everywhere".${Sync.requireApproval ? ' New devices must be approved from an approved device.' : ''}</p></div>`;
 }
 function activityPanelHTML(){
@@ -3017,7 +3005,7 @@ function maybeOfferInvite(){
         catch(e){ toast(e.message || 'Could not accept'); return false; }
         try { sessionStorage.removeItem(INVITE_KEY); } catch {}
         Audit.log('assistant-accept');
-        await Sync.detectRole(); toast('You are now an assistant'); Sync.schedule(100); render({ keepScroll:true });
+        await Sync.detectRole(); toast('You are now an assistant'); Sync.schedule(100, true); render({ keepScroll:true });
       }}]);
   }, 600);
 }
@@ -3115,7 +3103,7 @@ const Lock = {
       body = `<form id="lkForm" class="lk-form" novalidate>
         <div class="lk-field"><label for="lkEmail">Email address</label><input id="lkEmail" type="email" autocomplete="username" inputmode="email" placeholder="you@example.com" aria-describedby="lkEmailErr" required><span class="lk-err" id="lkEmailErr" aria-live="polite"></span></div>
         <div class="lk-field"><label for="lkPassword">Password</label><div class="lk-wrap"><input id="lkPassword" type="password" autocomplete="current-password" placeholder="Enter your password" aria-describedby="lkPwErr" required><button type="button" class="lk-eye" id="lkEye" aria-label="Show password" aria-pressed="false">${eye}</button></div><span class="lk-err" id="lkPwErr" aria-live="polite"></span></div>
-        <div class="lk-opts"><label class="lk-check"><input type="checkbox" id="lkKeep"> Remember me</label><button type="button" class="lk-link2" data-lk="reset">Forgot password?</button></div>
+        <div class="lk-opts"><label class="lk-check"><input type="checkbox" id="lkKeep" checked> Remember me</label><button type="button" class="lk-link2" data-lk="reset">Forgot password?</button></div>
         <button class="lk-btn primary" id="lkSubmit" type="submit"><span class="lk-label">Log In</span><span class="lk-spin" aria-hidden="true"></span></button>
         <p class="lk-msg" id="lkMsg" role="status" aria-live="polite">${esc(this.msg || hint)}</p>
         <div class="lk-divider">or continue with</div>
@@ -3143,7 +3131,7 @@ const Lock = {
     const a = b.dataset.lk;
     if (a === 'role') return this.setRole(b.dataset.r);
     if (a === 'role-owner') return this.setRole('owner');
-    if (a === 'close') return this.hide();
+    if (a === 'close'){ if (!this.locked){ try { localStorage.setItem('nyaega:skipLogin', '1'); } catch {} } return this.hide(); }   // "Local mode": don't offer the sign-in page at every start
     if (a === 'creds'){ this.view = 'credentials'; this.msg = ''; return this.draw(); }
     if (a === 'pinview'){ this.view = 'pin'; this.msg = ''; this.pin = ''; return this.draw(); }
     if (a === 'forgot'){ this.view = 'forgot'; this.msg = ''; return this.draw(); }
@@ -3207,6 +3195,7 @@ const Lock = {
     const c = this.readCreds(true); if (!c) return;
     if (c.pw.length < 8){ this.fieldError('lkPassword', 'Use at least 8 characters.'); return; }
     this.say('Creating account…');
+    Sync.keep = !!(document.getElementById('lkKeep') && document.getElementById('lkKeep').checked);
     try { const r = await Sync.signUp(c.email, c.pw); if (r === 'signed-in'){ await Sync.detectRole(); this.hide(); this.afterUnlock(true); } else this.say('Check your email and click the confirmation link, then log in here.'); }
     catch(e){ this.say(e.message || 'Could not create the account.'); }
   },
@@ -3670,10 +3659,16 @@ function partnerOf(cid){
   await migratePackOffsets();
   buildTabs(); S.bootState = 'ready'; render();
   try { await loadConflicts(); await ensureDeviceId(); await Sync.loadErased(); Sync.exSnap = Sync.snapOf(S.exercises); } catch {}
+  try { Sync.auto = ((await Store.getMeta('syncAuto', null)) || {}).on !== false; } catch {}   // automatic sync unless it was turned off
   try { const ao = await Store.getMeta('assistantOf', null); if (ao && ao.coachId){ Sync.role = 'assistant'; Sync.coachId = ao.coachId; document.body.classList.add('assistant'); } } catch {}
   captureInviteFromUrl();
   const oauthResult = takeOAuthResult();
-  Sync.restore().then(async () => { if (oauthResult) await completeOAuth(oauthResult); maybeOfferInvite(); });
+  Sync.restore().then(async () => {
+    if (oauthResult) await completeOAuth(oauthResult);
+    maybeOfferInvite();
+    // First visit on a device that has never signed in: offer the sign-in page once ("Local mode" there stops it coming back).
+    try { if (!oauthResult && Sync.enabled() && !Sync.signedIn() && !Sync.linkedId && !Lock.enabled() && !document.getElementById('lockScreen') && S.bootState === 'ready' && !sessionOpen() && localStorage.getItem('nyaega:skipLogin') !== '1') Lock.show({ view:'credentials', closable:true }); } catch {}
+  });
   registerServiceWorker();
   requestPersistentStorage().then(() => { if (S.view === 'dashboard' && S.sub === 'data') render({ keepScroll:true }); });
   refreshStorageEstimate();
@@ -6064,6 +6059,7 @@ const DATA_SECTIONS = [['backup','Backup and files'],['online','Online account']
 const dataSectionsFor = () => Sync.role === 'assistant' ? DATA_SECTIONS.filter(([k]) => ['online','security','general'].includes(k)) : DATA_SECTIONS;
 function dataSectionNow(){
   const list = dataSectionsFor(), want = S.dataSection;
+  if (want === 'activity') return 'activity';   // its own page, opened from the Online account section (not one of the buttons)
   return list.some(([k]) => k === want) ? want : list[0][0];
 }
 /* A small mark on a section that needs attention, so nothing important is hidden by being on another page. */
@@ -6133,10 +6129,15 @@ function dataGeneralSection(){
     <div class="row"><button class="btn danger" id="wipe">Delete all data</button></div>
   </div>`;
 }
+/* Recent activity is long, so it lives on its own page; the Online account section only has a button for it. */
+function activityLinkHTML(){
+  return `<div class="panel spread"><div><h3>Recent activity</h3><p class="small muted">Sign-ins, exports, device changes and deletions.</p></div><button type="button" class="btn ghost sm" data-dsec="activity">View</button></div>`;
+}
 function viewData(){
   const cur = dataSectionNow();
+  if (cur === 'activity') return `<div class="page-head spread"><button type="button" class="btn ghost sm" data-dsec="online">← Back to Online account</button></div>${activityPanelHTML()}`;
   const body = cur === 'backup' ? dataBackupSection()
-    : cur === 'online' ? `${syncPanelHTML()}${devicesPanelHTML()}${activityPanelHTML()}`
+    : cur === 'online' ? `${syncPanelHTML()}${devicesPanelHTML()}${activityLinkHTML()}`
     : cur === 'team' ? `${teamPanelHTML()}${privacyPanelHTML()}`
     : cur === 'security' ? lockPanelHTML()
     : dataGeneralSection();
