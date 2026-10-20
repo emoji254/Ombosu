@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-853HjzeuTsjjiSi3HoO3tdZwPNgqWChdsXYrgAtIoss=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-OrVOMLMUsuan/IhbUkA8CydezO+3vRQSG0UiOHizocU=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25">
 <link rel="manifest" href="manifest.webmanifest">
@@ -17,16 +17,16 @@
 <style>
 :root{
   /* One token set. Light values here, dark overrides below; legacy names (--ink, --panel, --plate-*) are aliases. */
-  --accent:#24483d; --accent-text:#24483d; --accent-mid:#6a9c83; --accent-soft:#8ab29a;
-  --surface:#fff; --surface-2:#f7f8f3; --floor:#f6f5f0;
-  --text:#18231f; --text-muted:#5d6a63;
-  --line:#e7e8e2; --line-soft:#eff0eb; --line-strong:#dfe5df;
+  --accent:#17372d; --accent-text:#17372d; --accent-mid:#6a9c83; --accent-soft:#8ab29a;
+  --surface:#fff; --surface-2:#fbfaf6; --floor:#f7f6f1;
+  --text:#18231f; --text-muted:#68736d;
+  --line:#e6e5dd; --line-soft:#efeee8; --line-strong:#dedcd2;
   --good:#4a7551; --good-text:#527360;
   --warn:#946a2c; --warn-text:#7d5a26; --warn-bg:#fff6e9;
   --bad:#9a4f3c; --bad-text:#9a4f2d; --bad-bg:#fff0e9; --bad-line:#e8cfc5;
   --tint:#edf4ef; --tint-2:#e2ede7;
-  --btn-primary:#142b25; --btn-primary-hover:#24483d; --on-primary:#fff;
-  --pine:#142b25; --pine-2:#24483d; --lime:#c4e58d; --on-lime:#142b25;
+  --btn-primary:#17372d; --btn-primary-hover:#24483d; --on-primary:#fff;
+  --pine:#17372d; --pine-2:#24483d; --lime:#c8ef83; --on-lime:#17372d;
   --focus:#648b68;
   --font-ui:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --plate-blue:var(--accent); --plate-red:var(--bad); --plate-green:var(--good); --plate-yellow:var(--warn);
@@ -775,19 +775,29 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
 .storage-meter>i{display:block;height:100%;background:var(--plate-green)}
 .storage-meter.warn>i{background:var(--plate-yellow)}
 .storage-meter.full>i{background:var(--plate-red)}
-/* ---- Phone and tablet navigation: bottom bar + quick-action button (built by js/38-mobile-nav.js, shown up to 900px wide).
-   Sizes follow the screen: --bn-h, the icon, the label and the "+" button grow from small phones to large tablets. ---- */
-#bottomNav,#fab,#navMenu{display:none}
+/* ---- Quick-action "+" button (all screens) and, up to 900px wide, the bottom navigation bar (built by js/38-mobile-nav.js).
+   On phones and tablets the sizes follow the screen: --bn-h, the icon, the label and the "+" button grow with the width. ---- */
+:root{--bn-h:0px;--bn-icon:25px;--bn-font:.7rem;--fab:clamp(60px,calc(4vw + 46px),74px);--bn-safe:env(safe-area-inset-bottom,0px)}
+#bottomNav{display:none}
 #bottomNav[hidden],#fab[hidden],#navMenu[hidden]{display:none!important}
 .quick-row{padding:.55rem 0;border-top:1px solid var(--line-soft);gap:.6rem}
 .quick-row:first-of-type{border-top:0}
+#fab{display:grid;place-items:center;position:fixed;right:1.1rem;bottom:calc(var(--bn-h) + 1.1rem + var(--bn-safe));z-index:46;width:var(--fab);height:var(--fab);border-radius:50%;border:0;background:radial-gradient(circle at 32% 28%,color-mix(in srgb,var(--lime) 80%,#fff 20%),var(--lime) 62%);color:var(--on-lime,#142b25);cursor:pointer;box-shadow:0 0 0 6px color-mix(in srgb,var(--lime) 22%,transparent),0 0 26px color-mix(in srgb,var(--lime) 40%,transparent),0 12px 28px #0007;-webkit-tap-highlight-color:transparent;transition:transform .2s ease}
+#fab:active{transform:scale(.94)}
+#fab.open{transform:rotate(45deg)}
+#fab svg{width:calc(var(--fab) * .46);height:calc(var(--fab) * .46)}
+#navMenu{display:grid;position:fixed;z-index:47;right:1.1rem;min-width:min(15rem,calc(100vw - 2rem));gap:.1rem;padding:.45rem;border-radius:20px;background:var(--panel);border:1px solid var(--line);box-shadow:0 18px 44px #0008;animation:navMenuIn .16s ease-out;transform-origin:bottom right}
+#navMenu[data-anchor="fab"]{bottom:calc(var(--bn-h) + var(--fab) + 1.9rem + var(--bn-safe))}
+#navMenu[data-anchor="more"]{bottom:calc(var(--bn-h) + .7rem + var(--bn-safe))}
+#navMenu button{display:flex;align-items:center;gap:.8rem;min-height:52px;padding:.55rem .9rem;border:0;border-radius:14px;background:none;color:var(--ink);font:inherit;font-size:1rem;font-weight:650;text-align:left;cursor:pointer}
+#navMenu button svg{flex:none;width:24px;height:24px;color:var(--plate-green,var(--lime))}
+#navMenu button:hover,#navMenu button:active{background:var(--floor)}
+#fab:focus-visible,#navMenu button:focus-visible,#bottomNav button:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
 @media(max-width:900px){
   :root{
     --bn-h:clamp(68px,calc(3.2vw + 56px),88px);
     --bn-icon:clamp(25px,calc(1.4vw + 20px),31px);
     --bn-font:clamp(.7rem,calc(.55vw + .54rem),.84rem);
-    --fab:clamp(60px,calc(4vw + 46px),74px);
-    --bn-safe:env(safe-area-inset-bottom,0px);
   }
   body:not(.in-session) nav.tabs,body:not(.in-session) nav.subtabs{display:none}
   #bottomNav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.1rem;position:fixed;left:0;right:0;bottom:0;z-index:45;height:calc(var(--bn-h) + var(--bn-safe));padding:.35rem .4rem var(--bn-safe);border-radius:20px 20px 0 0;background:linear-gradient(180deg,color-mix(in srgb,var(--pine) 88%,#fff 12%),var(--pine) 60%);border-top:1px solid #ffffff26;box-shadow:0 -10px 28px #0006}
@@ -796,35 +806,169 @@ input:-webkit-autofill,input:-webkit-autofill:hover,input:-webkit-autofill:focus
   #bottomNav button:active{transform:scale(.95)}
   #bottomNav button[aria-current="true"]{color:var(--lime);background:color-mix(in srgb,var(--lime) 15%,transparent)}
   #bottomNav button[aria-current="true"] svg{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--lime) 45%,transparent))}
-  #bottomNav button:focus-visible,#fab:focus-visible,#navMenu button:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
-  #fab{display:grid;place-items:center;position:fixed;right:1rem;bottom:calc(var(--bn-h) + .9rem + var(--bn-safe));z-index:46;width:var(--fab);height:var(--fab);border-radius:50%;border:0;background:radial-gradient(circle at 32% 28%,color-mix(in srgb,var(--lime) 80%,#fff 20%),var(--lime) 62%);color:var(--on-lime,#142b25);cursor:pointer;box-shadow:0 0 0 6px color-mix(in srgb,var(--lime) 22%,transparent),0 0 26px color-mix(in srgb,var(--lime) 40%,transparent),0 12px 28px #0007;-webkit-tap-highlight-color:transparent;transition:transform .2s ease}
-  #fab:active{transform:scale(.94)}
-  #fab.open{transform:rotate(45deg)}
-  #fab svg{width:calc(var(--fab) * .46);height:calc(var(--fab) * .46)}
-  #navMenu{display:grid;position:fixed;z-index:47;right:1rem;min-width:min(15rem,calc(100vw - 2rem));gap:.1rem;padding:.45rem;border-radius:20px;background:var(--panel);border:1px solid var(--line);box-shadow:0 18px 44px #0008;animation:navMenuIn .16s ease-out;transform-origin:bottom right}
-  #navMenu[data-anchor="fab"]{bottom:calc(var(--bn-h) + var(--fab) + 1.5rem + var(--bn-safe))}
-  #navMenu[data-anchor="more"]{bottom:calc(var(--bn-h) + .7rem + var(--bn-safe))}
-  #navMenu button{display:flex;align-items:center;gap:.8rem;min-height:calc(var(--bn-h) * .72);padding:.55rem .9rem;border:0;border-radius:14px;background:none;color:var(--ink);font:inherit;font-size:1rem;font-weight:650;text-align:left;cursor:pointer}
-  #navMenu button svg{flex:none;width:24px;height:24px;color:var(--plate-green,var(--lime))}
-  #navMenu button:hover,#navMenu button:active{background:var(--floor)}
   body.has-bottomnav main{padding-bottom:calc(var(--bn-h) + var(--fab) * .6 + 1.4rem + var(--bn-safe))}
   body.has-bottomnav .workout-dock{bottom:calc(var(--bn-h) + .6rem + var(--bn-safe))}
   body.has-bottomnav.has-workout-dock main{padding-bottom:calc(var(--bn-h) + 6.6rem + var(--bn-safe))}
   body.has-bottomnav.has-workout-dock #fab{bottom:calc(var(--bn-h) + 5.4rem + var(--bn-safe))}
-  body.has-bottomnav.has-workout-dock #navMenu[data-anchor="fab"]{bottom:calc(var(--bn-h) + var(--fab) + 6rem + var(--bn-safe))}
+  body.has-bottomnav.has-workout-dock #navMenu[data-anchor="fab"]{bottom:calc(var(--bn-h) + var(--fab) + 6.4rem + var(--bn-safe))}
   body.has-bottomnav .toast{bottom:calc(var(--bn-h) + 1rem + var(--bn-safe))}
   body.has-bottomnav .undo-toast{bottom:calc(var(--bn-h) + 1.4rem + var(--bn-safe))}
 }
 @media(max-width:900px) and (max-height:480px){:root{--bn-h:56px;--bn-icon:22px;--fab:52px}}
 @keyframes navMenuIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
-@media(prefers-reduced-motion:reduce){#fab,#bottomNav button{transition:none}#navMenu{animation:none}}</style>
+@media(prefers-reduced-motion:reduce){#fab,#bottomNav button{transition:none}#navMenu{animation:none}}
+
+/* Exercise library: Edit / Archive buttons side by side; hidden fields stay hidden. */
+.field[hidden]{display:none!important}
+.exercise-library-table td.ex-actions{text-align:right;white-space:nowrap}
+.exercise-library-table td.ex-actions .btn+.btn{margin-left:.3rem}
+
+/* The header save/sync note shows only when there is a problem (see setStatus). */
+header.top .status[hidden]{display:none!important}
+
+/* ---- Redesign (2026-10): compact light header with Schedule / Search / Profile, five-tab bottom bar, one visual style.
+   Lime marks only the brand, the selected tab and the selected sidebar item. Later rules here win over the older layers above. ---- */
+:root{--hdr-h:60px}
+header.top{display:flex;align-items:center;gap:.6rem;min-height:var(--hdr-h);padding:0 clamp(.75rem,2.5vw,1.5rem);background:var(--surface);border:0;border-bottom:1px solid var(--line);box-shadow:none;color:var(--text)}
+header.top h1{margin:0;font-size:1.2rem;color:var(--text)}
+header.top .brand{display:flex;align-items:center;gap:.6rem;min-height:44px;margin:0;padding:.2rem .4rem .2rem 0;border:0;border-radius:12px;background:none;color:inherit;font:inherit;letter-spacing:inherit;cursor:pointer}
+header.top .brand:focus-visible,.top-actions button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+header.top .mark{width:32px;height:32px;flex:none;border:0;border-radius:10px;background:var(--lime)}
+header.top .mark:after{color:var(--on-lime)}
+.top-actions{display:flex;align-items:center;gap:.15rem;margin-left:auto}
+.top-actions[hidden]{display:none}
+.top-actions button{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:12px;background:none;color:var(--text);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.top-actions button svg{width:23px;height:23px}
+.top-actions button:hover{background:var(--floor)}
+.top-actions button[aria-current="true"],.top-actions button[aria-expanded="true"]{background:var(--tint)}
+/* The problem note sits just under the header, never beside the navigation. */
+header.top .status{position:absolute;top:calc(100% + .45rem);left:50%;right:auto;bottom:auto;transform:translateX(-50%);max-width:min(92vw,520px);margin:0;padding:.38rem .85rem;border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);border-radius:999px;background:var(--warn-bg);color:var(--warn-text);font-size:.75rem;font-weight:650;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 6px 18px #17372d14;z-index:2}
+@media(max-width:900px){
+  header.top{position:sticky;top:0;inset:auto;z-index:32;width:100%;height:auto}
+  nav.tabs{top:var(--hdr-h)}
+}
+@media(min-width:901px){
+  header.top{position:fixed;inset:0 0 auto 0;width:auto;height:var(--hdr-h);z-index:31}
+  nav.tabs{top:var(--hdr-h);bottom:0;height:auto;align-self:auto;background:var(--surface);border-right:1px solid var(--line)}
+  nav.tabs:before{color:var(--text-muted)}
+  nav.tabs button{color:var(--text-muted)}
+  nav.tabs button:hover{background:var(--floor);color:var(--text)}
+  nav.tabs button[aria-current="true"]{background:var(--lime);color:#17372d;border-left-color:#17372d}
+  main{padding-top:calc(var(--hdr-h) + 1.5rem)}
+  main:before{display:none}
+}
+nav.subtabs button[aria-current="true"]{background:var(--pine);border-color:var(--pine);color:#fff}
+/* In-session top tabs on phones: light, like the header. */
+@media(max-width:900px){
+  nav.tabs{background:var(--surface);border-bottom:1px solid var(--line)}
+  nav.tabs button{color:var(--text-muted)}
+  nav.tabs button[aria-current="true"]{background:var(--tint);color:var(--text);border-bottom-color:var(--pine)}
+}
+/* Bottom bar: white surface, muted icons, the current tab in lime. */
+#bottomNav{background:var(--surface);border-top:1px solid var(--line);border-radius:0;box-shadow:0 -6px 20px #17372d12}
+#bottomNav button{color:var(--text-muted)}
+#bottomNav button[aria-current="true"]{color:#17372d;background:var(--lime)}
+#bottomNav button[aria-current="true"] svg{filter:none}
+#bottomNav button:focus-visible,#fab:focus-visible,#navMenu button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+/* "+" button: the primary colour, no glow. */
+#fab{background:var(--btn-primary);color:var(--on-primary);box-shadow:0 10px 24px #17372d40}
+/* Profile menu, opened from the header. */
+#navMenu[data-anchor="profile"]{top:calc(var(--hdr-h) + env(safe-area-inset-top,0px) + .4rem);bottom:auto;right:.75rem;transform-origin:top right;box-shadow:0 18px 44px #17372d26}
+#navMenu button span{display:flex;flex-direction:column;min-width:0}
+#navMenu button small{font-size:.76rem;font-weight:500;color:var(--text-muted)}
+#navMenu button svg{color:var(--text)}
+#navMenu .menu-head{display:grid;gap:.1rem;padding:.55rem .9rem .65rem;margin-bottom:.2rem;border-bottom:1px solid var(--line-soft)}
+#navMenu .menu-head strong{font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:16rem}
+#navMenu .menu-head span{font-size:.74rem;color:var(--text-muted)}
+/* Header search. */
+.search-results{display:grid;gap:.3rem;margin-top:.8rem}
+.search-results .eyebrow{margin:.7rem 0 .15rem}
+.search-hit{display:flex;flex-direction:column;align-items:flex-start;gap:.05rem;width:100%;min-height:48px;padding:.55rem .75rem;border:1px solid var(--line-soft);border-radius:10px;background:var(--surface);color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.search-hit:hover,.search-hit:focus-visible{border-color:var(--accent-mid);background:var(--surface-2)}
+input[type=search]{width:100%;min-height:46px;padding:.62rem .8rem;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface);font:inherit}
+/* Home: date, attendance counts, then today's clients. */
+.today-summary h2{margin:.15rem 0 .2rem}
+.att-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin:.75rem 0 .65rem}
+.att-stat{padding:.7rem .85rem;border:1px solid var(--line-soft);border-radius:12px;background:var(--surface-2)}
+.att-stat span{display:block;font-size:.66rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.att-stat strong{display:block;margin-top:.1rem;font-size:1.65rem;line-height:1.15;font-variant-numeric:tabular-nums;color:var(--text)}
+.att-stat.ok strong{color:var(--good-text)}.att-stat.bad strong{color:var(--bad-text)}.att-stat.warn strong{color:var(--warn-text)}
+.today-list-head{margin:1.2rem 0 .55rem}
+@media(max-width:360px){.att-stats{gap:.4rem}.att-stat{padding:.6rem}.att-stat strong{font-size:1.4rem}}
+
+/* ---- Design pass (2026-10-20): appearance only, matching the approved mockups. Same buttons, same places. ---- */
+:root{--hdr-h:76px;--bn-ink:#2c4a3f;--bn-on:color-mix(in srgb,var(--lime) 62%,#fff);--pill-pending-bg:#fdeadd;--pill-pending:#b8561f}
+:root[data-theme="dark"]{--bn-ink:var(--text-muted);--bn-on:var(--lime);--pill-pending-bg:var(--warn-bg);--pill-pending:var(--warn-text)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bn-ink:var(--text-muted);--bn-on:var(--lime);--pill-pending-bg:var(--warn-bg);--pill-pending:var(--warn-text)}}
+/* Header: warm paper, large mark, name with a small "Training Hub" line, round icon buttons. */
+header.top{background:var(--floor);gap:.75rem;padding:0 clamp(.9rem,3vw,1.75rem)}
+header.top h1{font-family:var(--font-ui);font-size:1rem;font-weight:inherit;letter-spacing:0}
+header.top .brand{gap:.75rem;padding:.25rem .5rem .25rem 0}
+header.top .mark{width:48px;height:48px;border-radius:13px;background:var(--lime)}
+header.top .mark:after{font-family:var(--font-ui);font-size:26px;font-weight:600;letter-spacing:0;color:#17372d}
+.brand-text{display:flex;flex-direction:column;align-items:flex-start;line-height:1.1;min-width:0}
+.brand-name{font-size:1.55rem;font-weight:650;letter-spacing:-.02em;color:var(--text)}
+.brand-sub{margin-top:.18rem;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.top-actions{gap:.55rem}
+.top-actions button{width:48px;height:48px;border-radius:50%;background:color-mix(in srgb,var(--pine) 8%,var(--floor));color:var(--text)}
+.top-actions button:hover{background:color-mix(in srgb,var(--pine) 13%,var(--floor))}
+.top-actions button svg{width:22px;height:22px}
+.top-actions #hdrProfile{background:var(--lime);color:#17372d}
+.top-actions button[aria-current="true"],.top-actions button[aria-expanded="true"]{background:color-mix(in srgb,var(--pine) 8%,var(--floor));box-shadow:inset 0 0 0 2px var(--pine)}
+.top-actions #hdrProfile[aria-current="true"],.top-actions #hdrProfile[aria-expanded="true"]{background:var(--lime);box-shadow:inset 0 0 0 2px #17372d}
+@media(max-width:420px){
+  :root{--hdr-h:68px}
+  header.top{gap:.5rem}
+  header.top .mark{width:40px;height:40px;border-radius:11px}
+  header.top .mark:after{font-size:22px}
+  .brand-name{font-size:1.3rem}
+  .brand-sub{font-size:.62rem}
+  .top-actions{gap:.35rem}
+  .top-actions button{width:42px;height:42px}
+}
+body.in-session .brand-sub{display:none}
+body.in-session .brand-name{font-size:1.05rem}
+body.in-session .top-actions button{width:38px;height:38px}
+/* Home: the attendance card. */
+.today-summary{padding:clamp(1.1rem,3.5vw,1.6rem);border-radius:20px;background:var(--surface-2);border:1px solid var(--line)}
+.today-summary .eyebrow{font-size:.8rem;font-weight:500;letter-spacing:.05em;color:var(--text-muted)}
+.today-summary h2{margin:.5rem 0 .2rem;font-size:clamp(1.75rem,7vw,2.5rem);font-weight:700;letter-spacing:-.02em;line-height:1.1;color:var(--text)}
+.att-stats{gap:.7rem;margin:1rem 0 .8rem}
+.att-stat{padding:.85rem 1rem;border-radius:14px;border:1px solid var(--line-soft);background:var(--surface);box-shadow:0 1px 3px #17372d0a}
+.att-stat span{font-size:.85rem;font-weight:500;letter-spacing:0;text-transform:none;color:var(--text-muted)}
+.att-stat strong{margin-top:.35rem;font-size:clamp(1.6rem,6vw,2.1rem);font-weight:600}
+.att-stat.ok strong,.att-stat.bad strong{color:var(--text)}
+.att-stat.warn strong{color:var(--pill-pending)}
+.today-list-head{font-size:.8rem;font-weight:500;letter-spacing:.05em}
+/* Client cards. */
+.today-card{padding:1rem 1.1rem;border-radius:16px;background:var(--surface);border:1px solid var(--line-soft)}
+.today-card .name{font-size:1.12rem;font-weight:600;gap:.8rem!important}
+.today-card .avatar{width:2.75rem;height:2.75rem;min-width:2.75rem;font-size:1.1rem;color:#fff}
+.today-card>.small{margin-left:3.55rem}
+.pill.warn{background:var(--pill-pending-bg);color:var(--pill-pending);font-weight:600}
+/* Bottom bar (phones and tablets): a floating white bar, dark-green icons, the current tab on a soft lime pill. */
+@media(max-width:900px){
+  #bottomNav{left:.7rem;right:.7rem;bottom:calc(.6rem + var(--bn-safe));height:var(--bn-h);padding:.35rem;gap:.2rem;border:1px solid var(--line);border-radius:22px;background:var(--surface);box-shadow:0 10px 30px #17372d1f}
+  #bottomNav button{border-radius:16px;color:var(--bn-ink);font-weight:500}
+  #bottomNav button[aria-current="true"]{background:var(--bn-on);color:#17372d;font-weight:650}
+  body.has-bottomnav main{padding-bottom:calc(var(--bn-h) + var(--fab) * .6 + 2rem + var(--bn-safe))}
+  #fab{bottom:calc(var(--bn-h) + 1.5rem + var(--bn-safe))}
+  #navMenu[data-anchor="fab"]{bottom:calc(var(--bn-h) + var(--fab) + 2.3rem + var(--bn-safe))}
+  body.has-bottomnav .workout-dock{bottom:calc(var(--bn-h) + 1.2rem + var(--bn-safe))}
+  body.has-bottomnav .toast{bottom:calc(var(--bn-h) + 1.6rem + var(--bn-safe))}
+}
+</style>
 </head>
 <body>
 <div class="shell">
   <header class="top">
-    <span class="mark" aria-hidden="true"></span>
-    <h1>Nyaega</h1>
-    <span class="status" id="status">Starting…</span>
+    <h1><button type="button" class="brand" id="brandHome" aria-label="Nyaega, go to Home"><span class="mark" aria-hidden="true"></span><span class="brand-text"><span class="brand-name">Nyaega</span><span class="brand-sub">Training Hub</span></span></button></h1>
+    <span class="status" id="status" hidden>Starting…</span>
+    <div class="top-actions" id="topActions" hidden>
+      <button type="button" id="hdrCalendar" aria-label="Schedule" title="Schedule"></button>
+      <button type="button" id="hdrSearch" aria-label="Search" title="Search"></button>
+      <button type="button" id="hdrProfile" aria-label="Profile and settings" title="Profile" aria-haspopup="menu" aria-expanded="false"></button>
+    </div>
   </header>
   <nav class="tabs" id="tabs" aria-label="Sections"></nav>
   <main id="main"></main>
@@ -1216,7 +1360,7 @@ async function showFileReconnect(){
   try { handle = await HandleStore.get('dataFile'); } catch(e){ console.warn('Could not read the remembered data file', e); }
   const name = handle?.name || 'your data file';
   const supported = fsApiSupported();
-  const status = document.getElementById('status'); if (status) status.textContent = 'Data file not connected — nothing is being saved';
+  const status = document.getElementById('status'); if (status){ status.textContent = 'Data file not connected — nothing is being saved'; status.hidden = false; }
   document.getElementById('tabs').innerHTML = '';
   document.getElementById('main').innerHTML = `<div class="panel stack" role="alert" style="max-width:640px;margin:2rem auto">
     <h2>Reconnect your data file</h2>
@@ -1251,11 +1395,14 @@ async function showFileReconnect(){
     `<p>From now on, changes are saved in this browser — <strong>not</strong> in ${esc(name)}.</p><p class="small muted">The file stays exactly as it is, but the two copies will then differ. You can connect a data file again later from the Data tab.</p>`,
     [{label:'Cancel'},{label:'Use browser storage', kind:'danger', onClick: async () => { await forgetFileMode(); location.reload(); }}]);
 }
+/* The header note is hidden while everything is normal. It only appears when something needs your attention: the sync is
+   stuck, or changes are waiting while offline. (Problems saving locally have their own banner.) */
 function setStatus(){
   const el = document.getElementById('status'); if (!el) return;
-  el.textContent = MODE === 'file' ? 'Saving directly to ' + (FILE_HANDLE ? FILE_HANDLE.name : 'a file') + ' — nothing in this browser'
-    : 'Saving to this browser — back up from the Data tab';
-  if (MODE === 'local' && typeof Sync !== 'undefined' && Sync.enabled() && Sync.signedIn()) el.textContent += ' · ' + Sync.label();
+  const syncing = MODE === 'local' && typeof Sync !== 'undefined' && Sync.enabled() && Sync.signedIn();
+  const problem = syncing && (Sync.state === 'attention' || (Sync.state === 'offline' && Sync.pending > 0));
+  if (S.bootState === 'ready' && problem){ el.textContent = Sync.label(); el.hidden = false; }
+  else if (S.bootState === 'ready'){ el.textContent = ''; el.hidden = true; }
 }
 
 /* --------------------------- state --------------------------- */
@@ -1294,7 +1441,7 @@ function announce(msg){
 }
 /* Clickable cards are real keyboard targets: focusable, announced as buttons, Enter/Space activate them. */
 function enhanceKeyboard(m){
-  m.querySelectorAll('.card:not(.static):not(button):not([role])').forEach(card => {
+  m.querySelectorAll('.card:not(.static):not(.today-card):not(button):not([role])').forEach(card => {   // Today's cards are read-only
     if (card.closest('button')) return;
     card.setAttribute('role', 'button'); if (!card.hasAttribute('tabindex')) card.tabIndex = 0;
     card.addEventListener('keydown', e => { if (e.target === card && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); card.click(); } });
@@ -1512,9 +1659,57 @@ function attList(cid){ return (attIndex().byClient[cid] || []).slice(); }
 function attendedCount(cid, from){ return (attIndex().byClient[cid] || []).filter(a => a.status === 'attended' && (!from || a.date >= from)).length; }
 function attendedOn(date){ return (attIndex().byDate[date] || []).filter(a => a.status === 'attended').length; }
 const attendanceOn = date => (attIndex().byDate[date] || []).slice();
+/* ---- recurrence: weekdays, plus "every 2 weeks" and optional first / last dates ----
+   rule = { dow:[0-6], every:1|2, start:'YYYY-MM-DD', end:'YYYY-MM-DD' }. A fortnightly rule counts weeks from the week of its start date. */
+const mondayMs = iso => { const d = new Date(iso + 'T12:00:00'); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return d.getTime(); };
+function ruleOccursOn(rule, iso){
+  if (!rule || !(rule.dow || []).includes(dowOf(iso))) return false;
+  if (rule.start && iso < rule.start) return false;
+  if (rule.end && iso > rule.end) return false;
+  const every = Number(rule.every) || 1;
+  if (every < 2 || !rule.start) return true;
+  const weeks = Math.round((mondayMs(iso) - mondayMs(rule.start)) / (7 * 86400000));
+  return ((weeks % every) + every) % every === 0;
+}
+const groupRule = g => ({ dow:g.dow, every:g.every, start:g.start, end:g.end });
+const soloRule = c => ({ dow:c.recurDow, every:c.recurEvery, start:c.recurStart, end:c.recurEnd });
+function ruleText(rule){
+  const parts = [], every = Number(rule.every) || 1;
+  if (every > 1) parts.push('every ' + every + ' weeks' + (rule.start ? ' from ' + rule.start : '')); else if (rule.start) parts.push('from ' + rule.start);
+  if (rule.end) parts.push((rule.end < todayISO() ? 'ended ' : 'until ') + rule.end);
+  return parts.join(' Â· ');
+}
+function nextRuleDate(dow, from){
+  const d = new Date(from + 'T12:00:00');
+  for (let i = 0; i < 14; i++, d.setDate(d.getDate() + 1)) if ((dow || []).includes(d.getDay())) return isoOf(d);
+  return '';
+}
+function recurrenceFieldsHTML(p, rule){
+  const every = Number(rule.every) || 1;
+  return `<div class="inline-fields">
+    <label class="field"><span>Repeats</span><select id="${p}_every"><option value="1" ${every < 2 ? 'selected' : ''}>Every week</option><option value="2" ${every === 2 ? 'selected' : ''}>Every 2 weeks</option></select></label>
+    <label class="field"><span id="${p}_startLabel">${every > 1 ? 'First session on' : 'Starts on (optional)'}</span><input type="date" id="${p}_start" value="${esc(rule.start || '')}"></label>
+    <label class="field"><span>Ends on (optional)</span><input type="date" id="${p}_end" value="${esc(rule.end || '')}"></label>
+  </div>`;
+}
+function wireRecurrenceFields(root, p, getDow){
+  const sel = root.querySelector('#' + p + '_every'), st = root.querySelector('#' + p + '_start'), lab = root.querySelector('#' + p + '_startLabel'); if (!sel || !st) return;
+  sel.onchange = () => {
+    const two = Number(sel.value) > 1; lab.textContent = two ? 'First session on' : 'Starts on (optional)';
+    if (two && !st.value){ const nd = nextRuleDate(getDow(), todayISO()); if (nd) st.value = nd; }
+  };
+}
+/* Reads the three fields; returns { every, start, end } or null after telling the coach what to fix. */
+function readRecurrence(root, p, dow){
+  const every = Number(root.querySelector('#' + p + '_every').value) || 1, start = root.querySelector('#' + p + '_start').value || '', end = root.querySelector('#' + p + '_end').value || '';
+  if ((start && !isISODate(start)) || (end && !isISODate(end))){ toast('Check the dates'); return null; }
+  if (every > 1 && !(dow || []).length){ toast('Choose the weekdays first'); return null; }
+  if (every > 1 && !start){ toast('Choose the first session date for an every-2-weeks pattern'); return null; }
+  if (start && end && end < start){ toast('The end date is before the start date'); return null; }
+  return { every, start, end };
+}
 function scheduledOn(dateISO){
-  const d = dowOf(dateISO);
-  return Object.entries(S.groups).map(([id,g]) => ({id,...g})).filter(g => (g.dow||[]).includes(d) && !isSkipped(dateISO, g.id)).sort((a,b) => timeSortKey(a.time) - timeSortKey(b.time) || (a.name||'').localeCompare(b.name||''));
+  return Object.entries(S.groups).map(([id,g]) => ({id,...g})).filter(g => ruleOccursOn(groupRule(g), dateISO) && !isSkipped(dateISO, g.id)).sort((a,b) => timeSortKey(a.time) - timeSortKey(b.time) || (a.name||'').localeCompare(b.name||''));
 }
 function groupMembers(gid){ return Object.entries(S.clients).map(([id,c]) => ({id,...c})).filter(c => c.groupId === gid && c.status !== 'archived').sort(byName); }
 /* ---- scheduling: one-off and moved sessions, and skipped recurring occurrences ---- */
@@ -1556,9 +1751,9 @@ function missedUnmarkedCount(cid){
   const due = new Set();
   const d = new Date(from + 'T12:00:00'); let guard = 0;
   for (; isoOf(d) < today && guard < 1200; d.setDate(d.getDate()+1), guard++){
-    const iso = isoOf(d), dow = d.getDay();
-    if (g && iso >= gFrom && (g.dow||[]).includes(dow) && !isSkipped(iso, c.groupId)) due.add(iso);
-    if (iso >= sFrom && Array.isArray(c.recurDow) && c.recurDow.includes(dow) && !isSkipped(iso, cid)) due.add(iso);
+    const iso = isoOf(d);
+    if (g && iso >= gFrom && ruleOccursOn(groupRule(g), iso) && !isSkipped(iso, c.groupId)) due.add(iso);
+    if (iso >= sFrom && ruleOccursOn(soloRule(c), iso) && !isSkipped(iso, cid)) due.add(iso);
   }
   Object.values(S.schedule).forEach(s => { if (s.status !== 'cancelled' && (s.clientIds||[]).includes(cid) && s.date >= from && s.date < today) due.add(s.date); });
   let n = 0; due.forEach(iso => { if (!attFor(iso, cid)) n++; });
@@ -1578,52 +1773,39 @@ async function restoreOccurrence(date, key){
     try { await Store.del('schedule', sid); delete S.schedule[sid]; } catch(e){ showSaveError(e); }
   }
 }
-function scheduleSessionDialog(iso){
-  const clients = Object.entries(S.clients).map(([id,c]) => ({id,...c})).filter(c => c.status !== 'archived').sort(byName);
-  const dlg = dialog('Add session',
-    `<label class="field"><span>Date</span><input type="date" id="s_date" value="${esc(iso)}"></label>
-     ${timeFieldHTML('s_time', '', 'Time')}
-     <label class="field"><span>Who — one or two clients</span></label>
-     <div class="stack small">${clients.map(c => `<label class="row tight" style="gap:.4rem"><input type="checkbox" class="smem" value="${esc(c.id)}" style="width:auto"> ${esc(c.name)}</label>`).join('') || '<span class="muted">No clients yet.</span>'}</div>
-     <label class="field"><span>Note</span><input type="text" id="s_note" placeholder="Optional"></label>`,
-    [{label:'Cancel'},{label:'Add', kind:'primary', onClick: async () => {
-      const date = val('s_date'), ids = [...document.querySelectorAll('.smem:checked')].map(i => i.value);
-      if (!isISODate(date)){ toast('Choose a date'); return false; }
-      if (!ids.length){ toast('Choose at least one client'); return false; }
-      if (ids.length > 2){ toast('At most 2 clients per session'); return false; }
-      const id = uid(), rec = { date, time: timeFieldVal('s_time'), clientIds: ids, note: val('s_note'), status:'scheduled' };
-      try { await Store.put('schedule', id, rec); } catch(e){ showSaveError(e); return false; }
-      S.schedule[id] = rec; S.sel.day = date; S.sel.month = date.slice(0,7); toast('Session added'); render();
-    }}]);
-  dlg.querySelectorAll('.smem').forEach(box => box.onchange = () => {
-    if (dlg.querySelectorAll('.smem:checked').length > 2){ box.checked = false; toast('At most 2 clients per session'); }
-  });
-}
+/* Reschedule: used when a client asks to move a session. Opens a picker for the new date and time. A recurring occurrence is
+   taken off its date and added as a one-off on the new one (Undo on the old date puts it back); a one-off is simply moved. */
 function moveOccurrenceDialog(kind, key, fromDate){
-  const name = kind === 'group' ? (S.groups[key]||{}).name : (S.clients[key]||{}).name;
-  const time = kind === 'group' ? (S.groups[key]||{}).time : (S.clients[key]||{}).recurTime;
+  const one = kind === 'oneoff' ? S.schedule[key] : null; if (kind === 'oneoff' && !one) return;
+  const name = one ? (one.label || 'session') : kind === 'group' ? (S.groups[key]||{}).name : (S.clients[key]||{}).name;
+  const time = one ? one.time : kind === 'group' ? (S.groups[key]||{}).time : (S.clients[key]||{}).recurTime;
   const d = new Date(fromDate + 'T12:00:00'); d.setDate(d.getDate() + 1);
-  dialog('Move ' + (name||'session'),
-    `<p class="small muted">Skips ${esc(fromDate)} and adds a one-off session on the new date.</p>
-     <label class="field"><span>Move to</span><input type="date" id="mv_date" value="${esc(isoOf(d))}"></label>
-     ${timeFieldHTML('mv_time', time, 'Time')}`,
-    [{label:'Cancel'},{label:'Move', kind:'primary', onClick: async () => {
+  dialog('Reschedule ' + (name||'session'),
+    `<p class="small muted">${one ? 'Moves this session to a new date or time.' : 'Takes the session off ' + esc(fromDate) + ' and adds it on the new date. Use this when the client asks to move it.'}${kind === 'group' ? ' This moves the whole pairing session (' + esc(groupMembers(key).map(c => c.name).join(' & ') || 'nobody assigned') + ').' : ''}</p>
+     <label class="field"><span>New date</span><input type="date" id="mv_date" value="${esc(isoOf(d))}"></label>
+     ${timeFieldHTML('mv_time', time, 'New time')}`,
+    [{label:'Cancel'},{label:'Reschedule', kind:'primary', onClick: async () => {
       const date = val('mv_date');
-      if (!isISODate(date) || date === fromDate){ toast('Choose a different date'); return false; }
+      if (!isISODate(date)){ toast('Choose a date'); return false; }
+      if (one){
+        if (date === one.date && timeFieldVal('mv_time') === (one.time || '')){ toast('Choose a different date or time'); return false; }
+        const next = { ...one, date, time: timeFieldVal('mv_time'), note: one.note || 'Rescheduled from ' + one.date };
+        try { await Store.put('schedule', key, next); } catch(e){ showSaveError(e); return false; }
+        S.schedule[key] = next; S.sel.day = date; S.sel.month = date.slice(0,7); toast('Rescheduled to ' + date); render(); return;
+      }
+      if (date === fromDate){ toast('Choose a different date'); return false; }
       const ids = kind === 'group' ? groupMembers(key).map(c => c.id) : [key];
       if (!(await skipOccurrence(key, kind, fromDate))) return false;
-      const id = uid(), rec = { date, time: timeFieldVal('mv_time'), clientIds: ids, label: name, note: 'Moved from ' + fromDate, status:'scheduled', movedFrom: fromDate, movedKey: key };
+      const id = uid(), rec = { date, time: timeFieldVal('mv_time'), clientIds: ids, label: name, note: 'Rescheduled from ' + fromDate, status:'scheduled', movedFrom: fromDate, movedKey: key };
       try { await Store.put('schedule', id, rec); } catch(e){ showSaveError(e); return false; }
-      S.schedule[id] = rec; S.sel.day = date; S.sel.month = date.slice(0,7); toast('Moved to ' + date); render();
+      S.schedule[id] = rec; S.sel.day = date; S.sel.month = date.slice(0,7); toast('Rescheduled to ' + date); render();
     }}]);
 }
-
 /* Clients with their own recurring day/time, independent of any pairing —
    covers a solo client who isn't part of a two-person slot. */
 function individualsOn(dateISO){
-  const d = dowOf(dateISO);
   return Object.entries(S.clients).map(([id,c]) => ({id,...c}))
-    .filter(c => c.status !== 'archived' && Array.isArray(c.recurDow) && c.recurDow.includes(d) && !isSkipped(dateISO, c.id))
+    .filter(c => c.status !== 'archived' && ruleOccursOn(soloRule(c), dateISO) && !isSkipped(dateISO, c.id))
     .sort((a,b) => timeSortKey(a.recurTime) - timeSortKey(b.recurTime) || byName(a,b));
 }
 
@@ -1749,21 +1931,17 @@ function exercisePicker(title,onChoose){
   const cats=[...new Set([...uniq('category'),'Other'])];
   const dlg=dialog(title,`<div id="exercisePickerMain"><label class="field"><span>Search exercises</span><input type="search" id="exercisePickerSearch" placeholder="Type an exercise name"></label><div class="exercise-picker-list" id="exercisePickerList"></div></div>
     <div id="exercisePickerCreate" hidden>
-      <label class="field"><span>Name</span><input type="text" id="newExName" autocomplete="off"></label>
-      <div class="inline-fields">
-        <label class="field"><span>Category</span><select id="newExCategory">${cats.map(c=>`<option ${c==='Other'?'selected':''}>${esc(c)}</option>`).join('')}</select></label>
-        <label class="field"><span>Equipment</span><input type="text" id="newExEquipment" list="newExEquipmentList" placeholder="Barbell, dumbbell" autocomplete="off"><datalist id="newExEquipmentList">${uniq('equipment').map(e=>`<option value="${esc(e)}">`).join('')}</datalist></label>
-      </div>
+      ${exerciseFieldsHTML('newEx')}
       <div class="row"><button type="button" class="btn ghost" id="newExBack">Back</button><button type="button" class="btn primary" id="newExSave">Add exercise</button></div>
     </div>`,[{label:'Cancel'}]);
   const search=dlg.querySelector('#exercisePickerSearch'),list=dlg.querySelector('#exercisePickerList');
   const mainBox=dlg.querySelector('#exercisePickerMain'),createBox=dlg.querySelector('#exercisePickerCreate'),nameInput=dlg.querySelector('#newExName');
+  wireExerciseFields(dlg,'newEx');
   const showCreate=()=>{nameInput.value=(search.value||'').trim();mainBox.hidden=true;createBox.hidden=false;nameInput.focus();};
   dlg.querySelector('#newExBack').onclick=()=>{createBox.hidden=true;mainBox.hidden=false;search.focus();};
   const saveNew=async()=>{
-    const name=nameInput.value.trim();if(!name){toast('Give the exercise a name');nameInput.focus();return;}
-    if(activeExercises().some(e=>String(e.name).trim().toLocaleLowerCase()===name.toLocaleLowerCase())){toast('That exercise is already in the library');return;}
-    const ex={id:uid(),name,category:dlg.querySelector('#newExCategory').value||'Other',equipment:dlg.querySelector('#newExEquipment').value.trim()};
+    const f=readExerciseFields(dlg,'newEx');if(!f)return;
+    const ex={id:uid(),...f};
     if(!(await saveExerciseList([...S.exercises,ex])))return;
     const result=await onChoose(ex.id);if(result===false)return;if(dlg.open)dlg.close();
   };
@@ -2521,13 +2699,6 @@ function consentPillHTML(c){
   return s === 'given' ? '' : s === 'withdrawn' ? ' <span class="pill bad">Consent withdrawn</span>' : ' <span class="pill warn">No consent recorded</span>';
 }
 /* Consent is recorded on the Edit Client page and is required before changes there can be saved. */
-function consentSummaryHTML(c){
-  const k = c.consent || {}, s = consentState(c);
-  const text = s === 'given' ? `Recorded on <strong>${esc(k.date)}</strong>. ${k.outsideKenya ? 'They agreed that synced copies may be stored outside Kenya.' : 'Not agreed to storage outside Kenya, so their data stays on this device.'}`
-    : s === 'withdrawn' ? `Withdrawn on <strong>${esc(k.withdrawnAt)}</strong>. Stop recording new data about them; archive or delete them.`
-    : 'Not recorded yet. Open Edit Client to record it.';
-  return `<div class="dash-row"><span class="dash-label">Consent</span><span class="dash-value small">${text}</span></div>`;
-}
 function consentFieldsHTML(c, cid){
   const k = c.consent || {}, s = consentState(c), given = s === 'given';
   const intro = given ? `Consent recorded on <strong>${esc(k.date)}</strong>. Update the details below if they changed.`
@@ -3162,8 +3333,7 @@ const Lock = {
         ${alts.length ? `<div class="lk-alt${alts.length === 1 ? ' one' : ''}">${alts.join('')}</div>` : ''}
         <p class="lk-signup">Don\u2019t have an account? <button type="button" class="lk-link2" data-lk="signup">Sign up</button></p></form>`;
     }
-    el.innerHTML = `<div class="lock-top"><span class="lock-pill ${s.cls}" id="lockPill"><i></i><span>${esc(s.text)}</span></span></div>
-      <div class="lock-card"><header class="lock-brand"><div class="logo" aria-hidden="true">N</div><h1>Nyaega</h1><p>Your coaching workspace</p></header>
+    el.innerHTML = `<div class="lock-card"><header class="lock-brand"><div class="logo" aria-hidden="true">N</div><h1>Nyaega</h1><p>Your coaching workspace</p></header>
         <div class="lock-roles" role="tablist" aria-label="I am a">${roles.map(([k, l]) => `<button type="button" role="tab" id="lkrole-${k}" aria-selected="${this.role === k}" data-lk="role" data-r="${k}">${l}</button>`).join('')}</div>
         <div class="lock-body">${body}</div></div>`;
     if (this.locked){   // no sign-up, no other providers, no local-mode shortcut while locked
@@ -3732,7 +3902,7 @@ function partnerOf(cid){
 function showLoadFailure(err){
   S.bootState = 'failed';
   const local = MODE === 'local';
-  const status = document.getElementById('status'); if (status) status.textContent = 'Data not loaded — nothing is being saved';
+  const status = document.getElementById('status'); if (status){ status.textContent = 'Data not loaded — nothing is being saved'; status.hidden = false; }
   document.getElementById('tabs').innerHTML = '';
   document.getElementById('main').innerHTML = `<div class="panel stack" role="alert" style="max-width:640px;margin:2rem auto">
     <h2>Couldn't load your data</h2>
@@ -3755,7 +3925,6 @@ function showLoadFailure(err){
   };
 }
 
-const VIEWS = [['dashboard','Dashboard'],['programs','Programs'],['exercises','Exercises'],['history','History']];
 const DASH_SUBS = [['today','Today'],['calendar','Calendar'],['clients','Clients'],['groups','Pairings'],['data','Data']];
 const DASH_VIEWFN = { today:viewToday, calendar:viewCalendar, clients:viewClients, groups:viewGroups, data:viewData };
 const TOP_VIEWFN = { programs:viewPrograms, conditioning:viewConditioning, exercises:viewExercises, history:viewProgress, session:viewSession };
@@ -3777,12 +3946,15 @@ function viewSession(){
   return '';
 }
 
+/* The sidebar (wide screens) and the in-workout top tabs (phones) list the same five places as the phone's bottom bar
+   (MOBILE_NAV and navPress, in 38-mobile-nav.js; built after boot, when that file has loaded). Home is the logo;
+   Schedule and Settings are the header icons. */
 function buildTabs(){
   const nav = document.getElementById('tabs'); nav.innerHTML = '';
-  VIEWS.forEach(([k,label]) => {
+  MOBILE_NAV.forEach(([k,label]) => {
     const b = document.createElement('button');
     b.textContent = label; b.dataset.k = k;
-    b.onclick = () => { flushProgramEditor(); parkWorkout(); S.view = k; if (k === 'dashboard' && !S.sub) S.sub = 'today'; S.sel = k==='programs'?{programSection:'programs'}:{}; render(); };
+    b.onclick = () => navPress(k);
     nav.appendChild(b);
   });
 }
@@ -4207,12 +4379,11 @@ function render(opts = {}){
   const m = document.getElementById('main');
   const key = routeKey(), keep = opts.keepScroll ?? (lastRouteKey !== null && key === lastRouteKey);
   const scrollY = window.scrollY, focus = keep ? captureFocus(m) : null, openPanels = keep ? captureOpenPanels(m) : null;
-  document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-current', String(b.dataset.k === (S.view === 'session' ? ((S.returnTo && S.returnTo.view) || 'dashboard') : S.view) || (b.dataset.k==='programs'&&S.view==='conditioning'))));
+  const tabNow = navKeyNow();
+  document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-current', String(b.dataset.k === tabNow)));
   if (S.view === 'dashboard'){
-    const sub = S.sub || 'today';
-    const subNav = `<nav class="subtabs" aria-label="Dashboard sections">${DASH_SUBS.map(([k,label]) =>
-      `<button data-sub="${k}" aria-current="${sub===k}">${esc(label)}</button>`).join('')}</nav>`;
-    m.innerHTML = subNav + DASH_VIEWFN[sub]();
+    // Today, Schedule, Clients, Pairings and Settings are reached from the header and the tabs; no sub-tab row.
+    m.innerHTML = DASH_VIEWFN[S.sub || 'today']();
   } else {
     m.innerHTML = TOP_VIEWFN[S.view]();
   }
@@ -4229,6 +4400,7 @@ function render(opts = {}){
   // Focus mode: while logging on a phone/tablet, hide the sub-tabs and shrink the header (CSS: body.in-session).
   document.body.classList.toggle('in-session',!!(S.sel?.draft||(S.sel?.conditioningClient&&S.sel?.conditioningSession)));
   if (typeof updateBottomNav === 'function') updateBottomNav();
+  setStatus();
   syncWakeLock();
   startWorkoutTicker();
   if(currentWorkoutSnapshot())scheduleWorkoutAutosave();
@@ -4238,10 +4410,8 @@ function render(opts = {}){
 }
 
 /* ============================ TODAY ============================ */
-/* Today lists who trains today with their attendance status. Tapping a
-   client opens quick actions (start the next program day, conditioning,
-   Attended / No-show, profile) — see openTodayActions. Status comes from
-   the attendance record for the date. */
+/* Today lists who trains today with their attendance status. It is read-only: sessions are logged with the "+" button,
+   and No-show, Cancelled and Reschedule are on the Schedule (calendar) tab. Status comes from the attendance record for the date. */
 /* Tomorrow through the next 7 days. */
 function upcomingHTML(){
   const list = upcomingSessions(7);
@@ -4286,32 +4456,35 @@ function viewToday(){
     const oo = oneOffToday.find(s => (s.clientIds||[]).includes(c.id));
     const timeNote = g && g.time && pairingIds.has(c.id) ? fmtTime(g.time) : (individualIds.has(c.id) ? fmtTime(c.recurTime) : (oo ? fmtTime(oo.time) : ''));
     const nextDay = p?.days?.[nextDayIndex(c.id)]?.name;
-    return `<div class="card today-card" data-today-client="${esc(c.id)}" role="button" tabindex="0" aria-label="${esc(c.name)} — actions">
+    return `<div class="card today-card">
       <div class="spread">
         <span class="name" style="display:flex;align-items:center;gap:.5rem">${avatarHTML(c.name)}${esc(c.name)}</span>
         ${statusPill(a ? a.status : '')}
       </div>
       <div class="small muted">${p ? esc(p.name) + ' · ' + esc(weekTextFor(p, c.currentWeek || 1)) : 'No program assigned'}${timeNote ? ' · ' + esc(timeNote) : ''}</div>
-      ${nextDay ? `<div class="small"><strong>Next: ${esc(nextDay)}</strong> <span class="muted">· tap to start or mark attendance</span></div>` : `<div class="small muted">Tap to start or mark attendance</div>`}
+      ${nextDay ? `<div class="small"><strong>Next: ${esc(nextDay)}</strong></div>` : ''}
     </div>`;
   };
 
   return `
-  <div class="panel">
-    <div class="spread">
-      <h2>${new Date().toLocaleDateString(undefined,{weekday:'long', day:'numeric', month:'long'})}</h2>
-      <span class="muted small num">${attended} attended · ${missed} missed · ${pending} pending</span>
+  <div class="panel today-summary">
+    <span class="eyebrow">${esc(new Date().toLocaleDateString(undefined,{weekday:'long', day:'numeric', month:'long'}))}</span>
+    <h2>Today's attendance</h2>
+    <div class="att-stats">
+      <div class="att-stat ok"><span>Attended</span><strong class="num">${attended}</strong></div>
+      <div class="att-stat bad"><span>Missed</span><strong class="num">${missed}</strong></div>
+      <div class="att-stat warn"><span>Pending</span><strong class="num">${pending}</strong></div>
     </div>
-    ${total ? `<div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>` : ''}
+    ${total ? `<div class="progress-track" role="img" aria-label="${pct}% attended so far"><div class="progress-fill" style="width:${pct}%"></div></div>` : ''}
   </div>
   ${!relevant.length
-    ? `<div class="empty"><p>Nothing scheduled today. Set weekdays on a pairing or a client's recurring sessions, or mark someone in from Calendar.</p></div>`
-    : `<div class="stack">${relevant.map(clientCard).join('')}</div>`}
+    ? `<div class="empty"><p>Nothing scheduled today. Set weekdays on a pairing or a client's recurring sessions.</p></div>`
+    : `<span class="eyebrow today-list-head">Clients</span><div class="stack">${relevant.map(clientCard).join('')}</div>`}
   ${exportReminderHTML()}
   ${retentionReminderHTML()}
   ${conflictsPanelHTML()}
   ${upcomingHTML()}
-  <p class="small muted" style="margin-top:.8rem">Mark attendance on the cards above. No-shows, cancellations and other days are on the Calendar tab.</p>`;
+  <p class="small muted" style="margin-top:.8rem">Log a session with the + button. No-shows, cancellations and rescheduling are in the Schedule (the calendar icon at the top).</p>`;
 }
 
 /* Injuries, preferences and goal, pinned at the top of the workout. Open by default when there
@@ -4611,38 +4784,27 @@ function openConditioningChooser(cid){
     beginClientWorkout(cid,'conditioning',templateId,withPartner?partner.id:'');
   });
 }
-/* Today card → quick actions for that client, so the usual "who's next → start" is two taps. */
+/* "More" in the + menu's session picker: resume, start a conditioning session, or open the profile. (No attendance buttons here:
+   No-show and Cancelled are set on the Schedule tab, and a logged session marks the client attended.) */
 function openTodayActions(cid){
   const c=S.clients[cid];if(!c)return;
   const p=S.programs[c.programId],di=nextDayIndex(cid),dayName=p?.days?.[di]?.name;
-  const iso=todayISO(),status=attFor(iso,cid)?.status||'',parked=!!sessionFor(cid);
-  const statusText=status==='attended'?'Marked attended today':status==='no-show'?'Marked no-show today':status==='cancelled'?'Marked cancelled today':'Not marked yet today';
-  const dlg=dialog(c.name,`<p class="small muted">${esc(statusText)}${p?` · ${esc(p.name)}`:''}</p>
+  const parked=!!sessionFor(cid);
+  const dlg=dialog(c.name,`<p class="small muted">${p?esc(p.name):'No program assigned'}</p>
     <div class="today-actions">
       ${parked?`<button type="button" class="btn primary" data-today-action="resume">Resume workout in progress</button>`:''}
       <button type="button" class="btn ${parked?'ghost':'primary'}" data-today-action="start">${dayName?'Log session · '+esc(dayName):'Log session'}</button>
       <button type="button" class="btn ghost" data-today-action="conditioning">Conditioning…</button>
-      <div class="today-actions-pair">
-        <button type="button" class="btn ${status==='attended'?'primary':'ghost'}" data-today-action="attended" aria-pressed="${status==='attended'}">${status==='attended'?'✓ Attended':'Attended'}</button>
-        <button type="button" class="btn ${status==='no-show'?'danger':'ghost'}" data-today-action="no-show" aria-pressed="${status==='no-show'}">No-show</button>
-      </div>
       <button type="button" class="btn ghost" data-today-action="profile">Open profile</button>
     </div>`,[{label:'Close'}]);
-  const act=async kind=>{
+  const act=kind=>{
     if(kind==='resume'){dlg.close();resumeParkedWorkout(sessionKey(sessionFor(cid)));return;}
     if(kind==='start'){dlg.close();beginClientWorkout(cid,'strength');return;}
     if(kind==='conditioning'){openConditioningChooser(cid);return;}
     if(kind==='profile'){dlg.close();S.view='dashboard';S.sub='clients';S.sel={client:cid};render();return;}
-    const next=status===kind?'':kind;   // tapping the current status clears it
-    try{await setAttendance(iso,cid,next,c.groupId||'');}catch(e){showSaveError(e);return;}
-    dlg.close();
-    const fresh=S.clients[cid];
-    toast(next==='attended'?(fresh.packTotal&&sessionsLeft(fresh)===0?fresh.name+' has now used the last session in the pack':fresh.name+' marked attended'):next==='no-show'?fresh.name+' marked no-show':'Attendance cleared');
-    render();
   };
   dlg.querySelectorAll('[data-today-action]').forEach(b=>b.onclick=()=>act(b.dataset.todayAction));
-}
-function markStrengthActivity(){
+}function markStrengthActivity(){
   const d=S.sel&&S.sel.draft;
   // (Editing a saved session must not move its strength/conditioning order.)
   if(d&&!d.editing&&(d.conditioningTemplateId||d.conditioningInProgress||d.conditioningSession))d.strengthCompletedAt=Date.now();
@@ -4785,6 +4947,11 @@ function viewCalendar(){
   ${dayPanel(day)}`;
 }
 
+/* The day under the calendar is for what happens to a booked session: mark a client No-show or Cancelled, or reschedule it
+   when the client asks. Sessions are logged only with the "+" button; attended marks come from logging them. */
+/* The day under the calendar is for what happens to a booked session: mark a client No-show or Cancelled, or reschedule it
+   when the client asks (the button sits on the same row). Sessions are logged with the "+" button or from a client's
+   profile; attended marks come from logging them. */
 function dayPanel(iso){
   const slots = scheduledOn(iso);
   const nice = new Date(iso + 'T12:00:00').toLocaleDateString(undefined, { weekday:'long', day:'numeric', month:'long' });
@@ -4796,21 +4963,19 @@ function dayPanel(iso){
   const scheduledIds = new Set([...pairingIds, ...individuals.map(c => c.id), ...oneOffs.flatMap(s => s.clientIds||[])]);
   const extras = Object.entries(S.clients).map(([id,c]) => ({id,...c}))
     .filter(c => c.status !== 'archived' && marked.has(c.id) && !scheduledIds.has(c.id)).sort(byName);
-  const unlisted = Object.entries(S.clients).map(([id,c]) => ({id,...c}))
-    .filter(c => c.status !== 'archived' && !marked.has(c.id) && !scheduledIds.has(c.id) && clientMatches(c, S.search.adhoc)).sort(byName);
 
-  const roster = (c, gid) => {
+  /* moveRef: which booking the Reschedule button on this row moves ('group|id|date', 'client|id|date' or 'oneoff|id|date'). */
+  const roster = (c, gid, moveRef, note) => {
     const a = attFor(iso, c.id), st = a ? a.status : '';
     const logged = logsOnDate(c.id, iso);
     return `<div class="att-row">
-      <div><strong>${esc(c.name)}</strong>
-        ${logged ? '<span class="pill ok">workout logged</span>' : ''}</div>
+      <div><strong>${esc(c.name)}</strong>${note ? ` <span class="small muted">${esc(note)}</span>` : ''}
+        ${st === 'attended' ? '<span class="pill ok">attended</span>' : ''}${logged ? ' <span class="pill ok">workout logged</span>' : ''}</div>
       <div class="row tight">
-        <button class="btn sm ${st==='attended'?'primary':'ghost'}" data-att="${esc(c.id)}|attended|${esc(gid)}|${esc(iso)}">Attended</button>
-        <button class="btn sm ${st==='no-show'?'danger':'ghost'}" data-att="${esc(c.id)}|no-show|${esc(gid)}|${esc(iso)}">No-show</button>
-        <button class="btn sm ${st==='cancelled'?'danger':'ghost'}" data-att="${esc(c.id)}|cancelled|${esc(gid)}|${esc(iso)}">Cancelled</button>
-        ${st ? `<button class="btn sm ghost" data-att="${esc(c.id)}||${esc(gid)}|${esc(iso)}" title="Clear">×</button>` : ''}
-        <button class="btn sm ghost" data-logdate="${esc(c.id)}|${esc(iso)}">Log session</button>
+        <button class="btn sm ${st==='no-show'?'danger':'ghost'}" data-att="${esc(c.id)}|no-show|${esc(gid)}|${esc(iso)}" aria-pressed="${st==='no-show'}">No-show</button>
+        <button class="btn sm ${st==='cancelled'?'danger':'ghost'}" data-att="${esc(c.id)}|cancelled|${esc(gid)}|${esc(iso)}" aria-pressed="${st==='cancelled'}">Cancelled</button>
+        ${moveRef ? `<button class="btn sm ghost" data-move="${esc(moveRef)}">Reschedule</button>` : ''}
+        ${st === 'no-show' || st === 'cancelled' ? `<button class="btn sm ghost" data-att="${esc(c.id)}||${esc(gid)}|${esc(iso)}" title="Clear" aria-label="Clear the mark for ${esc(c.name)}">×</button>` : ''}
       </div>
     </div>`;
   };
@@ -4824,41 +4989,28 @@ function dayPanel(iso){
       return `<div class="slot">
         <div class="slot-head"><strong class="cond" style="font-size:1.15rem">${esc(s.name)}</strong>
           <span class="muted small">${esc(fmtTime(s.time))} · ${mem.length===1?'1:1':mem.length===2?'Paired':mem.length+' — check pairing'}</span></div>
-        ${mem.map(c => roster(c, s.id)).join('') || '<p class="muted small" style="padding:.5rem .7rem">Nobody assigned to this pairing yet.</p>'}
-        <div class="sched-actions"><button class="btn sm ghost" data-skip="group|${esc(s.id)}|${esc(iso)}">Skip this date</button><button class="btn sm ghost" data-move="group|${esc(s.id)}|${esc(iso)}">Move to…</button></div>
+        ${mem.map(c => roster(c, s.id, 'group|' + s.id + '|' + iso)).join('') || '<p class="muted small" style="padding:.5rem .7rem">Nobody assigned to this pairing yet.</p>'}
       </div>`;
     }).join('') : ''}
 
     ${individuals.length ? `<div class="slot"><div class="slot-head"><strong class="cond" style="font-size:1.15rem">Individual sessions</strong>
         <span class="muted small">Recurring, not part of a pairing</span></div>
-      ${individuals.map(c => roster(c, '') + `<div class="sched-actions"><span class="small muted">${esc(fmtTime(c.recurTime))}</span><button class="btn sm ghost" data-skip="client|${esc(c.id)}|${esc(iso)}">Skip this date</button><button class="btn sm ghost" data-move="client|${esc(c.id)}|${esc(iso)}">Move to…</button></div>`).join('')}</div>` : ''}
+      ${individuals.map(c => roster(c, '', 'client|' + c.id + '|' + iso, fmtTime(c.recurTime))).join('')}</div>` : ''}
 
     ${oneOffs.map(s => `<div class="slot"><div class="slot-head"><strong class="cond" style="font-size:1.15rem">${esc(s.label || 'One-off session')}</strong>
         <span class="muted small">${esc(fmtTime(s.time))}${s.note ? ' · ' + esc(s.note) : ''}</span></div>
-      ${(s.clientIds||[]).filter(i => S.clients[i]).map(i => roster({id:i, ...S.clients[i]}, '')).join('')}
-      <div class="sched-actions"><button class="btn sm ghost" data-remove-oneoff="${esc(s.id)}">Remove session</button></div></div>`).join('')}
+      ${(s.clientIds||[]).filter(i => S.clients[i]).map(i => roster({id:i, ...S.clients[i]}, '', 'oneoff|' + s.id + '|' + iso)).join('')}</div>`).join('')}
 
-    ${skipped.length ? `<div class="small muted" style="margin:.5rem 0">Skipped this date: ${skipped.map(e => {
+    ${skipped.length ? `<div class="small muted" style="margin:.5rem 0">Rescheduled from this date: ${skipped.map(e => {
       const n = e.kind === 'group' ? (S.groups[e.key]||{}).name : (S.clients[e.key]||{}).name;
-      return `${esc(n || '(deleted)')} <button class="btn sm ghost" data-restore-skip="${esc(e.date)}|${esc(e.key)}">Restore</button>`;
+      const to = Object.values(S.schedule).find(x => x.movedFrom === e.date && x.movedKey === e.key);
+      return `${esc(n || '(deleted)')}${to ? ' → ' + esc(to.date) : ''} <button class="btn sm ghost" data-restore-skip="${esc(e.date)}|${esc(e.key)}">Undo</button>`;
     }).join(' ')}</div>` : ''}
 
-    ${!slots.length && !individuals.length && !oneOffs.length ? '<p class="muted small">Nothing recurring scheduled on this day. Set weekdays on a pairing, or on a client\'s own recurring sessions, or mark someone below for a one-off.</p>' : ''}
+    ${!slots.length && !individuals.length && !oneOffs.length ? '<p class="muted small">Nothing scheduled on this day. Recurring days are set on a pairing or on a client\'s own recurring sessions.</p>' : ''}
 
-    ${extras.length ? `<div class="slot"><div class="slot-head"><strong class="cond" style="font-size:1.15rem">One-off</strong></div>
-      ${extras.map(c => roster(c, '')).join('')}</div>` : ''}
-
-    <div class="row" style="margin-top:.7rem">
-      <button class="btn ghost" id="addSessionBtn" data-date="${esc(iso)}">Add session</button>
-    </div>
-    <div class="row" style="margin-top:.7rem">
-      ${Object.keys(S.clients).length > 6 ? searchBoxHTML('adhoc', 'Filter clients', 'Filter by name…') : ''}
-      <select id="adhoc" style="max-width:260px">
-        <option value="">Mark someone else in…</option>
-        ${unlisted.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('')}
-      </select>
-      <button class="btn ghost" id="adhocBtn" data-date="${esc(iso)}">Mark attended</button>
-    </div>
+    ${extras.length ? `<div class="slot"><div class="slot-head"><strong class="cond" style="font-size:1.15rem">Other marks</strong></div>
+      ${extras.map(c => roster(c, '', '')).join('')}</div>` : ''}
   </div>`;
 }
 
@@ -4895,7 +5047,8 @@ function clientDashboard(cid){
   const records = attList(cid);
   const attendedN = records.filter(a => a.status === 'attended').length;
   const missedUnmarked = missedUnmarkedCount(cid);
-  const pct = records.length + missedUnmarked ? Math.round((attendedN / (records.length + missedUnmarked)) * 100) : null;
+  const counted = records.filter(a => a.status !== 'cancelled').length;   // a cancelled session is not held against the client
+  const pct = counted + missedUnmarked ? Math.round((attendedN / (counted + missedUnmarked)) * 100) : null;
   const lastSession = logs[0];
 
   return `
@@ -4911,8 +5064,6 @@ function clientDashboard(cid){
     ${c.packTotal ? `<div class="dash-row"><span class="dash-label">Sessions</span><span class="dash-value num">${esc(packUsedOf(c, cid))} / ${esc(c.packTotal)}</span></div>` : ''}
     <div class="dash-row"><span class="dash-label">Attendance</span><span class="dash-value num">${pct == null ? '—' : pct + '%'}${missedUnmarked ? `<span class="small muted"> · ${missedUnmarked} unmarked counted as missed</span>` : ''}</span></div>
     <div class="dash-row"><span class="dash-label">Last session</span><span class="dash-value">${lastSession ? esc(lastSession.date) : 'No sessions yet'}</span></div>
-    ${Sync.role === 'assistant' ? '' : consentSummaryHTML(c)}
-    ${syncNoteHTML(c)}
   </div>
   ${String(c.notes||'').trim() ? `<div class="panel client-notes-panel"><h3>Notes — injuries, preferences</h3><p>${esc(c.notes).replace(/\n/g,'<br>')}</p></div>` : ''}
 
@@ -4987,6 +5138,7 @@ function clientEditPanel(cid){
       <div class="row tight" style="margin-bottom:.5rem">${DOW.map((d,i) => `<label class="row tight small" style="gap:.2rem">
         <input type="checkbox" class="c_recurdow" value="${i}" ${(c.recurDow||[]).includes(i)?'checked':''} style="width:auto"> ${d}</label>`).join('')}</div>
       ${timeFieldHTML('c_recurtime', c.recurTime, 'Time')}
+      ${recurrenceFieldsHTML('c', soloRule(c))}
     </div>
     <div class="inline-fields">
       <label class="field"><span>Sessions in pack</span><input type="number" id="c_packTotal" min="0" value="${esc(c.packTotal||0)}"></label>
@@ -5034,7 +5186,7 @@ function viewGroups(){
     return `<div class="card" data-group="${esc(g.id)}">
       <div class="spread"><span class="name">${esc(g.name)}</span>
         <span class="pill ${over?'bad':'ok'}">${label}</span></div>
-      <div class="small muted">${(g.dow||[]).length ? g.dow.slice().sort().map(i => DOW[i]).join(' · ') : 'No days set'} ${esc(fmtTime(g.time))}</div>
+      <div class="small muted">${(g.dow||[]).length ? g.dow.slice().sort().map(i => DOW[i]).join(' · ') : 'No days set'} ${esc(fmtTime(g.time))}${ruleText(groupRule(g)) ? ' Â· ' + esc(ruleText(groupRule(g))) : ''}</div>
       <div class="small muted">${members.map(([,c]) => esc(c.name)).join(' & ') || 'Nobody assigned'}</div>
     </div>`;
   }).join('') || '<div class="empty"><p>No pairings yet. Add one for each recurring time you train someone — solo or with a partner.</p></div>'}
@@ -5542,16 +5694,13 @@ function captureConditioningResult(ss,state,opts={ask:true}){
   scheduleWorkoutAutosave();
   if(opts.ask!==false)openConditioningResultDialog(ss,idx);
 }
-function openConditioningResultDialog(ss,idx){
-  const block=(ss.blocks||[])[idx];if(!block)return;
-  const mode=block.mode,val=v=>v==null?'':esc(v);
-  const group=!!sessionClientIds(ss),people=group?ss.clientIds:[null];   // group: one set of fields per client
-  const resultOf=k=>k===0?((ss.results||{})[idx]||{}):((((ss.partnerResults||{})[people[k]])||{})[idx]||{});
+/* The result fields for one block (and optionally one person: `s` is an id suffix), and the matching reader. Used by the
+   live "Block result" window and by editing a saved session. */
+function conditioningResultFieldsHTML(mode,r,s){
+  const val=v=>v==null?'':esc(v);
   const field=(id,label,value,attrs='')=>`<label class="field"><span>${label}</span><input id="${id}" type="text" inputmode="decimal" value="${val(value)}" ${attrs}></label>`;
-  const fieldsFor=k=>{
-    const r=resultOf(k),s=group?'_'+k:'';
-    const rpeOptions=['','6','6.5','7','7.5','8','8.5','9','9.5','10'].map(v=>`<option value="${v}" ${String(r.rpe??'')===v?'selected':''}>${v||'—'}</option>`).join('');
-    return `<div class="inline-fields">
+  const rpeOptions=['','6','6.5','7','7.5','8','8.5','9','9.5','10'].map(v=>`<option value="${v}" ${String(r.rpe??'')===v?'selected':''}>${v||'—'}</option>`).join('');
+  return `<div class="inline-fields">
       ${mode==='forTime'?field('cr_time'+s,'Time (min:sec)',r.timeSeconds!=null?formatClock(r.timeSeconds):'','placeholder="7:42"'):''}
       ${field('cr_rounds'+s,mode==='emom'?'Intervals completed':'Rounds completed',r.roundsCompleted,'inputmode="numeric"')}
       ${mode==='amrap'?field('cr_extra'+s,'Extra reps',r.extraReps,'inputmode="numeric"'):''}
@@ -5560,24 +5709,36 @@ function openConditioningResultDialog(ss,idx){
       <label class="field"><span>RPE (optional)</span><select id="cr_rpe${s}">${rpeOptions}</select></label>
     </div>
     <label class="field"><span>Note (optional)</span><textarea id="cr_note${s}" placeholder="How did it go?">${esc(r.note||'')}</textarea></label>`;
-  };
+}
+/* Returns the new result for the block, or null (after a message) when the time is not written as min:sec. */
+function readConditioningResultFields(mode,prev,idx,s){
+  const val2=id=>document.getElementById(id)?.value.trim()??'';
+  const num=id=>{const t=val2(id);if(t==='')return null;const n=Number(t);return Number.isFinite(n)&&n>=0?n:null;};
+  const next={...prev,blockIndex:idx,mode};
+  const set=(key,v)=>{if(v==null||v==='')delete next[key];else next[key]=v;};
+  set('roundsCompleted',num('cr_rounds'+s));
+  if(mode==='amrap')set('extraReps',num('cr_extra'+s));
+  if(mode==='forTime'){const t=parseClockInput(val2('cr_time'+s));if(val2('cr_time'+s)!==''&&t==null){toast('Enter the time as min:sec, e.g. 7:42');return null;}set('timeSeconds',t);}
+  set('calories',num('cr_cal'+s));set('distance',num('cr_dist'+s));
+  const rpe=val2('cr_rpe'+s);set('rpe',rpe===''?null:Number(rpe));
+  set('note',val2('cr_note'+s));
+  return next;
+}
+function openConditioningResultDialog(ss,idx){
+  const block=(ss.blocks||[])[idx];if(!block)return;
+  const mode=block.mode;
+  const group=!!sessionClientIds(ss),people=group?ss.clientIds:[null];   // group: one set of fields per client
+  const resultOf=k=>k===0?((ss.results||{})[idx]||{}):((((ss.partnerResults||{})[people[k]])||{})[idx]||{});
+  const fieldsFor=k=>conditioningResultFieldsHTML(mode,resultOf(k),group?'_'+k:'');
   const body=`<p class="small muted">${esc(block.name||'Block '+(idx+1))} · ${esc(conditioningModeName(mode))}. ${group?'Filled in from the shared timer — adjust each person\'s result, or skip.':'Filled in from the timer — adjust anything, or skip.'}</p>`
     +people.map((cid,k)=>group?`<fieldset class="cr-person"><legend>${esc((S.clients[cid]||{}).name||'Client')}</legend>${fieldsFor(k)}</fieldset>`:fieldsFor(k)).join('');
   dialog('Block result',body,[
     {label:'Skip'},
     {label:'Save result',kind:'primary',onClick:()=>{
-      const val2=id=>document.getElementById(id)?.value.trim()??'';
-      const num=id=>{const t=val2(id);if(t==='')return null;const n=Number(t);return Number.isFinite(n)&&n>=0?n:null;};
       const nexts=[];
       for(let k=0;k<people.length;k++){
-        const s=group?'_'+k:'',next={...resultOf(k),blockIndex:idx,mode};
-        const set=(key,v)=>{if(v==null||v==='')delete next[key];else next[key]=v;};
-        set('roundsCompleted',num('cr_rounds'+s));
-        if(mode==='amrap')set('extraReps',num('cr_extra'+s));
-        if(mode==='forTime'){const t=parseClockInput(val2('cr_time'+s));if(val2('cr_time'+s)!==''&&t==null){toast('Enter the time as min:sec, e.g. 7:42');return false;}set('timeSeconds',t);}
-        set('calories',num('cr_cal'+s));set('distance',num('cr_dist'+s));
-        const rpe=val2('cr_rpe'+s);set('rpe',rpe===''?null:Number(rpe));
-        set('note',val2('cr_note'+s));
+        const next=readConditioningResultFields(mode,resultOf(k),idx,group?'_'+k:'');
+        if(next===null)return false;
         nexts.push(next);
       }
       nexts.forEach((next,k)=>{
@@ -5588,7 +5749,50 @@ function openConditioningResultDialog(ss,idx){
     }}
   ]);
 }
-function conditioningResultsPanelHTML(ss,blocks){
+/* Edit a saved conditioning session: its date and notes (conditioning-only sessions) and each block's result. Group sessions
+   save one log per client, so this changes only this client's record. */
+function openConditioningLogEdit(logId){
+  const l=S.logs[logId];if(!l||!l.conditioningSession)return;
+  const cs=l.conditioningSession,blocks=Array.isArray(cs.blocks)?cs.blocks:[],only=l.type==='conditioning';
+  const meaningful=r=>['roundsCompleted','extraReps','timeSeconds','calories','distance','rpe','note'].some(k=>r[k]!=null&&r[k]!=='');
+  const body=`${l.sharedSessionId?'<p class="small muted">This was a group session. Only this client\'s record is changed here.</p>':''}
+    ${only?`<label class="field"><span>Date</span><input type="date" id="ce_date" value="${esc(l.date||todayISO())}"></label>`:''}
+    ${blocks.length?blocks.map((b,i)=>`<fieldset class="cr-person"><legend>Block ${i+1} · ${esc(b.name||conditioningModeName(b.mode))} · ${esc(conditioningModeName(b.mode))}</legend>${conditioningResultFieldsHTML(b.mode,(cs.results||{})[i]||{},'_'+i)}</fieldset>`).join(''):'<p class="small muted">Detailed block data was not recorded for this older session.</p>'}
+    ${only?`<label class="field"><span>Session notes</span><textarea id="ce_notes">${esc(l.notes||'')}</textarea></label>`:''}`;
+  dialog('Edit conditioning session',body,[
+    {label:'Cancel'},
+    {label:'Save changes',kind:'primary',onClick:async()=>{
+      const date=only?document.getElementById('ce_date').value:l.date;
+      const notesVal=only?(document.getElementById('ce_notes')?document.getElementById('ce_notes').value.trim():(l.notes||'')):null;   // read now: the move-attendance question below replaces this window
+      if(only&&!isISODate(date)){toast('Choose a date');return false;}
+      const results={...(cs.results||{})};
+      for(let i=0;i<blocks.length;i++){
+        const r=readConditioningResultFields(blocks[i].mode,results[i]||{},i,'_'+i);
+        if(r===null)return false;
+        if(meaningful(r)||results[i])results[i]=r;
+        if(!meaningful(r)&&results[i]&&Object.keys(results[i]).every(k=>['blockIndex','mode','elapsedSeconds','capped'].includes(k)))delete results[i];
+      }
+      // A changed date takes this client's "attended" mark along, if that mark belongs to this session alone.
+      let move=null;
+      if(only&&date!==l.date){
+        const rec=S.attendance[attId(l.date,l.clientId)];
+        const other=Object.entries(S.logs).some(([id,x])=>id!==logId&&x.clientId===l.clientId&&x.date===l.date);
+        if(rec&&rec.status==='attended'&&!other){
+          const choice=await askChoice('Move attendance too?',`<p>You changed the date from <strong>${esc(l.date)}</strong> to <strong>${esc(date)}</strong>. Should the "attended" mark move as well?</p>`,[
+            {label:'Cancel',value:'cancel'},{label:'Keep attendance where it is',value:'keep'},{label:'Move attendance',value:'move',kind:'primary'}]);
+          if(!choice||choice==='cancel')return false;
+          if(choice==='move')move=rec;
+        }
+      }
+      const next={...l,date,conditioningSession:{...cs,results},...(only?{notes:notesVal}:{})};
+      try{await Store.put('logs',logId,next);}catch(e){showSaveError(e);return false;}
+      S.logs[logId]=next;invalidateLogIndex();
+      let note='Changes saved';
+      if(move){try{await setAttendance(l.date,l.clientId,'',move.groupId||'');await setAttendance(date,l.clientId,'attended',move.groupId||'');note='Changes saved and attendance moved';}catch(e){showSaveError(e);note='Changes saved — attendance was NOT moved';}}
+      toast(note);render({keepScroll:true});
+    }}
+  ]);
+}function conditioningResultsPanelHTML(ss,blocks){
   const group=!!sessionClientIds(ss),people=group?ss.clientIds:[null];
   const resultOf=(k,i)=>k===0?(ss.results||{})[i]:(((ss.partnerResults||{})[people[k]])||{})[i];
   const rows=blocks.map((_,i)=>i).filter(i=>people.some((_,k)=>resultOf(k,i)));
@@ -5671,27 +5875,104 @@ function wireConditioningWorkout(){
 }
 
 /* ============================ EXERCISES ============================ */
+/* The same three fields (name, category, equipment) are used when adding, editing and creating from the picker:
+   exerciseFieldsHTML() draws them, readExerciseFields() checks and reads them. `p` is an id prefix. */
+const EX_NEW_CAT = '__new_category__';
+function exerciseCategories(extra){
+  return [...new Set([...S.exercises.map(e => String(e.category || '').trim()).filter(Boolean), 'Other', ...(extra ? [extra] : [])])].sort((a, b) => a.localeCompare(b));
+}
+function exerciseFieldsHTML(p, ex = {}){
+  const cur = String(ex.category || 'Other').trim() || 'Other', cats = exerciseCategories(cur);
+  const eqs = [...new Set(S.exercises.map(e => String(e.equipment || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  return `<label class="field"><span>Name</span><input type="text" id="${p}Name" value="${esc(ex.name || '')}" maxlength="80" autocomplete="off"></label>
+    <div class="inline-fields">
+      <label class="field"><span>Category</span><select id="${p}Cat">${cats.map(c => `<option value="${esc(c)}" ${c === cur ? 'selected' : ''}>${esc(c)}</option>`).join('')}<option value="${EX_NEW_CAT}">+ New category…</option></select></label>
+      <label class="field" id="${p}CatNewWrap" hidden><span>New category</span><input type="text" id="${p}CatNew" maxlength="40" autocomplete="off"></label>
+      <label class="field"><span>Equipment</span><input type="text" id="${p}Eq" list="${p}EqList" value="${esc(ex.equipment || '')}" placeholder="Barbell, dumbbell" maxlength="60" autocomplete="off"><datalist id="${p}EqList">${eqs.map(e => `<option value="${esc(e)}">`).join('')}</datalist></label>
+    </div>`;
+}
+function wireExerciseFields(root, p){
+  const sel = root.querySelector('#' + p + 'Cat'), wrap = root.querySelector('#' + p + 'CatNewWrap'); if (!sel || !wrap) return;
+  sel.onchange = () => { wrap.hidden = sel.value !== EX_NEW_CAT; if (!wrap.hidden) root.querySelector('#' + p + 'CatNew').focus(); };
+}
+/* Returns { name, category, equipment }, or null after telling the coach what is wrong. `selfId` is the exercise being edited. */
+function readExerciseFields(root, p, selfId){
+  const nameEl = root.querySelector('#' + p + 'Name'), name = nameEl.value.trim().replace(/\s+/g, ' ');
+  if (!name){ toast('Give the exercise a name'); nameEl.focus(); return null; }
+  const dup = S.exercises.find(e => e.id !== selfId && normExName(e.name) === normExName(name));
+  if (dup){ toast(dup.archived ? '"' + dup.name + '" is in your archived exercises. Restore it instead.' : 'That exercise is already in the library'); nameEl.focus(); return null; }
+  let category = root.querySelector('#' + p + 'Cat').value;
+  if (category === EX_NEW_CAT){
+    const c = root.querySelector('#' + p + 'CatNew'); category = c.value.trim().replace(/\s+/g, ' ');
+    if (!category){ toast('Type the name of the new category'); c.focus(); return null; }
+  }
+  return { name, category: category || 'Other', equipment: root.querySelector('#' + p + 'Eq').value.trim() };
+}
+/* Past sessions keep the name they were logged with unless the coach asks to update them. */
+async function renameExerciseInLogs(exId, name){
+  const pairs = [];
+  for (const [id, l] of Object.entries(S.logs)){
+    const copy = JSON.parse(JSON.stringify(l)); let changed = false;
+    workoutLogEntries(copy).forEach(e => { if (String(loggedExerciseId(e) ?? '') === String(exId) && loggedExerciseName(e) !== name){ e.name = name; changed = true; } });
+    if (changed) pairs.push([id, copy]);
+  }
+  if (!pairs.length) return 0;
+  try { await Store.batch(async () => { await Store.bulkPut('logs', pairs, S.logs); }); } catch(e){ showSaveError(e); return 0; }
+  invalidateLogIndex(); return pairs.length;
+}
+function openExerciseDialog(id){
+  const ex = id ? S.exercises.find(e => e.id === id) : null;
+  if (id && !ex) return;
+  const u = ex ? exerciseUsage(ex.id) : null, plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+  const usage = ex && (u.programs || u.logs)
+    ? `<p class="small muted">Used in ${plural(u.programs, 'program')} and ${plural(u.logs, 'logged session')}. Programs always show the current name.</p>` : '';
+  const logsBox = ex && u.logs
+    ? `<label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="exRenameLogs" checked style="width:auto;margin-top:.2rem"><span style="flex:1;min-width:0">If you change the name, also update it in the ${plural(u.logs, 'past session')} that use it (recommended).</span></label>` : '';
+  const dlg = dialog(ex ? 'Edit exercise' : 'Add exercise', exerciseFieldsHTML('ex', ex || {}) + logsBox + usage, [
+    { label:'Cancel' },
+    { label:ex ? 'Save' : 'Add', kind:'primary', onClick: async () => {
+      const f = readExerciseFields(dlg, 'ex', ex && ex.id); if (!f) return false;
+      if (ex){
+        if (!(await saveExerciseList(S.exercises.map(e => e.id === ex.id ? { ...e, ...f } : e)))) return false;
+        let n = 0; const box = dlg.querySelector('#exRenameLogs');
+        if (f.name !== ex.name && box && box.checked) n = await renameExerciseInLogs(ex.id, f.name);
+        toast(f.name !== ex.name && n ? 'Exercise renamed (' + plural(n, 'session') + ' updated)' : 'Exercise updated');
+      } else {
+        if (!(await saveExerciseList([...S.exercises, { id:uid(), ...f }]))) return false;
+        toast(f.name + ' added');
+      }
+      render({ keepScroll:true });
+    }}
+  ]);
+  wireExerciseFields(dlg, 'ex');
+  const first = dlg.querySelector('#exName'); if (first) first.focus();
+}
+S.search.exercises = '';
 function viewExercises(){
-  const active = activeExercises(), archived = S.exercises.filter(e => e.archived).sort(byName);
-  const cats = [...new Set(active.map(e => e.category || 'Other'))].sort();
+  const q = String(S.search.exercises || '').trim().toLocaleLowerCase();
+  const matches = e => !q || [e.name, e.category, e.equipment].some(v => String(v || '').toLocaleLowerCase().includes(q));
+  const all = activeExercises(), active = all.filter(matches), archivedAll = S.exercises.filter(e => e.archived).sort(byName), archived = archivedAll.filter(matches);
+  const cats = [...new Set(active.map(e => e.category || 'Other'))].sort((a, b) => a.localeCompare(b));
   const showArchived = !!S.sel.showArchivedExercises;
   return `
-  <div class="panel spread"><div><h2>Exercise library</h2><span class="muted small num">${active.length} movements${archived.length ? ' · ' + archived.length + ' archived' : ''}</span></div>
+  <div class="panel spread"><div><h2>Exercise library</h2><span class="muted small num">${q ? active.length + ' of ' + all.length : all.length} movements${archivedAll.length ? ' · ' + archivedAll.length + ' archived' : ''}</span></div>
     <button class="btn primary" id="newEx">Add exercise</button></div>
+  <div class="panel">${searchBoxHTML('exercises', 'Search exercises', 'Search by name, category or equipment')}</div>
+  ${q && !active.length && !archived.length ? `<div class="empty"><p>No exercises match “${esc(S.search.exercises)}”.</p></div>` : ''}
   ${cats.map(cat => `<div class="panel">
     <h3>${esc(cat)}</h3>
     <div class="tablewrap"><table class="exercise-library-table"><tbody>
-    ${active.filter(e => (e.category||'Other') === cat).sort(byName).map(e => `<tr>
-      <td>${esc(e.name)}</td><td class="muted small">${esc(e.equipment||'')}</td>
-      <td><button class="btn sm ghost" data-archiveex="${esc(e.id)}">Archive</button></td></tr>`).join('')}
+    ${active.filter(e => (e.category || 'Other') === cat).sort(byName).map(e => `<tr>
+      <td>${esc(e.name)}</td><td class="muted small">${esc(e.equipment || '')}</td>
+      <td class="ex-actions"><button class="btn sm ghost" data-editex="${esc(e.id)}">Edit</button> <button class="btn sm ghost" data-archiveex="${esc(e.id)}">Archive</button></td></tr>`).join('')}
     </tbody></table></div></div>`).join('')}
-  ${archived.length ? `<div class="panel">
+  ${archivedAll.length && (!q || archived.length) ? `<div class="panel">
     <div class="spread"><h3 class="muted">Archived exercises</h3>
       <button type="button" class="btn sm ghost" id="toggleArchivedExercises">${showArchived ? 'Hide archived' : 'Show archived (' + archived.length + ')'}</button></div>
     ${showArchived ? `<p class="small muted">Hidden from pickers. Programs and history that already use them are unaffected.</p>
     <div class="tablewrap"><table class="exercise-library-table"><tbody>
     ${archived.map(e => `<tr><td>${esc(e.name)}</td><td class="muted small">${esc([e.category, e.equipment].filter(Boolean).join(' · '))}</td>
-      <td><button class="btn sm ghost" data-restoreex="${esc(e.id)}">Restore</button></td></tr>`).join('')}
+      <td class="ex-actions"><button class="btn sm ghost" data-restoreex="${esc(e.id)}">Restore</button></td></tr>`).join('')}
     </tbody></table></div>` : ''}
   </div>` : ''}`;
 }
@@ -6061,7 +6342,7 @@ function historyDayDetail(cid, logId){
     ${l.notes ? `<p class="small muted" style="margin-top:.7rem">Notes: ${esc(l.notes)}</p>` : ''}
   </div>`;
   const hasRepeatEntries=hasRepeatWorkoutSource(cid,l);
-  const deleteHTML=`<div class="row panel" style="margin-top:.8rem">${l.type==='conditioning'?'':`<button type="button" class="btn primary sm" data-edit-session="${esc(logId)}">Edit session</button>`}${hasRepeatEntries?`<button type="button" class="btn ghost sm" data-repeat-program="${esc(logId)}">Repeat program</button>`:''}<button class="btn danger sm" data-dellogday="${esc(logId)}">Delete this session</button></div>`;
+  const deleteHTML=`<div class="row panel" style="margin-top:.8rem">${l.type==='conditioning'?`<button type="button" class="btn primary sm" data-edit-cond="${esc(logId)}">Edit session</button>`:`<button type="button" class="btn primary sm" data-edit-session="${esc(logId)}">Edit session</button>`}${l.conditioningSession&&l.type!=='conditioning'?`<button type="button" class="btn ghost sm" data-edit-cond="${esc(logId)}">Edit conditioning results</button>`:''}${hasRepeatEntries?`<button type="button" class="btn ghost sm" data-repeat-program="${esc(logId)}">Repeat program</button>`:''}<button class="btn danger sm" data-dellogday="${esc(logId)}">Delete this session</button></div>`;
   let activityHTML=strengthHTML;
   if(conditioningHTML&&strengthHTML){
     const strengthAt=Number(l.strengthCompletedAt||l.completedAt)||0,conditioningAt=Number(l.conditioningSession.completedAt)||0;
@@ -6589,20 +6870,16 @@ function wire(){
   m.querySelectorAll('[data-program]').forEach(el => el.onclick = () => { S.sel = { programsKind:'strength', program: el.dataset.program }; render(); });
   m.querySelectorAll('[data-open-conditioning]').forEach(el => el.onclick = () => { S.view='programs'; S.sel={programsKind:'conditioning',conditioningId:el.dataset.openConditioning,conditioningDraft:null}; render(); });
   m.querySelectorAll('[data-program-kind]').forEach(el=>el.onclick=()=>{const kind=el.dataset.programKind;S.view='programs';S.sel=kind==='chooser'?{}:{programsKind:kind};render();});
-   m.querySelectorAll('[data-start-workout]').forEach(el => el.onclick = e => {
-     e.stopPropagation();
-     const cid=el.dataset.startWorkout;
-     const dlg=dialog('Log session',`<p class="small muted">Choose how this session should begin.</p><div class="grid start-workout-choices"><button type="button" class="card program-kind-card" id="startNormalProgram"><span class="program-kind-icon">↗</span><strong>Normal program</strong><span class="small muted">Start the client’s strength workout.</span></button><button type="button" class="card program-kind-card" id="startConditioningProgram"><span class="program-kind-icon">◷</span><strong>Conditioning program</strong><span class="small muted">Choose a conditioning template and start conditioning on its own.</span></button></div>`,[{label:'Cancel'}]);
-     dlg.querySelector('#startNormalProgram').onclick=()=>{dlg.close();beginClientWorkout(cid,'strength');};
-      dlg.querySelector('#startConditioningProgram').onclick=()=>openConditioningChooser(cid);
-   });
-  // Today: tap (or Enter/Space on) a client card for quick actions.
-  m.querySelectorAll('[data-today-client]').forEach(card=>{
-    card.onclick=()=>openTodayActions(card.dataset.todayClient);
-    card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openTodayActions(card.dataset.todayClient);}};
-  });
-
   /* Today's group-filter dropdown was removed — it now auto-lists expected pairings */
+
+  // Client profile > Log session: choose a normal (strength) program day or a conditioning program.
+  m.querySelectorAll('[data-start-workout]').forEach(el => el.onclick = e => {
+    e.stopPropagation();
+    const cid = el.dataset.startWorkout;
+    const dlg = dialog('Log session', `<p class="small muted">Choose how this session should begin.</p><div class="grid start-workout-choices"><button type="button" class="card program-kind-card" id="startNormalProgram"><span class="program-kind-icon">↗</span><strong>Normal program</strong><span class="small muted">Start the client’s strength workout.</span></button><button type="button" class="card program-kind-card" id="startConditioningProgram"><span class="program-kind-icon">◷</span><strong>Conditioning program</strong><span class="small muted">Choose a conditioning template and start conditioning on its own.</span></button></div>`, [{label:'Cancel'}]);
+    dlg.querySelector('#startNormalProgram').onclick = () => { dlg.close(); beginClientWorkout(cid, 'strength'); };
+    dlg.querySelector('#startConditioningProgram').onclick = () => openConditioningChooser(cid);
+  });
 
   /* ---- calendar ---- */
   m.querySelectorAll('[data-mon]').forEach(b => b.onclick = () => {
@@ -6628,38 +6905,8 @@ function wire(){
     if (next === 'attended' && c.packTotal && sessionsLeft(c) === 0) toast(c.name + ' has now used the last session in the pack');
     render();
   });
-  m.querySelectorAll('[data-skip]').forEach(b => b.onclick = async () => {
-    const [kind, key, date] = b.dataset.skip.split('|');
-    if (!(await skipOccurrence(key, kind, date))) return;
-    render();
-    undoToast('Skipped ' + date, async () => { await restoreOccurrence(date, key); render(); });
-  });
   m.querySelectorAll('[data-move]').forEach(b => b.onclick = () => { const [kind, key, date] = b.dataset.move.split('|'); moveOccurrenceDialog(kind, key, date); });
   m.querySelectorAll('[data-restore-skip]').forEach(b => b.onclick = async () => { const [date, key] = b.dataset.restoreSkip.split('|'); await restoreOccurrence(date, key); render(); });
-  m.querySelectorAll('[data-remove-oneoff]').forEach(b => b.onclick = async () => {
-    const id = b.dataset.removeOneoff, prev = S.schedule[id]; if (!prev) return;
-    try { await Store.del('schedule', id); } catch(e){ showSaveError(e); return; }
-    delete S.schedule[id]; render();
-    undoToast('Session removed', async () => { try { await Store.put('schedule', id, prev); S.schedule[id] = prev; } catch(e){ showSaveError(e); } render(); });
-  });
-  const addSessionBtn = document.getElementById('addSessionBtn');
-  if (addSessionBtn) addSessionBtn.onclick = () => scheduleSessionDialog(addSessionBtn.dataset.date || S.sel.day || todayISO());
-  const adhocBtn = document.getElementById('adhocBtn');
-  if (adhocBtn) adhocBtn.onclick = async () => {
-    const cid = val('adhoc'); if (!cid) return;
-    await setAttendance(adhocBtn.dataset.date || S.sel.day || todayISO(), cid, 'attended', S.clients[cid].groupId || '');
-    render();
-  };
-  m.querySelectorAll('[data-logdate]').forEach(b => b.onclick = () => {
-    const [cid, iso] = b.dataset.logdate.split('|');
-    archiveParkedWorkoutBeforeStartingAnother(cid);
-    const back = S.sub;
-    const dayIndex = nextDayIndex(cid);
-    S.sel = { logClient: cid, dayIndex, draft: buildDraft(cid, dayIndex), backTo: back };
-    S.sel.draft.date = iso;
-    render();
-  });
-
   const dp = document.getElementById('dayPick');
   if (dp) dp.onchange = () => {
     const old=S.sel.draft, next=buildDraft(S.sel.logClient,Number(dp.value));
@@ -6952,10 +7199,12 @@ function wire(){
       S.clients[id] = c; render();
     }}]);
 
+  if (document.getElementById('c_every')) wireRecurrenceFields(document, 'c', () => [...document.querySelectorAll('.c_recurdow:checked')].map(i => Number(i.value)));
   const sc = document.getElementById('saveClient');
   if (sc) sc.onclick = async () => {
     const cid = S.sel.client, c = S.clients[cid];
     const recurDow = [...document.querySelectorAll('.c_recurdow:checked')].map(i => Number(i.value));
+    const rec = readRecurrence(document, 'c', recurDow); if (!rec) return;
     const chosenGroup = val('c_group');
     if (chosenGroup && chosenGroup !== c.groupId && groupMembers(chosenGroup).filter(m => m.id !== cid).length >= 2){
       toast('That pairing already has 2 clients — remove one first'); return;
@@ -6969,7 +7218,10 @@ function wire(){
       status: val('c_status'), notes: val('c_notes')
     };
     const dowKey = a => JSON.stringify([...(a || [])].sort());
-    if (dowKey(recurDow) !== dowKey(c.recurDow)) next.recurFrom = todayISO();
+    if (rec.every > 1) next.recurEvery = rec.every; else delete next.recurEvery;
+    if (rec.start) next.recurStart = rec.start; else delete next.recurStart;
+    if (rec.end) next.recurEnd = rec.end; else delete next.recurEnd;
+    if (dowKey(recurDow) !== dowKey(c.recurDow) || rec.every !== (Number(c.recurEvery) || 1) || rec.start !== (c.recurStart || '')) next.recurFrom = todayISO();
     if ((next.groupId || '') !== (c.groupId || '')) next.groupFrom = todayISO();
     const autoWeek = document.getElementById('c_autoweek'); if (autoWeek) next.autoWeek = autoWeek.checked;
     if ((next.currentWeek || 1) !== (c.currentWeek || 1) || next.programId !== c.programId) next.weekFrom = todayISO();   // sessions before this belong to an earlier week
@@ -7066,6 +7318,7 @@ function wire(){
       delete S.logs[id]; invalidateLogIndex(); delete S.sel.historyDay; render();
     }}]));
   m.querySelectorAll('[data-edit-session]').forEach(button=>button.onclick=()=>beginEditSession(button.dataset.editSession));
+  m.querySelectorAll('[data-edit-cond]').forEach(button=>button.onclick=()=>openConditioningLogEdit(button.dataset.editCond));
   m.querySelectorAll('[data-repeat-program]').forEach(button=>button.onclick=()=>{
     const log=S.logs[button.dataset.repeatProgram],cid=log?.clientId||S.sel.historyClient,built=log&&buildRepeatWorkoutDraft(cid,log);if(!built||!built.draft.entries.length){toast('This session has no saved exercises or matching program day to repeat');return;}
     archiveParkedWorkoutBeforeStartingAnother(cid);S.sel={logClient:cid,dayIndex:built.dayIndex,draft:built.draft};render();
@@ -7242,17 +7495,8 @@ function wire(){
 
   /* ---- exercises ---- */
   const nex = document.getElementById('newEx');
-  if (nex) nex.onclick = () => dialog('Add exercise',
-    `<label class="field"><span>Name</span><input type="text" id="e_name" autofocus></label>
-     <div class="inline-fields">
-       <label class="field"><span>Category</span><input type="text" id="e_cat" placeholder="Legs, Push, Core…"></label>
-       <label class="field"><span>Equipment</span><input type="text" id="e_eq" placeholder="Barbell, Machine…"></label>
-     </div>`,
-    [{label:'Cancel'},{label:'Add', kind:'primary', onClick: async () => {
-      const name = val('e_name'); if (!name){ toast('Name is required'); return false; }
-      if (!(await saveExerciseList([...S.exercises, { id: uid(), name, category: val('e_cat') || 'Other', equipment: val('e_eq') }]))) return false;
-      render();
-    }}]);
+  if (nex) nex.onclick = () => openExerciseDialog();
+  m.querySelectorAll('[data-editex]').forEach(b => b.onclick = () => openExerciseDialog(b.dataset.editex));
   m.querySelectorAll('[data-archiveex]').forEach(b => b.onclick = () => {
     const id = b.dataset.archiveex, ex = S.exercises.find(e => e.id === id); if (!ex) return;
     const u = exerciseUsage(id);
@@ -7398,6 +7642,7 @@ function groupDialog(gid){
      <label class="field"><span>Repeats on</span></label>
      <div class="row tight" style="margin-bottom:.6rem">${DOW.map((d,i) => `<label class="row tight small" style="gap:.2rem">
         <input type="checkbox" class="gdow" value="${i}" ${(g.dow||[]).includes(i)?'checked':''} style="width:auto"> ${d}</label>`).join('')}</div>
+     ${recurrenceFieldsHTML('g', groupRule(g))}
      <label class="field"><span>Who's in it — one client for 1:1, two for a pairing, never more</span></label>
      <div class="stack small">${clients.map(c => `<label class="row tight" style="gap:.4rem">
         <input type="checkbox" class="gmem" value="${esc(c.id)}" ${c.groupId===gid?'checked':''} style="width:auto"> ${esc(c.name)}</label>`).join('') || '<span class="muted">No clients yet.</span>'}</div>`,
@@ -7415,11 +7660,12 @@ function groupDialog(gid){
         if (checked.length > 2){ toast('A pairing can have at most 2 clients — uncheck one'); return false; }
         const id = gid || uid();
         const dow = [...document.querySelectorAll('.gdow:checked')].map(i => Number(i.value));
-        const data = { name, dow, time: timeFieldVal('g_time') };
+        const rec = readRecurrence(dlg, 'g', dow); if (!rec) return false;
+        const data = { name, dow, time: timeFieldVal('g_time'), ...(rec.every > 1 ? { every:rec.every } : {}), ...(rec.start ? { start:rec.start } : {}), ...(rec.end ? { end:rec.end } : {}) };
         if (gid){
           if (g.dowFrom) data.dowFrom = g.dowFrom;
           const dk = a => JSON.stringify([...(a || [])].sort());
-          if (dk(dow) !== dk(g.dow)) data.dowFrom = todayISO();   // missed-session counting restarts from today
+          if (dk(dow) !== dk(g.dow) || rec.every !== (Number(g.every) || 1) || rec.start !== (g.start || '')) data.dowFrom = todayISO();   // missed-session counting restarts from today
         }
         try { await Store.put('groups', id, data); } catch(e){ showSaveError(e); return false; }
         S.groups[id] = data;
@@ -7433,18 +7679,23 @@ function groupDialog(gid){
         } catch(e){ showSaveError(e); toast('Pairing saved, but some members were not updated'); }
         render();
       }} ]);
+  wireRecurrenceFields(dlg, 'g', () => [...dlg.querySelectorAll('.gdow:checked')].map(i => Number(i.value)));
   dlg.querySelectorAll('.gmem').forEach(box => box.onchange = () => {
     const checked = dlg.querySelectorAll('.gmem:checked');
     if (checked.length > 2){ box.checked = false; toast('A pairing can have at most 2 clients'); }
   });
 }
 
-try { const t = localStorage.getItem('nyaega:theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch {}
+// Light is the default; "Dark" and "Match system" (stored as '') in Settings and data > Appearance still apply.
+try { const t = localStorage.getItem('nyaega:theme'); if (t !== '') document.documentElement.setAttribute('data-theme', t || 'light'); } catch { document.documentElement.setAttribute('data-theme', 'light'); }
 /* ---------------------------------------------------------------
-   Phone and tablet navigation (screens up to 900px wide): a bottom bar with the five main places, within reach of a thumb,
-   and a round "+" button for quick actions (start a session, add a client, log attendance) from any screen.
-   Wider screens keep the left sidebar. Both are hidden while a workout is on screen (focus mode) and under the lock screen.
-   The bar and the button are only drawn by CSS at those widths; this file builds them and keeps them current.
+   Navigation.
+   - Header (every screen size): the Nyaega mark returns Home (Today); on the right, Calendar opens the Schedule, Search finds
+     clients, pairings, programs and exercises, and Profile opens a small menu (Profile, Settings and data).
+   - Phone and tablet (up to 900px wide): a bottom bar with Clients, Programs, Exercises, History and Pairings. Home is the
+     launch page but not a tab. Wider screens keep the left sidebar.
+   - A round "+" button for quick actions (start a session, add a client, log attendance) on every screen.
+   The bar and the button are hidden while a workout is on screen (focus mode) and under the lock screen.
 ----------------------------------------------------------------*/
 const NAV_ICON = {
   today:    '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
@@ -7458,23 +7709,27 @@ const NAV_ICON = {
   pairings: '<circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2.5 20c0-3 2.5-5 5.5-5M21.5 20c0-3-2.5-5-5.5-5"/>',
   exercises:'<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',
   history:  '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
-  settings: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>'
+  settings: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+  search:   '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',
+  profile:  '<circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20c.8-3.6 3.8-5.6 7.5-5.6s6.7 2 7.5 5.6"/>'
 };
-const MOBILE_NAV = [['today', 'Dashboard'], ['calendar', 'Schedule'], ['clients', 'Clients'], ['programs', 'Programs'], ['more', 'More']];
+const MOBILE_NAV = [['clients', 'Clients'], ['programs', 'Programs'], ['exercises', 'Exercises'], ['history', 'History'], ['pairings', 'Pairings']];
 const navSvg = (paths, w = 1.9) => `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
 
-/* Same effect as the top tabs: park any open workout, leave the program editor saved, go to the screen. */
-function navigateTo(view, sub){
+/* Same effect as the top tabs: park any open workout, leave the program editor saved, go to the screen.
+   `sel` opens something on that screen (a client, a program); by default the screen opens at its start. */
+function navigateTo(view, sub, sel){
   flushProgramEditor(); parkWorkout();
   S.view = view; if (view === 'dashboard') S.sub = sub || 'today';
-  S.sel = view === 'programs' ? { programSection:'programs' } : {};
+  S.sel = sel || (view === 'programs' ? { programSection:'programs' } : {});
   render(); window.scrollTo({ top:0 });
 }
+/* Which bottom-bar tab is current; '' for Home, Schedule and Settings, which are reached from the header. */
 function navKeyNow(){
   const v = S.view === 'session' ? ((S.returnTo && S.returnTo.view) || 'dashboard') : S.view;
-  if (v === 'dashboard'){ const s = S.sub || 'today'; return s === 'today' ? 'today' : s === 'calendar' ? 'calendar' : s === 'clients' ? 'clients' : 'more'; }
+  if (v === 'dashboard'){ const s = S.sub || 'today'; return s === 'clients' ? 'clients' : s === 'groups' ? 'pairings' : ''; }
   if (v === 'programs' || v === 'conditioning') return 'programs';
-  return 'more';   // exercises, history
+  return v === 'exercises' || v === 'history' ? v : '';
 }
 function ensureMobileNav(){
   if (document.getElementById('bottomNav')) return;
@@ -7484,38 +7739,31 @@ function ensureMobileNav(){
   fab.setAttribute('aria-label', 'Quick actions'); fab.setAttribute('aria-haspopup', 'menu'); fab.setAttribute('aria-expanded', 'false'); fab.innerHTML = navSvg('<path d="M12 5v14M5 12h14"/>', 2.8);
   const menu = document.createElement('div'); menu.id = 'navMenu'; menu.setAttribute('role', 'menu'); menu.hidden = true;
   document.body.append(nav, fab, menu);
-  nav.querySelectorAll('[data-bn]').forEach(b => b.onclick = () => navPress(b.dataset.bn, b));
+  nav.querySelectorAll('[data-bn]').forEach(b => b.onclick = () => navPress(b.dataset.bn));
   fab.onclick = () => navMenuIsOpen('fab') ? closeNavMenu() : openNavMenu('fab', quickActionItems());
-  document.addEventListener('click', e => { if (navMenuIsOpen() && !e.target.closest('#navMenu, #fab, #bottomNav [data-bn="more"]')) closeNavMenu(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && navMenuIsOpen()){ const a = document.getElementById('navMenu').dataset.anchor; closeNavMenu(); const f = document.querySelector(a === 'fab' ? '#fab' : '#bottomNav [data-bn="more"]'); if (f) f.focus(); } });
+  wireHeader();
+  document.addEventListener('click', e => { if (navMenuIsOpen() && !e.target.closest('#navMenu, #fab, #hdrProfile')) closeNavMenu(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && navMenuIsOpen()){ const a = document.getElementById('navMenu').dataset.anchor; closeNavMenu(); const f = document.getElementById(a === 'profile' ? 'hdrProfile' : 'fab'); if (f) f.focus(); } });
 }
-function navPress(k, button){
-  if (k === 'today') return navigateTo('dashboard', 'today');
-  if (k === 'calendar') return navigateTo('dashboard', 'calendar');
+function navPress(k){
   if (k === 'clients') return navigateTo('dashboard', 'clients');
+  if (k === 'pairings') return navigateTo('dashboard', 'groups');
   if (k === 'programs') return navigateTo('programs');
-  // More: everything that is not one of the four main places
-  if (navMenuIsOpen('more')) return closeNavMenu();
-  openNavMenu('more', [
-    { label:'Pairings', icon:'pairings', go:() => navigateTo('dashboard', 'groups') },
-    { label:'Exercises', icon:'exercises', go:() => navigateTo('exercises') },
-    { label:'History and progress', icon:'history', go:() => navigateTo('history') },
-    { label:'Settings and data', icon:'settings', go:() => { S.dataSection = undefined; navigateTo('dashboard', 'data'); } }
-  ]);
+  navigateTo(k);   // exercises, history
 }
 const navMenuIsOpen = anchor => { const m = document.getElementById('navMenu'); return !!m && !m.hidden && (!anchor || m.dataset.anchor === anchor); };
 function closeNavMenu(){
   const m = document.getElementById('navMenu'); if (m){ m.hidden = true; m.innerHTML = ''; }
   const f = document.getElementById('fab'); if (f){ f.setAttribute('aria-expanded', 'false'); f.classList.remove('open'); }
-  const more = document.querySelector('#bottomNav [data-bn="more"]'); if (more) more.setAttribute('aria-expanded', 'false');
+  const p = document.getElementById('hdrProfile'); if (p) p.setAttribute('aria-expanded', 'false');
 }
-function openNavMenu(anchor, items){
+function openNavMenu(anchor, items, headHTML = ''){
   const m = document.getElementById('navMenu'); if (!m) return;
   m.dataset.anchor = anchor; m.hidden = false;
-  m.innerHTML = items.map((it, i) => `<button type="button" role="menuitem" data-mi="${i}">${it.icon ? navSvg(NAV_ICON[it.icon]) : ''}<span>${esc(it.label)}</span></button>`).join('');
+  m.innerHTML = headHTML + items.map((it, i) => `<button type="button" role="menuitem" data-mi="${i}">${it.icon ? navSvg(NAV_ICON[it.icon]) : ''}<span>${esc(it.label)}${it.note ? `<small>${esc(it.note)}</small>` : ''}</span></button>`).join('');
   m.querySelectorAll('[data-mi]').forEach(b => b.onclick = () => { const it = items[Number(b.dataset.mi)]; closeNavMenu(); it.go(); });
   const f = document.getElementById('fab'); if (f && anchor === 'fab'){ f.setAttribute('aria-expanded', 'true'); f.classList.add('open'); }
-  const more = document.querySelector('#bottomNav [data-bn="more"]'); if (more && anchor === 'more') more.setAttribute('aria-expanded', 'true');
+  const p = document.getElementById('hdrProfile'); if (p && anchor === 'profile') p.setAttribute('aria-expanded', 'true');
   const first = m.querySelector('button'); if (first) { try { first.focus({ preventScroll:true }); } catch {} }
 }
 /* Called at the end of every render(). */
@@ -7528,6 +7776,64 @@ function updateBottomNav(){
   if (!show) closeNavMenu();
   const cur = navKeyNow();
   nav.querySelectorAll('[data-bn]').forEach(b => b.setAttribute('aria-current', String(b.dataset.bn === cur)));
+  const acts = document.getElementById('topActions'); if (acts) acts.hidden = S.bootState !== 'ready';
+  const sub = S.view === 'dashboard' ? (S.sub || 'today') : '';
+  const cal = document.getElementById('hdrCalendar'); if (cal) cal.setAttribute('aria-current', String(sub === 'calendar'));
+  const prof = document.getElementById('hdrProfile'); if (prof) prof.setAttribute('aria-current', String(sub === 'data'));
+}
+
+/* ---- header: Home, Schedule, Search, Profile ---- */
+function wireHeader(){
+  const set = (id, icon, fn) => { const b = document.getElementById(id); if (!b) return; if (icon) b.innerHTML = navSvg(NAV_ICON[icon]); b.onclick = fn; };
+  set('brandHome', '', () => { closeNavMenu(); navigateTo('dashboard', 'today'); });
+  set('hdrCalendar', 'calendar', () => { closeNavMenu(); navigateTo('dashboard', 'calendar'); });
+  set('hdrSearch', 'search', () => { closeNavMenu(); openSearch(); });
+  set('hdrProfile', 'profile', () => navMenuIsOpen('profile') ? closeNavMenu() : openProfileMenu());
+}
+function openProfileMenu(){
+  const signedIn = typeof Sync !== 'undefined' && Sync.signedIn();
+  const who = signedIn ? ((Sync.session.user && Sync.session.user.email) || 'Signed in') : 'Local mode · not signed in';
+  const role = Sync.role === 'assistant' ? 'Assistant coach' : 'Head coach';
+  const head = `<div class="menu-head"><strong>${esc(who)}</strong><span>${esc(role)}</span></div>`;
+  openNavMenu('profile', [
+    { label:'Profile', note:'Account details', icon:'profile', go:() => { S.dataSection = 'online'; navigateTo('dashboard', 'data'); } },
+    { label:'Settings and data', note:'Backup, restore, preferences', icon:'settings', go:() => { S.dataSection = undefined; navigateTo('dashboard', 'data'); } }
+  ], head);
+}
+
+/* ---- header search: clients, pairings, programs and exercises ---- */
+function searchResults(q){
+  const n = String(q || '').trim().toLocaleLowerCase(); if (!n) return [];
+  const has = (...vals) => vals.some(v => String(v || '').toLocaleLowerCase().includes(n));
+  const out = [];
+  Object.entries(S.clients).filter(([, c]) => has(c.name, c.email)).sort((a, b) => byName(a[1], b[1]))
+    .forEach(([id, c]) => out.push({ kind:'Clients', label:c.name, note:c.status === 'archived' ? 'Archived' : ((S.programs[c.programId] || {}).name || ''), go:() => navigateTo('dashboard', 'clients', { client:id }) }));
+  Object.entries(S.groups).filter(([id, g]) => has(g.name, ...groupMembers(id).map(m => m.name))).sort((a, b) => byName(a[1], b[1]))
+    .forEach(([, g]) => out.push({ kind:'Pairings', label:g.name || 'Pairing', note:'', go:() => navigateTo('dashboard', 'groups') }));
+  Object.entries(S.programs).filter(([, p]) => has(p.name)).sort((a, b) => byName(a[1], b[1]))
+    .forEach(([id, p]) => out.push({ kind:'Programs', label:p.name, note:'Strength', go:() => navigateTo('programs', '', { programsKind:'strength', program:id }) }));
+  Object.entries(S.conditioning).filter(([, p]) => has(p.name)).sort((a, b) => byName(a[1], b[1]))
+    .forEach(([id, p]) => out.push({ kind:'Programs', label:p.name, note:'Conditioning', go:() => navigateTo('programs', '', { programsKind:'conditioning', conditioningId:id, conditioningDraft:null }) }));
+  S.exercises.filter(e => has(e.name, e.category, e.equipment)).sort(byName)
+    .forEach(e => out.push({ kind:'Exercises', label:e.name, note:[e.category, e.archived ? 'Archived' : ''].filter(Boolean).join(' · '), go:() => { S.search.exercises = e.name; navigateTo('exercises'); } }));
+  return out;
+}
+function openSearch(){
+  const dlg = dialog('Search', `<label class="field"><span class="sr-only">Search</span><input type="search" id="appSearch" placeholder="Clients, pairings, programs, exercises" autocomplete="off" enterkeyhint="search"></label><div id="appSearchResults" class="search-results" aria-live="polite"></div>`, [{ label:'Close' }]);
+  const input = dlg.querySelector('#appSearch'), box = dlg.querySelector('#appSearchResults');
+  let found = [];
+  const draw = () => {
+    const q = input.value.trim(); found = searchResults(q).slice(0, 40);
+    if (!q){ box.innerHTML = '<p class="small muted">Type a name to find a client, pairing, program or exercise.</p>'; return; }
+    if (!found.length){ box.innerHTML = `<p class="small muted">Nothing matches “${esc(q)}”.</p>`; return; }
+    let last = '';
+    box.innerHTML = found.map((r, i) => { const head = r.kind !== last ? `<div class="eyebrow">${esc(r.kind)}</div>` : ''; last = r.kind;
+      return head + `<button type="button" class="search-hit" data-hit="${i}"><strong>${esc(r.label)}</strong>${r.note ? `<span class="small muted">${esc(r.note)}</span>` : ''}</button>`; }).join('');
+    box.querySelectorAll('[data-hit]').forEach(b => b.onclick = () => { const r = found[Number(b.dataset.hit)]; dlg.close(); r.go(); });
+  };
+  input.oninput = draw;
+  input.onkeydown = e => { if (e.key === 'Enter'){ e.preventDefault(); const b = box.querySelector('[data-hit]'); if (b) b.click(); } };
+  draw(); input.focus();
 }
 
 /* ---- the "+" menu ---- */
