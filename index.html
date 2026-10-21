@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-OrVOMLMUsuan/IhbUkA8CydezO+3vRQSG0UiOHizocU=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-LODgme72smcEZfr5C/ItuJSQuLHMhVWVqDS4YbVQI6s=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25">
 <link rel="manifest" href="manifest.webmanifest">
@@ -347,9 +347,9 @@ body.has-timer-bar .undo-toast{bottom:calc(6.4rem + env(safe-area-inset-bottom,0
 .conflict-cols{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
 @media(max-width:600px){.conflict-cols{grid-template-columns:1fr}}
 body.assistant .owner-only,body.assistant #exportJson,body.assistant #exportEnc,body.assistant #exportCsv,body.assistant #exportAtt,body.assistant #exportRoster,body.assistant #importBtn,body.assistant #wipe,body.assistant #newClient,body.assistant #newGroup,body.assistant [data-delclient],body.assistant [data-archiveclient],body.assistant [data-restoreclient],body.assistant [data-dlprogram],body.assistant [data-dlsummary],body.assistant [data-dlhistory],body.assistant [data-dlmydata],body.assistant #reminderExport,body.assistant #deleteAccount{display:none!important}
-:root{--lk-bg:#f2f5f1;--lk-card:#fff;--lk-text:#17241e;--lk-muted:#5f7066;--lk-line:#dce5dd;--lk-accent:#205b43;--lk-hover:#174832;--lk-on-accent:#fff;--lk-soft:#e9f2eb;--lk-focus:#4f9870;--lk-error:#bd3b35;--lk-key:#fff;--lk-shadow:0 24px 70px rgba(28,55,39,.12)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--lk-bg:#101713;--lk-card:#19231d;--lk-text:#edf4ee;--lk-muted:#a0afa5;--lk-line:#344239;--lk-accent:#bde887;--lk-hover:#d1f2a4;--lk-on-accent:#17241e;--lk-soft:#26372b;--lk-focus:#a8d979;--lk-error:#ff9b8e;--lk-key:#1e2b24;--lk-shadow:0 28px 80px rgba(0,0,0,.36)}}
-:root[data-theme="dark"]{--lk-bg:#101713;--lk-card:#19231d;--lk-text:#edf4ee;--lk-muted:#a0afa5;--lk-line:#344239;--lk-accent:#bde887;--lk-hover:#d1f2a4;--lk-on-accent:#17241e;--lk-soft:#26372b;--lk-focus:#a8d979;--lk-error:#ff9b8e;--lk-key:#1e2b24;--lk-shadow:0 28px 80px rgba(0,0,0,.36)}
+:root{--lk-bg:#f7f6f1;--lk-card:#fff;--lk-text:#18231f;--lk-muted:#68736d;--lk-line:#e6e5dd;--lk-accent:#17372d;--lk-hover:#24483d;--lk-on-accent:#fff;--lk-soft:#efeee8;--lk-focus:#6a9c83;--lk-error:#bd3b35;--lk-key:#fff;--lk-shadow:0 24px 70px rgba(23,55,45,.10)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--lk-bg:#101713;--lk-card:#19231d;--lk-text:#edf4ee;--lk-muted:#a0afa5;--lk-line:#344239;--lk-accent:#c8ef83;--lk-hover:#d1f2a4;--lk-on-accent:#17241e;--lk-soft:#26372b;--lk-focus:#a8d979;--lk-error:#ff9b8e;--lk-key:#1e2b24;--lk-shadow:0 28px 80px rgba(0,0,0,.36)}}
+:root[data-theme="dark"]{--lk-bg:#101713;--lk-card:#19231d;--lk-text:#edf4ee;--lk-muted:#a0afa5;--lk-line:#344239;--lk-accent:#c8ef83;--lk-hover:#d1f2a4;--lk-on-accent:#17241e;--lk-soft:#26372b;--lk-focus:#a8d979;--lk-error:#ff9b8e;--lk-key:#1e2b24;--lk-shadow:0 28px 80px rgba(0,0,0,.36)}
 #lockScreen{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--lk-accent) 9%,transparent),transparent 48%),var(--lk-bg);color:var(--lk-text);overflow:auto;font-family:var(--font-ui)}
 #lockScreen *{box-sizing:border-box}
 .lock-top{position:fixed;top:max(env(safe-area-inset-top,0px),.75rem);right:.75rem;z-index:2}
@@ -880,6 +880,8 @@ nav.subtabs button[aria-current="true"]{background:var(--pine);border-color:var(
 #navMenu .menu-head{display:grid;gap:.1rem;padding:.55rem .9rem .65rem;margin-bottom:.2rem;border-bottom:1px solid var(--line-soft)}
 #navMenu .menu-head strong{font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:16rem}
 #navMenu .menu-head span{font-size:.74rem;color:var(--text-muted)}
+#navMenu button.menu-danger{margin-top:.2rem;border-top:1px solid var(--line-soft);border-radius:0 0 14px 14px;color:var(--bad-text)}
+#navMenu button.menu-danger svg{color:var(--bad-text)}
 /* Header search. */
 .search-results{display:grid;gap:.3rem;margin-top:.8rem}
 .search-results .eyebrow{margin:.7rem 0 .15rem}
@@ -943,7 +945,7 @@ body.in-session .top-actions button{width:38px;height:38px}
 /* Client cards. */
 .today-card{padding:1rem 1.1rem;border-radius:16px;background:var(--surface);border:1px solid var(--line-soft)}
 .today-card .name{font-size:1.12rem;font-weight:600;gap:.8rem!important}
-.today-card .avatar{width:2.75rem;height:2.75rem;min-width:2.75rem;font-size:1.1rem;color:#fff}
+.today-card .avatar{width:2.75rem;height:2.75rem;min-width:2.75rem;font-size:1.1rem}
 .today-card>.small{margin-left:3.55rem}
 .pill.warn{background:var(--pill-pending-bg);color:var(--pill-pending);font-weight:600}
 /* Bottom bar (phones and tablets): a floating white bar, dark-green icons, the current tab on a soft lime pill. */
@@ -957,6 +959,137 @@ body.in-session .top-actions button{width:38px;height:38px}
   body.has-bottomnav .workout-dock{bottom:calc(var(--bn-h) + 1.2rem + var(--bn-safe))}
   body.has-bottomnav .toast{bottom:calc(var(--bn-h) + 1.6rem + var(--bn-safe))}
 }
+
+/* ---- Design pass, every page (2026-10-20): the Home look carried across. Shapes, sizes and type only; the dark-green
+   session, timer and conditioning panels keep their own colours. ---- */
+.panel{border-radius:18px;box-shadow:0 1px 3px #17372d0a}
+.card,.exblock,.slot{border-radius:16px;box-shadow:0 1px 3px #17372d0a}
+.card{padding:1rem 1.1rem}
+.card:hover{box-shadow:0 6px 16px #17372d12}
+.card.static:hover{box-shadow:0 1px 3px #17372d0a}
+main h2{font-size:clamp(1.3rem,4.2vw,1.65rem);font-weight:700;letter-spacing:-.02em;line-height:1.2}
+main h3{font-size:1.05rem;font-weight:650;letter-spacing:-.01em}
+.eyebrow{font-weight:600;letter-spacing:.08em}
+.empty h2{font-size:clamp(1.5rem,5vw,2rem);font-weight:700;letter-spacing:-.02em}
+/* People: the same card as Home on Clients and History. */
+.person-card .name{display:flex;align-items:center;gap:.8rem!important;font-size:1.08rem;font-weight:600}
+.person-card .avatar{width:2.75rem;height:2.75rem;min-width:2.75rem;font-size:1.1rem}
+.person-card>.small{margin-left:3.55rem}
+main h2 .avatar{width:3rem;height:3rem;min-width:3rem;font-size:1.2rem}
+:root[data-theme="light"] .avatar{color:#fff}
+/* Controls. */
+button.btn{border-radius:12px;font-weight:600}
+button.btn.sm{border-radius:10px}
+input[type=text],input[type=number],input[type=date],input[type=tel],input[type=email],input[type=time],select,textarea{border-radius:10px}
+.pill{border-radius:999px;padding:.24rem .65rem;font-weight:600}
+.tablewrap{border-radius:14px;background:var(--surface)}
+.cal-cell{border-radius:12px}
+dialog{border-radius:20px}
+dialog .dlg-body>h2:first-child{font-size:1.35rem;font-weight:700;letter-spacing:-.02em}
+.toast{border-radius:12px}
+/* Sign-in and lock screen: the header's mark and type. */
+.lock-brand .logo{background:var(--lime);color:#17372d;font-family:var(--font-ui);font-weight:600;letter-spacing:0;border-radius:16px;box-shadow:none}
+#lockScreen .lock-brand h1{font-family:var(--font-ui);font-weight:650;letter-spacing:-.02em}
+.lock-card{border-radius:24px}
+.lk-btn{border-radius:12px}
+/* Workout screen: the same sans-serif type as the rest of the app (it used a serif). */
+.session-overview h2{font-family:var(--font-ui);font-weight:700;letter-spacing:-.01em}
+.session-clock{font-family:var(--font-ui);font-weight:600;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.session-overview,.session-timer,.conditioning-timer{border-radius:18px}
+/* Workout timer bar (session and rest clocks at the bottom): a floating, rounded white card like the bottom bar. */
+/* Compact: only as wide as its contents, centred, two small clocks and one small button. */
+.timer-bar{left:50%;right:auto;bottom:calc(.6rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:max-content;max-width:calc(100vw - 1.4rem);gap:1rem;padding:.38rem .4rem .38rem .95rem;border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--text);box-shadow:0 8px 24px #17372d1f}
+.timer-bar-clocks{gap:.95rem}
+.timer-bar .timer-kicker{font-size:.56rem;font-weight:600;letter-spacing:.1em;color:var(--text-muted)}
+.timer-bar strong{font-size:1rem;font-weight:650;color:var(--text);font-variant-numeric:tabular-nums}
+.timer-bar #barRest.running{color:var(--accent-text)}
+.timer-bar{padding:.3rem .3rem .3rem .95rem}
+/* The rest clock is the button: a soft pill with a small play / pause sign. */
+.timer-bar .bar-rest{display:grid;line-height:1.15;min-height:44px;margin:0;padding:.28rem .7rem;border:0;border-radius:13px;background:color-mix(in srgb,var(--pine) 8%,var(--surface));color:var(--text);font:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .1s}
+.timer-bar .bar-rest:hover{background:color-mix(in srgb,var(--pine) 13%,var(--surface))}
+.timer-bar .bar-rest:active{transform:scale(.96)}
+.timer-bar .bar-rest:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.timer-bar .bar-rest.running{background:color-mix(in srgb,var(--lime) 55%,var(--surface))}
+.bar-rest-time{display:flex;align-items:center;gap:.4rem}
+.timer-bar-clocks{align-items:center}
+.timer-bar-clocks>div{padding:.28rem 0}
+.bar-rest-icon{flex:none;fill:currentColor;opacity:.7}
+.bar-rest .i-pause,.bar-rest.running .i-play{display:none}
+.bar-rest.running .i-pause{display:inline}
+.timer-bar .bar-rest.running #barRest,.timer-bar .bar-rest.running .bar-rest-icon{color:#17372d}
+@media(min-width:761px){.timer-bar{left:calc(248px + (100vw - 248px) / 2)}}
+body.has-timer-bar main{padding-bottom:calc(5.5rem + env(safe-area-inset-bottom,0px))}
+body.has-timer-bar .toast{bottom:calc(4.6rem + env(safe-area-inset-bottom,0px))}
+body.has-timer-bar .undo-toast{bottom:calc(5.6rem + env(safe-area-inset-bottom,0px))}
+/* Exercise library on narrow phones: words wrap whole ("Dumbbell", not "Dumbbe-ll") and the buttons take less room. */
+.exercise-library-table td{overflow-wrap:normal;word-break:normal}
+@media(max-width:480px){
+  .exercise-library-table td{padding:.55rem .4rem}
+  .exercise-library-table td.ex-actions .btn{min-height:38px;padding:.35rem .55rem;font-size:.8rem}
+  .exercise-library-table td.ex-actions .btn+.btn{margin-left:.2rem}
+}
+
+/* ---- Bigger logo on every screen (2026-10-20). The calendar, search and profile icons keep their size and place
+   (they are pushed to the right edge, so a wider logo never moves them); the header height is unchanged. ---- */
+header.top .mark{width:60px;height:60px;border-radius:16px}
+header.top .mark:after{font-size:33px}
+.brand-name{font-size:1.7rem}
+.brand-sub{font-size:.72rem}
+@media(max-width:420px){
+  header.top .mark{width:52px;height:52px;border-radius:14px}
+  header.top .mark:after{font-size:28px}
+  .brand-name{font-size:1.45rem}
+  .brand-sub{font-size:.64rem}
+}
+@media(max-width:340px){
+  header.top .mark{width:46px;height:46px}
+  .brand-name{font-size:1.3rem}
+}
+.lock-brand .logo{width:72px;height:72px;border-radius:19px;font-size:2.2rem}
+/* During a workout the header stays a little more compact, but the logo is still large. */
+body.in-session header.top{min-height:62px}
+body.in-session header.top .mark{width:46px;height:46px;border-radius:13px}
+body.in-session header.top .mark:after{font-size:25px}
+body.in-session .brand-name{font-size:1.3rem}
+
+/* ---- Workout in progress: no Clients / Programs / Exercises / History / Pairings tabs (top row on phones, sidebar on
+   wide screens). The header keeps the logo (Home) and the calendar, search and profile icons. ---- */
+body.in-session nav.tabs{display:none!important}
+@media(min-width:761px){
+  body.in-session main{margin-left:0}
+  .timer-bar{left:50%}
+}
+
+/* ---- Set swipe (right = copy previous, left = delete): soft app colours, an icon instead of words, and only visible while
+   swiping. A finished set's tint is solid, so nothing shows through it. ---- */
+.set-swipe-wrap{background:var(--surface)}
+.set-swipe-action{width:50%;padding:0 1.1rem;opacity:0;transition:opacity .12s;font-size:0;letter-spacing:0}
+.set-swipe-action svg{flex:none}
+.set-swipe-action.copy{background:color-mix(in srgb,var(--lime) 38%,var(--surface));color:#17372d}
+.set-swipe-action.delete{background:var(--bad-bg);color:var(--bad-text)}
+.set-swipe-wrap.swipe-copying .set-swipe-action.copy,.set-swipe-wrap.swipe-deleting .set-swipe-action.delete{opacity:1}
+.setrow{background:var(--surface)}
+.setrow.done{background:color-mix(in srgb,var(--plate-green) 9%,var(--surface))}
+.setrow.swiping{box-shadow:0 2px 10px #17372d14}
+
+/* ---- Finished exercises fold to their title row (tap to open or fold again). ---- */
+.exblock.finished>header{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.exblock.finished>header:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
+.exblock.folded>:not(header){display:none}
+.exblock.folded .exercise-actions-menu{display:none}   /* no ⋯ on a folded line; it is back when the card is open */
+.exblock.folded>header{border-bottom:0}
+.exblock.folded{background:color-mix(in srgb,var(--plate-green) 6%,var(--surface))}
+.exblock.folded .exercise-best{display:none}
+.exercise-done-summary{margin-top:.15rem;font-size:.8rem;font-weight:600;color:var(--good-text)}
+
+/* ---- Session notes: one slim line under the conditioning row; tap to write. ---- */
+.session-notes-fold{margin:.9rem 0;border:1px solid var(--line-strong);border-radius:14px;background:var(--surface-2)}
+.session-notes-fold>summary{display:flex;align-items:center;gap:.6rem;min-height:48px;padding:.55rem 1rem;list-style:none;cursor:pointer;font-size:.88rem;font-weight:650;color:var(--text);-webkit-tap-highlight-color:transparent}
+.session-notes-fold>summary::-webkit-details-marker{display:none}
+.session-notes-fold>summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:14px}
+.session-notes-preview{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:450;color:var(--text-muted)}
+.session-notes-fold[open] .session-notes-preview{display:none}
+.session-notes-fold .session-notes-input{display:block;width:calc(100% - 1.6rem);min-height:110px;margin:0 .8rem .8rem;padding:.75rem .85rem;border:1px solid var(--line-strong);border-radius:12px;background:var(--surface);font:inherit;font-size:.92rem;line-height:1.5;resize:vertical}
 </style>
 </head>
 <body>
@@ -2223,7 +2356,7 @@ function exportReminderDue(){
 }
 function exportReminderHTML(){
   if (!exportReminderDue()) return '';
-  return `<div class="panel" role="status" style="margin-top:.8rem;border-left:4px solid var(--warn)"><div class="spread"><div><strong>${esc(exportStatusText())}</strong><div class="small muted">A fresh export keeps a copy of your clients and sessions outside this browser.</div></div><button type="button" class="btn primary sm" id="reminderExport">Export now</button></div></div>`;
+  return `<div class="panel" role="status" style="margin-top:.8rem;border-left:4px solid var(--warn)"><div class="spread"><div><strong>${esc(exportStatusText())}</strong></div><button type="button" class="btn primary sm" id="reminderExport">Export now</button></div></div>`;
 }
 function exportEverything(){
   if (assistantBlocked()) return;
@@ -2235,10 +2368,10 @@ function backupsPanelHTML(snaps){
   const idb = MODE === 'local' && LOCAL === 'idb';
   return `<div class="panel stack owner-only"><h3>Safety copies</h3>
     <p class="small"><strong>${esc(exportStatusText())}.</strong> ${exportReminderDue() ? 'It has been more than a week — export a copy soon.' : ''}</p>
-    ${idb ? `<p class="small muted">${S.persisted ? 'Your browser has agreed to keep this data (persistent storage is on).' : 'Your browser may clear this data if the device runs low on space — export regularly.'}</p>
-      <p class="small muted">The app keeps the last ${SNAPSHOT_KEEP} daily snapshots inside this browser. They protect against mistakes, not against losing the device.</p>
-      <div class="stack" id="snapshotList">${(snaps || []).map(s => `<div class="spread"><span class="small">${esc(s.key === 'pre-restore' ? 'Before the last restore' : s.key)} <span class="muted num">· ${esc((s.counts && s.counts.clients) || 0)} clients · ${esc((s.counts && s.counts.logs) || 0)} sessions</span></span><button type="button" class="btn sm ghost" data-restore-snapshot="${esc(s.key)}">Restore</button></div>`).join('') || '<p class="small muted">The first snapshot is taken the next time the app opens.</p>'}</div>`
-      : '<p class="small muted">Daily snapshots are kept when the app stores data in this browser\'s database.</p>'}
+    ${idb ? `${S.persisted ? '' : '<p class="small muted">Your browser may clear this data if the device runs low on space — export regularly.</p>'}
+      <p class="small muted">Last ${SNAPSHOT_KEEP} daily copies, kept in this browser.</p>
+      <div class="stack" id="snapshotList">${(snaps || []).map(s => `<div class="spread"><span class="small">${esc(s.key === 'pre-restore' ? 'Before the last restore' : s.key)} <span class="muted num">· ${esc((s.counts && s.counts.clients) || 0)} clients · ${esc((s.counts && s.counts.logs) || 0)} sessions</span></span><button type="button" class="btn sm ghost" data-restore-snapshot="${esc(s.key)}">Restore</button></div>`).join('') || '<p class="small muted">None yet.</p>'}</div>`
+      : ''}
   </div>`;
 }
 
@@ -2643,16 +2776,15 @@ function refreshSyncUI(){
   const box = document.getElementById('syncStatusText'); if (box) box.textContent = Sync.label();
 }
 function syncPanelHTML(){
-  if (!Sync.enabled()) return '<div class="panel stack"><h3>Account and sync</h3><p class="small muted">Sync is available when the app stores data in this browser\'s database, in a normal browser window.</p></div>';
+  if (!Sync.enabled()) return '<div class="panel stack"><h3>Account and sync</h3><p class="small muted">Not available in this mode or window.</p></div>';
   if (Sync.signedIn()) return `<div class="panel stack"><h3>Account and sync</h3>
     <p class="small">Signed in as <strong>${esc(Sync.session.user.email || '')}</strong>. <span id="syncStatusText" aria-live="polite">${esc(Sync.label())}</span></p>
-    <p class="small muted">${Sync.lastSyncAt ? 'Last synced ' + esc(new Date(Sync.lastSyncAt).toLocaleTimeString()) + '. ' : ''}A copy of your data is kept in your account. This device keeps working offline and catches up later.</p>
-    <label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="syncAuto" ${Sync.auto ? 'checked' : ''} style="width:auto;margin-top:.2rem"><span style="flex:1;min-width:0">Sync automatically (recommended). Turn this off to sync only when you tap Sync now.</span></label>
+    ${Sync.lastSyncAt ? '<p class="small muted">Last synced ' + esc(new Date(Sync.lastSyncAt).toLocaleTimeString()) + '.</p>' : ''}
+    <label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="syncAuto" ${Sync.auto ? 'checked' : ''} style="width:auto;margin-top:.2rem"><span style="flex:1;min-width:0">Sync automatically</span></label>
     <div class="row"><button type="button" class="btn ${Sync.auto ? 'ghost' : 'primary'} sm" id="syncNow">Sync now</button><button type="button" class="btn ghost sm" id="syncSignOut">Sign out</button></div></div>`;
   return `<div class="panel stack"><h3>Account and sync</h3>
-    <p class="small muted">Optional. Sign in to keep a copy of your data in your account and use it on your other devices; after that it syncs by itself. Signed out, everything stays on this device.</p>
-    <div class="row"><button type="button" class="btn primary sm" id="syncOpenLogin">Sign in or create an account</button></div>
-    <p class="small muted">The sign-in page has email and password, "Forgot password?" and Continue with Google.</p></div>`;
+    <p class="small muted">Sign in to sync with your other devices.</p>
+    <div class="row"><button type="button" class="btn primary sm" id="syncOpenLogin">Sign in or create an account</button></div></div>`;
 }
 function wireSyncPanel(m){
   const login = document.getElementById('syncOpenLogin'); if (login) login.onclick = () => Lock.show({ view:'credentials', closable:true });
@@ -2861,7 +2993,7 @@ function downloadPrivacyNoticePdf(){
 }
 function privacyPanelHTML(){
   return `<div class="panel stack owner-only"><h3>Privacy and data rights</h3>
-    <p class="small muted">Used in the privacy notice you give clients, and for reminders about old records. Per client: consent, download their data, and delete their data are on their profile.</p>
+    <p class="small muted">Used in the privacy notice you give clients.</p>
     <div class="inline-fields">
       <label class="field"><span>Your name or business</span><input type="text" id="pv_controller" value="${esc(S.privacy.controller)}"></label>
       <label class="field"><span>Contact email or phone</span><input type="text" id="pv_contact" value="${esc(S.privacy.contact)}"></label>
@@ -3026,13 +3158,13 @@ function devicesPanelHTML(){
     ${list.map(d => `<div class="spread"><span class="small"><strong>${esc(d.name)}</strong>${d.device_id === mine ? ' · this device' : ''} ${status(d)}<br><span class="muted">Last seen ${d.last_seen ? esc(new Date(d.last_seen).toLocaleString()) : '—'}</span></span>
       <span class="row tight">${canManage && !d.approved_at && !d.revoked_at ? `<button type="button" class="btn sm primary" data-device-approve="${esc(d.device_id)}">Approve</button>` : ''}${canManage && !d.revoked_at ? `<button type="button" class="btn sm danger" data-device-revoke="${esc(d.device_id)}">Remove</button>` : ''}</span></div>`).join('') || '<p class="small muted">No devices listed yet.</p>'}
     <div class="row"><button type="button" class="btn ghost sm" id="signOutAll">Sign out everywhere</button><button type="button" class="btn danger sm" id="deleteAccount">Delete my account and online copy</button></div>
-    ${canManage && Sync.role !== 'assistant' && Sync.requireApproval !== undefined ? `<label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="requireApproval" ${Sync.requireApproval ? 'checked' : ''} style="width:auto;margin-top:.2rem"><span style="flex:1;min-width:0">Ask me to approve each new device. Safer: someone who learns your password cannot add a device on their own. When this is off, any device that signs in to your account is trusted straight away.</span></label>` : ''}
-    <p class="small muted">If you lose a device: remove it here from another one, then change your password and use "Sign out everywhere".${Sync.requireApproval ? ' New devices must be approved from an approved device.' : ''}</p></div>`;
+    ${canManage && Sync.role !== 'assistant' && Sync.requireApproval !== undefined ? `<label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="requireApproval" ${Sync.requireApproval ? 'checked' : ''} style="width:auto;margin-top:.2rem"><span style="flex:1;min-width:0">Ask me to approve each new device (safer)</span></label>` : ''}
+    <p class="small muted">Lost a device? Remove it here, change your password, then Sign out everywhere.</p></div>`;
 }
 function activityPanelHTML(){
   const rows = S.activity || [];
   return `<div class="panel stack" id="activityPanel"><h3>Recent activity</h3>
-    <p class="small muted">${Sync.signedIn() ? 'From your account, all devices. Entries cannot be edited or deleted.' : 'On this device. Sign in to also keep a tamper-resistant copy in your account.'} Names and client details are never recorded.</p>
+    <p class="small muted">${Sync.signedIn() ? 'All your devices.' : 'This device only.'}</p>
     ${rows.length ? rows.map(e => { const dev = (Sync.devices || []).find(d => d.device_id === e.device); return `<div class="small spread"><span>${esc(auditLineText(e))}${dev ? ' · <span class="muted">' + esc(dev.name) + '</span>' : ''}</span><span class="muted num">${esc(new Date(e.at).toLocaleString())}</span></div>`; }).join('') : '<p class="small muted">Nothing recorded yet.</p>'}</div>`;
 }
 async function refreshActivity(){
@@ -3149,7 +3281,7 @@ function teamPanelHTML(){
   const nameOf = id => (S.clients[id] || {}).name || 'a client';
   const t = S.team;
   return `<div class="panel stack owner-only" id="teamPanel"><h3>Assistant coaches</h3>
-    <p class="small muted">An assistant has their own account and sees only the clients you assign. They cannot export, import, delete or change settings. Invitation links work for 48 hours and once only.</p>
+    <p class="small muted">Assistants see only the clients you assign. Invitation links work once, for 48 hours.</p>
     ${t.members.map(m => { const mine = t.access.filter(a => a.member_id === m.member_id); return `<div class="spread"><span class="small"><strong>${esc(m.label || 'Assistant')}</strong><br><span class="muted">${mine.length ? mine.map(a => esc(nameOf(a.client_id))).join(', ') : 'No clients assigned'}</span></span><span class="row tight"><button type="button" class="btn sm ghost" data-team-edit="${esc(m.member_id)}">Clients</button><button type="button" class="btn sm danger" data-team-remove="${esc(m.member_id)}">Remove</button></span></div>`; }).join('')}
     ${t.invites.map(i => `<div class="spread"><span class="small">Invitation for ${esc((i.client_ids || []).map(nameOf).join(', ') || 'no clients')}<br><span class="muted">expires ${esc(new Date(i.expires_at).toLocaleString())}</span></span><button type="button" class="btn sm ghost" data-invite-cancel="${esc(i.id)}">Cancel</button></div>`).join('')}
     <div class="row"><button type="button" class="btn primary sm" id="inviteAssistant">Invite an assistant</button></div></div>`;
@@ -3158,7 +3290,7 @@ function clientCheckboxes(selected){
   return Object.entries(S.clients).filter(([, c]) => c.status !== 'archived').sort((a, b) => byName(a[1], b[1])).map(([id, c]) => `<label class="row tight" style="gap:.4rem"><input type="checkbox" class="tcl" value="${esc(id)}" ${selected.has(id) ? 'checked' : ''} style="width:auto"> ${esc(c.name)}</label>`).join('') || '<p class="small muted">No clients yet.</p>';
 }
 function inviteDialog(){
-  dialog('Invite an assistant', `<p class="small muted">Choose the clients this assistant may see. You can change this later.</p><div class="stack small">${clientCheckboxes(new Set())}</div>`, [{label:'Cancel'}, {label:'Create link', kind:'primary', onClick: async () => {
+  dialog('Invite an assistant', `<p class="small muted">Clients this assistant may see:</p><div class="stack small">${clientCheckboxes(new Set())}</div>`, [{label:'Cancel'}, {label:'Create link', kind:'primary', onClick: async () => {
     const ids = [...document.querySelectorAll('.tcl:checked')].map(i => i.value);
     if (!ids.length){ toast('Choose at least one client'); return false; }
     const token = b64url(crypto.getRandomValues(new Uint8Array(32)));
@@ -3207,7 +3339,7 @@ function captureInviteFromUrl(){
     const u = new URL(location.href), t = u.searchParams.get('invite');
     if (!t) return;
     sessionStorage.setItem(INVITE_KEY, t.slice(0, 200));
-    u.searchParams.delete('invite'); history.replaceState(null, '', u.pathname + (u.search || '') + u.hash);   // the token never stays in the address bar
+    u.searchParams.delete('invite'); history.replaceState(history.state, '', u.pathname + (u.search || '') + u.hash);   // the token never stays in the address bar
   } catch {}
 }
 function pendingInvite(){ try { return sessionStorage.getItem(INVITE_KEY) || ''; } catch { return ''; } }
@@ -3451,7 +3583,7 @@ const Lock = {
 function lockPanelHTML(){
   const on = Lock.enabled(), bio = Lock.cfg && Lock.cfg.bio;
   return `<div class="panel stack" id="lockPanel"><h3>App lock</h3>
-    <p class="small muted">A PIN (and optional fingerprint or face unlock) hides the app when you leave it. It protects against someone glancing at an unlocked phone; it does not encrypt your data, so keep your device passcode on too.</p>
+    <p class="small muted">Hides the app when you leave it. It doesn't encrypt your data, so keep your phone's passcode on too.</p>
     <p class="small"><strong>${on ? 'PIN lock is on.' : 'PIN lock is off.'}</strong>${bio ? ' Biometric unlock is on.' : ''}</p>
     <div class="row"><button type="button" class="btn primary sm" id="lockSetPin">${on ? 'Change PIN' : 'Set a PIN'}</button>
       ${on ? '<button type="button" class="btn ghost sm" id="lockNow">Lock now</button><button type="button" class="btn ghost sm" id="lockOff">Turn off</button>' : ''}
@@ -3529,7 +3661,7 @@ function takeOAuthResult(){
     const error = u.searchParams.get('error_description') || u.searchParams.get('error') || hash.get('error_description') || hash.get('error');
     if (!code && !error) return null;
     ['code', 'error', 'error_code', 'error_description'].forEach(k => u.searchParams.delete(k));
-    history.replaceState(null, '', u.pathname + (u.search || ''));
+    history.replaceState(history.state, '', u.pathname + (u.search || ''));   // keep the back-button state of this entry
     return { code, error };
   } catch { return null; }
 }
@@ -3794,7 +3926,7 @@ function programWeekBarHTML(p, wk){
   }).join('');
   const others = Array.from({ length:total }, (_, i) => i + 1).filter(w => w !== wk && weekHasChanges(p, w)).map(w => `<option value="${w}">Week ${w}</option>`).join('');
   return `<div class="panel stack" id="weekBar">
-    <div class="spread"><strong>Weekly plan</strong><span class="small muted">${wk ? 'Editing week ' + wk + ' — only what you change here differs from the base.' : 'The base applies to every week unless a week changes it. Pick a week to vary sets, reps, load or effort.'}</span></div>
+    <div class="spread"><strong>Weekly plan</strong><span class="small muted">${wk ? 'Editing week ' + wk + ' only.' : 'Applies to every week. Pick a week to change it.'}</span></div>
     <nav class="week-tabs" aria-label="Program weeks"><button type="button" data-pweek="0" aria-current="${wk === 0}">Base</button>${tabs}</nav>
     ${wk ? `<div class="inline-fields">
       <label class="field"><span>Week name (optional)</span><input type="text" id="wk_label" maxlength="30" value="${esc(plan.label || '')}" placeholder="e.g. Heavy, Peak, Deload"></label>
@@ -4279,17 +4411,12 @@ function renderTimerBar(){
   if(!on){bar.hidden=true;bar.innerHTML='';return;}
   if(bar.hidden||!bar.firstChild){
     bar.hidden=false;
-    bar.innerHTML=`<div class="timer-bar-clocks"><div><span class="timer-kicker">SESSION</span><strong id="barSession" class="num">00:00:00</strong></div><div><span class="timer-kicker">REST</span><strong id="barRest" class="num">01:30</strong></div><div id="barRestOtherWrap" hidden><span class="timer-kicker" id="barRestOtherName">OTHER</span><strong id="barRestOther" class="num">00:00</strong></div></div>
-      <div class="timer-bar-actions"><button type="button" class="btn sm" id="barRestToggle">Start</button><button type="button" class="btn sm ghost" id="barMute" aria-label="Sound cues" aria-pressed="false">🔔</button></div>`;
-    document.getElementById('barRestToggle').onclick=toggleRest;
-    document.getElementById('barMute').onclick=()=>{Cues.setMuted(!Cues.muted());Cues.unlock();updateMuteButton();};
+    // The rest clock is itself the button: tap it to start, pause or resume the rest.
+    bar.innerHTML=`<div class="timer-bar-clocks"><div><span class="timer-kicker">SESSION</span><strong id="barSession" class="num">00:00:00</strong></div><button type="button" class="bar-rest" id="barRestBtn" aria-label="Rest timer: tap to start"><span class="timer-kicker">REST</span><span class="bar-rest-time"><strong id="barRest" class="num">01:30</strong><svg class="bar-rest-icon" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path class="i-play" d="M3 1.8v8.4L10 6z"/><path class="i-pause" d="M2.6 1.8h2.4v8.4H2.6zM7 1.8h2.4v8.4H7z"/></svg></span></button><div id="barRestOtherWrap" hidden><span class="timer-kicker" id="barRestOtherName">OTHER</span><strong id="barRestOther" class="num">00:00</strong></div></div>`;
+    document.getElementById('barRestBtn').onclick=toggleRest;
   }
-  updateMuteButton();
 }
-function updateMuteButton(){
-  const b=document.getElementById('barMute');if(!b)return;
-  const muted=Cues.muted();b.textContent=muted?'🔕':'🔔';b.setAttribute('aria-pressed',String(!muted));b.setAttribute('aria-label',muted?'Sound cues off — tap to turn on':'Sound cues on — tap to turn off');
-}
+// Sound cues are switched on or off in Settings and data > Appearance and reset (the bar no longer has a bell).
 function toggleRest(){
   const d=S.sel?.draft||(S.parkedWorkout&&S.parkedWorkout.draft)||(S.sel?.conditioningClient&&S.sel.conditioningSession)||(S.sessions[0]&&S.sessions[0].draft);if(!d)return;
   if(d.restRunning){d.restRemainingMs=Math.max(0,d.restEndAt-Date.now());d.restRunning=false;d.restEndAt=null;}
@@ -4319,7 +4446,7 @@ function updateWorkoutTimerUI(){
   const toggleText=d.restRunning?'Pause':(remaining<(Number(d.restDurationSeconds)||90)?'Resume':`Start ${Number(d.restDurationSeconds)||90}s`);
   const toggle=document.getElementById('restToggle');
   if(toggle) toggle.textContent=toggleText;
-  const barToggle=document.getElementById('barRestToggle'); if(barToggle) barToggle.textContent=toggleText;
+  const barBtn=document.getElementById('barRestBtn'); if(barBtn){barBtn.classList.toggle('running',!!d.restRunning);barBtn.setAttribute('aria-label','Rest '+formatClock(remaining)+(d.restRunning?': tap to pause':remaining<(Number(d.restDurationSeconds)||90)?': paused, tap to resume':': tap to start'));}
   const dock=document.getElementById('dockStatus');
   if(dock){const parked=S.sessions[0]; const cl=parked&&S.clients[parked.logClient],conditioning=parked&&(parked.sessionType==='conditioning'||parked.activePhase==='conditioning'); dock.textContent=conditioning?`${cl?cl.name:'Client'} · ${S.conditioning[parked.conditioningId]?.name||'Conditioning'} · ${formatClock(elapsed)} elapsed`:`${cl?cl.name:'Client'} · ${formatClock(elapsed)} elapsed · ${workoutProgress(d)}`;}
   if(Date.now()-lastPeriodicWorkoutAutosave>15000&&currentWorkoutSnapshot()){lastPeriodicWorkoutAutosave=Date.now();scheduleWorkoutAutosave();}
@@ -4407,6 +4534,7 @@ function render(opts = {}){
   lastRouteKey = key;
   if (keep){ restoreOpenPanels(m, openPanels); window.scrollTo(0, scrollY); restoreFocus(m, focus); }
   else window.scrollTo({ top: 0 });
+  if (typeof navHistorySync === 'function') navHistorySync(scrollY);   // phone back button (39-back-button.js)
 }
 
 /* ============================ TODAY ============================ */
@@ -4422,7 +4550,7 @@ function upcomingHTML(){
 }
 function viewToday(){
   const clientsAll = Object.entries(S.clients).map(([id,c]) => ({id,...c})).filter(c => c.status !== 'archived');
-  if (!clientsAll.length) return `<div class="empty"><h2>No clients yet</h2><p>Add your roster first, then come back here to see who trains today.</p><button class="btn primary" data-go="clients">Add a client</button></div>`;
+  if (!clientsAll.length) return `<div class="empty"><h2>No clients yet</h2><button class="btn primary" data-go="clients">Add a client</button></div>`;
 
   const iso = todayISO();
   const slots = scheduledOn(iso);
@@ -4478,13 +4606,12 @@ function viewToday(){
     ${total ? `<div class="progress-track" role="img" aria-label="${pct}% attended so far"><div class="progress-fill" style="width:${pct}%"></div></div>` : ''}
   </div>
   ${!relevant.length
-    ? `<div class="empty"><p>Nothing scheduled today. Set weekdays on a pairing or a client's recurring sessions.</p></div>`
+    ? `<div class="empty"><p>Nothing scheduled today.</p></div>`
     : `<span class="eyebrow today-list-head">Clients</span><div class="stack">${relevant.map(clientCard).join('')}</div>`}
   ${exportReminderHTML()}
   ${retentionReminderHTML()}
   ${conflictsPanelHTML()}
-  ${upcomingHTML()}
-  <p class="small muted" style="margin-top:.8rem">Log a session with the + button. No-shows, cancellations and rescheduling are in the Schedule (the calendar icon at the top).</p>`;
+  ${upcomingHTML()}`;
 }
 
 /* Injuries, preferences and goal, pinned at the top of the workout. Open by default when there
@@ -4516,7 +4643,7 @@ function logSheet(cid){
   </section>
   ${clientNotesBannerHTML(c)}
   ${draft.dayNotes?`<div class="panel day-notes-banner"><strong>${esc(draft.dayLabel||'Today')}</strong> — ${esc(draft.dayNotes)}</div>`:''}
-  ${draft.dayConditioningId&&S.conditioning[draft.dayConditioningId]&&!draft.conditioningSession&&!draft.conditioningInProgress&&!draft.editing?`<div class="panel day-cond-banner"><div><strong>Day includes ${esc(S.conditioning[draft.dayConditioningId].name||'conditioning')}</strong><div class="small muted">${(S.conditioning[draft.dayConditioningId].blocks||[]).length} timed block${(S.conditioning[draft.dayConditioningId].blocks||[]).length===1?'':'s'} — your strength work stays in this session.</div></div><button type="button" class="btn primary" id="startDayConditioning" data-template="${esc(draft.dayConditioningId)}">Start conditioning</button></div>`:''}
+  ${draft.dayConditioningId&&S.conditioning[draft.dayConditioningId]&&!draft.conditioningSession&&!draft.conditioningInProgress&&!draft.editing?`<div class="panel day-cond-banner"><div><strong>Day includes ${esc(S.conditioning[draft.dayConditioningId].name||'conditioning')}</strong><div class="small muted">${(S.conditioning[draft.dayConditioningId].blocks||[]).length} timed block${(S.conditioning[draft.dayConditioningId].blocks||[]).length===1?'':'s'}</div></div><button type="button" class="btn primary" id="startDayConditioning" data-template="${esc(draft.dayConditioningId)}">Start conditioning</button></div>`:''}
 
   ${draft.editing?'':`<section class="session-timer panel" aria-label="Workout timers">
     <div class="session-clock-block"><span class="timer-kicker">SESSION</span><strong id="sessionClock" class="session-clock num">00:00:00</strong><span id="exerciseProgress" class="timer-caption"></span></div>
@@ -4524,7 +4651,7 @@ function logSheet(cid){
       <div class="rest-controls"><button type="button" class="btn btn-light" id="restToggle">Start ${esc(draft.restDurationSeconds||90)}s</button><button type="button" class="btn btn-light" id="restReset" aria-label="Reset rest timer">Reset</button></div>
     </div>
   </section>`}
-  ${draft.conditioningSession?`<div class="panel"><strong>Conditioning complete · ${esc(draft.conditioningSession.templateName||'Session')}</strong><div class="small muted">${(draft.conditioningSession.blocksCompleted||[]).length} timed blocks completed and included in this workout.</div></div>`:''}
+  ${draft.conditioningSession?`<div class="panel"><strong>Conditioning complete · ${esc(draft.conditioningSession.templateName||'Session')}</strong><div class="small muted">${(draft.conditioningSession.blocksCompleted||[]).length} timed blocks completed.</div></div>`:''}
   <div id="exList">${draft.entries.map((en,ei) => exBlock(en, ei)).join('') || '<div class="panel muted">Nothing prescribed. Add a lift below.</div>'}</div>
 
   <div class="panel">
@@ -4532,8 +4659,9 @@ function logSheet(cid){
       <button class="btn ghost" id="addExBtn">Add exercise</button>
     </div>
     <hr>
-    ${Object.keys(S.conditioning).length&&!draft.conditioningSession&&!draft.editing?`<div class="conditioning-add-row"><div><strong>${draft.conditioningInProgress?'Conditioning block in progress':'Add a conditioning block'}</strong><small>${draft.conditioningInProgress?'Continue the conditioning part of this session.':'Choose a template and add conditioning to this session.'}</small></div><button type="button" class="btn primary" id="openSessionConditioning">${draft.conditioningInProgress?'Continue':'＋ Add conditioning'}</button></div>`:''}
-    <label class="field session-notes-field"><span>Session notes</span><textarea id="sessNotes" class="session-notes-input" placeholder="How did the session feel? Add observations for next time…">${esc(draft.notes||'')}</textarea><small>Notes are saved with this workout and appear in the client’s history.</small></label>
+    ${Object.keys(S.conditioning).length&&!draft.conditioningSession&&!draft.editing?`<div class="conditioning-add-row"><div><strong>${draft.conditioningInProgress?'Conditioning block in progress':'Add a conditioning block'}</strong></div><button type="button" class="btn primary" id="openSessionConditioning">${draft.conditioningInProgress?'Continue':'＋ Add conditioning'}</button></div>`:''}
+    <details class="session-notes-fold" id="sessNotesFold" ${S.sel.sessNotesOpen?'open':''}><summary><span>Session notes</span><span class="session-notes-preview" id="sessNotesPreview">${esc(String(draft.notes||'').trim().split('\n')[0].slice(0,60))}</span></summary>
+      <textarea id="sessNotes" class="session-notes-input" aria-label="Session notes" placeholder="How did the session feel?">${esc(draft.notes||'')}</textarea></details>
     <div class="logger-status-row" aria-live="polite">Draft status: <strong id="workoutSaveStatus">${S.recoverySaved?'Saved offline':'Autosave ready'}</strong></div>
     <div class="row">
       <button class="btn primary" id="saveSess">${draft.editing?'Save changes':'Save session'}</button>
@@ -4615,7 +4743,7 @@ function exerciseTargetHTML(en,suggestion){
   if(en.targetRPE)parts.push('RPE '+esc(en.targetRPE));
   if(en.targetRIR)parts.push('RIR '+esc(en.targetRIR));
   if(en.targetTempo)parts.push('Tempo '+esc(en.targetTempo));
-  if(en.targetRest)parts.push('Rest '+esc(en.targetRest));
+  // (The rest time is not repeated here: the rest timer already uses it.)
   if(!parts.length&&!suggestion&&!en.targetNotes)return '';
   return `<div class="exercise-target">${parts.length?`<span>Target ${parts.join(' · ')}</span>`:''}${en.targetNotes?`<span class="exercise-cue">✎ ${esc(en.targetNotes)}</span>`:''}${suggestion?`<span class="exercise-suggestion">↗ ${esc(suggestion.note)}</span>`:''}</div>`;
 }
@@ -4623,25 +4751,21 @@ function exBlock(en, ei){
   const previous=exerciseHistory(S.sel.draft.clientId,en.exId).last;
   const groupLabel=groupPositionLabel(en,ei);
   const suggestion=entrySuggestion(en),best=en.best;
-  return `<div class="exblock" data-ei="${ei}" id="logger-ex-${ei}">
-    <header><div><div class="exercise-title-line"><strong class="cond" style="font-size:1.15rem">${esc(en.name)}</strong>${groupLabel?`<span class="exercise-group-chip">${esc(groupLabel)}</span>`:''}</div></div>
+  const draft=S.sel.draft,finished=!draft.editing&&entryFinished(en)&&(!en.groupId||draft.entries.filter(x=>x.groupId===en.groupId).every(entryFinished)),folded=exerciseFolded(draft,ei);
+  return `<div class="exblock${folded?' folded':''}${finished?' finished':''}" data-ei="${ei}" id="logger-ex-${ei}">
+    <header${finished?` data-fold="${ei}" role="button" tabindex="0" aria-expanded="${!folded}" aria-label="${esc(en.name)}: ${folded?'show':'hide'} sets"`:''}><div><div class="exercise-title-line"><strong class="cond" style="font-size:1.15rem">${esc(en.name)}</strong>${groupLabel?`<span class="exercise-group-chip">${esc(groupLabel)}</span>`:''}</div>${finished?`<div class="exercise-done-summary"><span aria-hidden="true">✓</span> ${exerciseDoneSummary(en)}</div>`:''}</div>
       <div class="exhead-right">${best&&best.weight!=null?`<span class="exercise-best" title="Heaviest set logged for this client">Best ${esc(best.weight)} kg${best.reps!=null?' × '+esc(best.reps):''}${best.date?' · '+esc(shortDate(best.date)):''}</span>`:''}<details class="exercise-actions-menu"><summary aria-label="Exercise actions" title="Exercise actions">⋯</summary><div class="exercise-actions-pop">
         <button type="button" data-move-ex="${ei}.-1" ${ei===0?'disabled':''}>Move up</button><button type="button" data-move-ex="${ei}.1" ${ei===S.sel.draft.entries.length-1?'disabled':''}>Move down</button><button type="button" data-session-group="superset" data-ei="${ei}">Create superset</button><button type="button" data-session-group="triset" data-ei="${ei}">Create triset</button><button type="button" data-set-type="${ei}">Set type</button><button type="button" data-set-notes="${ei}">Set notes</button><button type="button" data-replace-session="${ei}">Replace exercise</button><button type="button" data-rmex="${ei}" data-remove-action>Remove exercise</button>
       </div></details></div>
     </header>
     ${exerciseTargetHTML(en,suggestion)}
     <div class="setheads"><span>Set</span><span>Previous</span><span>Kg</span><span>Reps</span><span></span></div>
-    ${en.sets.map((rawSet,si)=>{const s=ensureSetDefaults(rawSet),prev=previous?.sets?.[si],lastWeight=previous?(prev?.weight??null):s.lastWeight,lastReps=previous?(prev?.reps??null):s.lastReps,sug=suggestion?.sets?.[si],hintWeight=sug?.weight??en.targetKg??lastWeight,hintReps=sug?.reps??lastReps;const rpeOptions=['','6','6.5','7','7.5','8','8.5','9','9.5','10'].map(v=>`<option value="${v}" ${String(s.actualRPE??'')===v?'selected':''}>${v||'—'}</option>`).join(''),rirOptions=['','0','1','2','3','4','5+'].map(v=>`<option value="${v}" ${String(s.actualRIR??'')===v?'selected':''}>${v||'—'}</option>`).join('');return `
-      <div class="set-swipe-wrap"><span class="set-swipe-action copy">Copy previous</span><span class="set-swipe-action delete">Delete set</span><div class="setrow ${s.done?'done':''}" data-si="${si}"><span class="idx num">${si+1}</span><span class="last num">${lastWeight!=null||lastReps!=null?esc((lastWeight??'—')+'kg × '+(lastReps??'—')):'—'}</span>
+    ${en.sets.map((rawSet,si)=>{const s=ensureSetDefaults(rawSet),prev=previous?.sets?.[si],lastWeight=previous?(prev?.weight??null):s.lastWeight,lastReps=previous?(prev?.reps??null):s.lastReps,sug=suggestion?.sets?.[si],hintWeight=sug?.weight??en.targetKg??lastWeight,hintReps=sug?.reps??lastReps;return `
+      <div class="set-swipe-wrap"><span class="set-swipe-action copy" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></span><span class="set-swipe-action delete" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></span><div class="setrow ${s.done?'done':''}" data-si="${si}"><span class="idx num">${si+1}</span><span class="last num">${lastWeight!=null||lastReps!=null?esc((lastWeight??'—')+'kg × '+(lastReps??'—')):'—'}</span>
         <input type="number" inputmode="decimal" step="0.5" class="num" data-set-input="weight" value="${esc(s.weight??'')}" placeholder="${esc(hintWeight??'')}" aria-label="Kilograms for set ${si+1}">
         <input type="number" inputmode="numeric" class="num" data-set-input="reps" value="${esc(s.reps??'')}" placeholder="${esc(hintReps??'')}" aria-label="Reps for set ${si+1}">
       <button class="tick" data-done="1" aria-pressed="${s.done?'true':'false'}" aria-label="${s.done?'Reopen':'Mark'} set ${si+1} ${s.done?'':'complete'}">${s.done?'✓':''}</button>
-      </div></div>
-      <details class="set-more"><summary>Effort · RPE / RIR optional</summary>
-        <div class="set-more-grid"><label>Actual RPE<select data-set-input="actualRPE">${rpeOptions}</select></label><label>Actual RIR<select data-set-input="actualRIR">${rirOptions}</select></label></div>
-        <div class="set-more-actions"><button type="button" class="btn sm ghost" data-adjust-set="${ei}.${si}.weight.-2.5">− 2.5 kg</button><button type="button" class="btn sm ghost" data-adjust-set="${ei}.${si}.weight.2.5">+ 2.5 kg</button><button type="button" class="btn sm ghost" data-adjust-set="${ei}.${si}.reps.-1">− 1 rep</button><button type="button" class="btn sm ghost" data-adjust-set="${ei}.${si}.reps.1">+ 1 rep</button></div>
-        <div class="set-more-actions"><button type="button" class="btn sm ghost" data-copy-prev="${ei}.${si}">Copy previous</button><button type="button" class="btn sm danger" data-delete-set="${ei}.${si}">Delete set ${si+1}</button></div>
-      </details>`}).join('')}
+      </div></div>`}).join('')}
     <div style="padding:.4rem .7rem"><button class="btn sm ghost" data-addset="${ei}">Add set</button></div>
   </div>`;
 }
@@ -4774,8 +4898,8 @@ function packLowWarning(cid){
 function openConditioningChooser(cid){
   if(!Object.keys(S.conditioning).length){toast('Create a conditioning program first');return;}
   const partner=partnerOf(cid);
-  const templates=Object.entries(S.conditioning).map(([id,w])=>`<button type="button" class="card program-kind-card" data-start-conditioning-template="${esc(id)}"><span class="program-kind-icon">◷</span><strong>${esc(w.name||'Conditioning template')}</strong><span class="small muted">${(w.blocks||[]).length} timed block${(w.blocks||[]).length===1?'':'s'}</span><span class="small muted">Start this conditioning program →</span></button>`).join('');
-  const templateDialog=dialog('Choose conditioning program',`<p class="small muted">Select a program to start its conditioning session.</p>${partner?`<label class="row tight small" style="gap:.4rem;margin-bottom:.6rem"><input type="checkbox" id="condWithPartner" style="width:auto"> Also run it for ${esc(partner.name)} — one shared timer, a separate result for each</label>`:''}<div class="grid start-workout-choices">${templates}</div>`,[{label:'Cancel'}]);
+  const templates=Object.entries(S.conditioning).map(([id,w])=>`<button type="button" class="card program-kind-card" data-start-conditioning-template="${esc(id)}"><span class="program-kind-icon">◷</span><strong>${esc(w.name||'Conditioning program')}</strong><span class="small muted">${(w.blocks||[]).length} timed block${(w.blocks||[]).length===1?'':'s'}</span></button>`).join('');
+  const templateDialog=dialog('Choose conditioning program',`${partner?`<label class="row tight small" style="gap:.4rem;margin-bottom:.6rem"><input type="checkbox" id="condWithPartner" style="width:auto"> Also run it for ${esc(partner.name)} — one shared timer, a separate result for each</label>`:''}<div class="grid start-workout-choices">${templates}</div>`,[{label:'Cancel'}]);
   templateDialog.querySelectorAll('[data-start-conditioning-template]').forEach(button=>button.onclick=()=>{
     const templateId=button.dataset.startConditioningTemplate;
     if(!S.conditioning[templateId]){toast('This conditioning program is no longer available');return;}
@@ -4830,9 +4954,14 @@ function deleteSetAt(ei,si){
 }
 function copyPreviousSet(ei,si){
   const entry=S.sel.draft?.entries?.[ei],set=entry?.sets?.[si];
-  const previous=entry&&exerciseHistory(S.sel.draft.clientId,entry.exId).last?.sets?.[si];
+  // This set from the client's last session; if there is none, the set just above it in this workout.
+  const last=entry&&exerciseHistory(S.sel.draft.clientId,entry.exId).last?.sets?.[si],above=si>0?entry?.sets?.[si-1]:null;
+  const previous=last&&(last.weight!=null||last.reps!=null)?last:(above&&(above.weight!=null||above.reps!=null)?above:null);
   if(!previous||!set){toast('No previous set to copy');return;}
   set.weight=previous.weight??null;set.reps=previous.reps??null;set.done=false;
+  // Ticking a set updates its row in place, so put the copied numbers in the boxes first.
+  const row=document.querySelector(`.exblock[data-ei="${ei}"] .setrow[data-si="${si}"]`);
+  if(row){const kg=row.querySelector('[data-set-input="weight"]'),reps=row.querySelector('[data-set-input="reps"]');if(kg)kg.value=set.weight??'';if(reps)reps.value=set.reps??'';}
   if(set.weight!=null&&set.reps!=null)completeWorkoutSet(ei,si);else{markStrengthActivity();render();}
 }
 /* The kg × reps shown as grey hints in this set's boxes: the progression suggestion when
@@ -4858,31 +4987,70 @@ function completeWorkoutSet(ei,si,opts={}){
   const row=document.querySelector(`.exblock[data-ei="${ei}"] .setrow[data-si="${si}"]`),tick=row?.querySelector('[data-done]');
   if(row)row.classList.add('done');if(tick){tick.textContent='✓';tick.setAttribute('aria-label',`Reopen set ${si+1}`);tick.setAttribute('aria-pressed','true');}
   updateWorkoutTimerUI();markStrengthActivity();
-  if(nextMember!=null&&opts.advance){
+  if(nextMember!=null&&opts.advance){   // superset / tri-set: slide to the next exercise's same set
     const box=document.querySelector(`.exblock[data-ei="${nextMember}"] .setrow[data-si="${si}"] [data-set-input="weight"]`);
-    if(box){box.scrollIntoView({block:'center'});try{box.focus({preventScroll:true});box.select();}catch{}}
+    if(box){box.scrollIntoView({block:'center',behavior:'smooth'});try{box.focus({preventScroll:true});box.select();}catch{}}
+  } else if(opts.advance&&draft.entries[ei].groupId){   // end of a round: slide back to the first exercise's next set (rest is running, so no keyboard)
+    const first=draft.entries.findIndex(e=>e.groupId===draft.entries[ei].groupId);
+    if(first>=0&&draft.entries[first].sets[si+1]&&!draft.entries[first].sets[si+1].done){
+      const row=document.querySelector(`.exblock[data-ei="${first}"] .setrow[data-si="${si+1}"]`);if(row)row.scrollIntoView({block:'center',behavior:'smooth'});
+    }
   }
+  foldFinishedExercises(ei);
   return true;
+}
+/* ---- Finished exercises fold to one line (phone-friendly). An exercise folds when all its sets are ticked; in a superset
+   or tri-set, when every exercise in it is finished. Tapping a folded title opens it (entry.uiOpen); it folds again when
+   the coach moves on to another exercise. Nothing folds while a saved session is being edited. ---- */
+const entryFinished=e=>!!(e&&e.sets&&e.sets.length&&e.sets.every(s=>s.done));
+function exerciseFolded(draft,ei){
+  const e=draft?.entries?.[ei];if(!e||draft.editing||e.uiOpen||!entryFinished(e))return false;
+  return !e.groupId||draft.entries.filter(x=>x.groupId===e.groupId).every(entryFinished);
+}
+function foldFinishedExercises(ei){
+  const draft=S.sel?.draft;if(!draft||draft.editing)return;
+  const e=draft.entries[ei];if(!entryFinished(e))return;
+  const members=e.groupId?draft.entries.map((x,i)=>x.groupId===e.groupId?i:-1).filter(i=>i>=0):[ei];
+  if(!members.every(i=>entryFinished(draft.entries[i])))return;
+  setTimeout(()=>{   // a moment to see the last ✓
+    if(S.sel?.draft!==draft||!members.every(i=>entryFinished(draft.entries[i])))return;   // gone, or a set was reopened meanwhile
+    members.forEach(i=>delete draft.entries[i].uiOpen);
+    render({keepScroll:true});   // redraws the folded title rows (keeps scroll and focus)
+    const last=Math.max(...members),next=draft.entries.findIndex((x,i)=>i>last&&!entryFinished(x));
+    const target=next>=0?next:draft.entries.findIndex(x=>!entryFinished(x));
+    const block=target>=0?document.querySelector(`.exblock[data-ei="${target}"]`):null;
+    if(block){   // the next exercise, with the folded one just above it still in view
+      const above=block.previousElementSibling?.classList.contains('exblock')?block.previousElementSibling:null;
+      const head=document.querySelector('header.top'),pos=head?getComputedStyle(head).position:'';
+      const covered=head&&(pos==='sticky'||pos==='fixed')?Math.max(0,head.getBoundingClientRect().bottom):0;
+      window.scrollTo({top:Math.max(0,block.getBoundingClientRect().top+window.scrollY-covered-(above?above.offsetHeight+14:12)),behavior:'smooth'});
+    }
+    scheduleWorkoutAutosave();
+  },650);
+}
+function exerciseDoneSummary(e){
+  const done=e.sets.filter(s=>s.done),top=done.filter(s=>s.weight!=null).sort((a,b)=>Number(b.weight)-Number(a.weight))[0];
+  return `${done.length} set${done.length===1?'':'s'}${top?` · ${esc(top.weight)} kg × ${esc(top.reps??'—')}`:''}`;
 }
 
 function conditioningWorkoutSheet(){
   const cid=S.sel.conditioningClient,w=S.conditioning[S.sel.conditioningId],ss=S.sel.conditioningSession||{};
-  if(!w)return '<div class="empty"><p>Conditioning template not found.</p><button class="btn ghost" id="leaveConditioningWorkout">Back</button></div>';
+  if(!w)return '<div class="empty"><p>Conditioning program not found.</p><button class="btn ghost" id="leaveConditioningWorkout">Back</button></div>';
   const blocks=Array.isArray(ss.blocks)?ss.blocks:(ss.blocks=JSON.parse(JSON.stringify(w.blocks||[])));
   const selected=Math.min(Number(ss.blockIndex)||0,Math.max(0,blocks.length-1));
   const options=blocks.map((b,i)=>`<option value="${i}" ${i===selected?'selected':''}>Block ${i+1} · ${esc(b.name||conditioningModeName(b.mode))}</option>`).join('');
   const combined=S.sel.conditioningMode==='both';
-  return `<div class="panel spread"><div><span class="eyebrow">${combined?'COMBINED SESSION':sessionClientIds(ss)?'GROUP CONDITIONING':'CONDITIONING SESSION'}</span><h2>${esc(clientNamesOf(cid,ss))} · ${esc(w.name||'Conditioning')}</h2><p class="small muted">${combined?'Strength and conditioning stay in the same workout session.':'Run each timed block, then complete the session to save it to client history.'}</p></div><button class="btn ghost" id="leaveConditioningWorkout">${combined?'Return to strength':'Back to profile (keep session)'}</button></div>
+  return `<div class="panel spread"><div><span class="eyebrow">${combined?'COMBINED SESSION':sessionClientIds(ss)?'GROUP CONDITIONING':'CONDITIONING SESSION'}</span><h2>${esc(clientNamesOf(cid,ss))} · ${esc(w.name||'Conditioning')}</h2></div><button class="btn ghost" id="leaveConditioningWorkout">${combined?'Return to strength':'Back to profile (keep session)'}</button></div>
     <section class="session-timer panel" aria-label="Workout session and rest timers"><div class="session-clock-block"><span class="timer-kicker">SESSION</span><strong id="sessionClock" class="session-clock num">00:00:00</strong><span id="exerciseProgress" class="timer-caption"></span></div><div class="rest-clock-block"><div class="rest-clock-title"><span class="timer-kicker">REST</span></div><button type="button" id="restClock" class="rest-clock rest-clock-edit num" role="timer" aria-label="Edit rest timer duration">01:30</button><div class="rest-controls"><button type="button" class="btn btn-light" id="restToggle">Start 90s</button><button type="button" class="btn btn-light" id="restReset" aria-label="Reset rest timer to 90 seconds">Reset</button></div></div></section>
     ${w.warmup?`<section class="conditioning-bookend"><span class="conditioning-section-mark">WUP</span><div><h3>Warm-up</h3><p>${esc(w.warmup).replace(/\n/g,'<br>')}</p></div></section>`:''}
      <section class="conditioning-timer panel"><div class="conditioning-timer-config"><div><span class="timer-kicker">${esc(conditioningModeName(blocks[selected]?.mode||''))}</span><h3>${esc(blocks[selected]?.name||'Conditioning timer')}</h3></div><label class="field"><span>Block</span><select id="conditioningTimerBlock" ${ss.completed?'disabled data-locked="1"':(conditioningTimerBusy()?'disabled':'')}>${options||'<option value="">No blocks</option>'}</select></label></div>
        ${ss.completed?'<p class="conditioning-session-complete-note">Conditioning complete. Review the block summary, then save this session.</p>':''}
        <div class="conditioning-timer-display"><span id="conditioningTimerPhase">${ss.completed?'Complete':'Ready'}</span><strong id="conditioningTimerClock" class="num">${ss.completed?'✓':'00:00'}</strong><span id="conditioningTimerRound">${blocks.length?'Ready when you are':'Add a block to begin'}</span><span id="conditioningTimerExercise" class="conditioning-timer-exercise"></span></div>
        <div class="row tight conditioning-timer-actions"><button class="btn primary" id="conditioningTimerStart" ${blocks.length&&!ss.completed?'':'disabled'}>Start block</button><button class="btn ghost" id="conditioningTimerPause" disabled>Pause</button><button class="btn ghost" id="conditioningTimerRoundDone" hidden>Complete round</button><button class="btn ghost" id="conditioningTimerFinish" disabled>Finish block</button></div>
-       ${blocks.length>1?'<p class="small muted" style="text-align:center">Choose the next block above when this one is complete.</p>':''}</section>
+       </section>
     ${conditioningResultsPanelHTML(ss,blocks)}
     ${w.finisher?`<section class="conditioning-bookend conditioning-finisher"><span class="conditioning-section-mark">FIN</span><div><h3>Finisher</h3><p>${esc(w.finisher).replace(/\n/g,'<br>')}</p></div></section>`:''}
-     <div class="panel spread"><span class="small muted">${ss.completed?(combined?'Add this completed conditioning block to the strength workout.':'Save this conditioning session or continue to the normal program.'):combined?'Conditioning will be added to the strength workout log.':'Add the client’s normal workout now, or complete conditioning and save it when ready.'}</span><div class="row tight">${!combined?`<button class="btn ghost" id="addNormalProgram">${ss.completed?'Go to normal program':'Add normal program'}</button>`:''}<button class="btn primary" id="completeConditioningWorkout">${ss.completed?'Save session':combined?'Finish conditioning':'Complete conditioning session'}</button></div></div>`;
+     <div class="panel spread"><span></span><div class="row tight">${!combined?`<button class="btn ghost" id="addNormalProgram">${ss.completed?'Go to normal program':'Add normal program'}</button>`:''}<button class="btn primary" id="completeConditioningWorkout">${ss.completed?'Save session':combined?'Finish conditioning':'Complete conditioning session'}</button></div></div>`;
 }
 
 /* ============================ CALENDAR ============================ */
@@ -5007,7 +5175,7 @@ function dayPanel(iso){
       return `${esc(n || '(deleted)')}${to ? ' → ' + esc(to.date) : ''} <button class="btn sm ghost" data-restore-skip="${esc(e.date)}|${esc(e.key)}">Undo</button>`;
     }).join(' ')}</div>` : ''}
 
-    ${!slots.length && !individuals.length && !oneOffs.length ? '<p class="muted small">Nothing scheduled on this day. Recurring days are set on a pairing or on a client\'s own recurring sessions.</p>' : ''}
+    ${!slots.length && !individuals.length && !oneOffs.length ? '<p class="muted small">Nothing scheduled.</p>' : ''}
 
     ${extras.length ? `<div class="slot"><div class="slot-head"><strong class="cond" style="font-size:1.15rem">Other marks</strong></div>
       ${extras.map(c => roster(c, '', '')).join('')}</div>` : ''}
@@ -5022,13 +5190,12 @@ const searchBoxHTML = (key, label, placeholder) => `<input type="search" id="sea
 function viewClients(){
   if (S.sel.client) return clientDetail(S.sel.client);
   const all = Object.entries(S.clients).map(([id,c]) => ({id,...c})).sort(byName);
-  const list = all.filter(c => clientMatches(c, S.search.clients));
-  const active = list.filter(c => c.status !== 'archived');
-  const archived = list.filter(c => c.status === 'archived');
+  // No search box here: the search icon in the header finds clients.
+  const active = all.filter(c => c.status !== 'archived');
+  const archived = all.filter(c => c.status === 'archived');
   return `
   <div class="panel spread"><h2>Roster</h2><button class="btn primary" id="newClient">Add client</button></div>
-  ${all.length > 1 ? `<div class="panel">${searchBoxHTML('clients', 'Search clients')}</div>` : ''}
-  ${!all.length ? `<div class="empty"><p>Your roster is empty. Add the people you train and assign each one a program.</p></div>` : !list.length ? `<div class="empty"><p>No clients match “${esc(S.search.clients)}”.</p></div>` : ''}
+  ${!all.length ? `<div class="empty"><p>No clients yet.</p></div>` : ''}
   <div class="grid">${active.map(cardForClient).join('')}</div>
   ${archived.length ? `<hr><h3 class="muted">Archived</h3><div class="grid">${archived.map(cardForClient).join('')}</div>` : ''}`;
 }
@@ -5079,7 +5246,6 @@ function clientDashboard(cid){
 
   <div class="panel">
     <h3>Share with ${esc(c.name)}</h3>
-    <p class="small muted">Downloads a file you can hand over, email, or print — nothing is sent anywhere automatically.</p>
     <div class="row tight">
       ${c.programId && p ? `<button class="btn ghost sm" data-dlprogram="${esc(cid)}">Program (PDF)</button>` : `<span class="small muted">Assign a program to share it as a PDF.</span>`}
       <button class="btn ghost sm" data-dlsummary="${esc(cid)}">Summary (PDF)</button>
@@ -5099,7 +5265,7 @@ function clientAttendancePanel(cid){
   </div>
   <div class="panel">
     <h3>Attendance <span class="muted small num">(last 30)</span></h3>
-    ${!rows.length ? '<p class="muted small">Nothing marked yet. Use the Calendar tab.</p>' :
+    ${!rows.length ? '<p class="muted small">Nothing marked yet.</p>' :
       `<div class="tablewrap"><table><thead><tr><th>Date</th><th>Day</th><th>Status</th><th>Pairing</th></tr></thead><tbody>
       ${rows.map(a => `<tr><td class="num">${esc(a.date)}</td><td>${DOW[dowOf(a.date)]}</td>
         <td><span class="pill ${a.status==='attended'?'ok':'bad'}">${esc(a.status)}</span></td>
@@ -5163,8 +5329,8 @@ function clientEditPanel(cid){
 
 function cardForClient(c){
   const p = S.programs[c.programId], g = S.groups[c.groupId];
-  return `<div class="card" data-client="${esc(c.id)}">
-    <div class="spread"><span class="name">${esc(c.name)}</span>${consentPillHTML(c)}${syncPillHTML(c)}</div>
+  return `<div class="card person-card" data-client="${esc(c.id)}">
+    <div class="spread"><span class="name">${avatarHTML(c.name)}${esc(c.name)}</span>${consentPillHTML(c)}${syncPillHTML(c)}</div>
     <div class="small muted">${g ? esc(g.name) : 'No pairing'} · ${p ? esc(p.name) : 'No program'}</div>
     <div class="small muted num">${attendedCount(c.id)} sessions attended</div>
     <div class="small muted">${esc(c.goal || '')}</div>
@@ -5175,8 +5341,7 @@ function cardForClient(c){
 function viewGroups(){
   const groups = Object.entries(S.groups).map(([id,g]) => ({id,...g})).sort(byName);
   return `
-  <div class="panel spread"><div><h2>Pairings</h2>
-    <span class="muted small">A recurring session time — Tue 6am, Sat 9am — with one client (1:1) or two (semi-private). Never more than two.</span></div>
+  <div class="panel spread"><div><h2>Pairings</h2></div>
     <button class="btn primary" id="newGroup">Add pairing</button></div>
   <div class="grid">
   ${groups.map(g => {
@@ -5189,7 +5354,7 @@ function viewGroups(){
       <div class="small muted">${(g.dow||[]).length ? g.dow.slice().sort().map(i => DOW[i]).join(' · ') : 'No days set'} ${esc(fmtTime(g.time))}${ruleText(groupRule(g)) ? ' Â· ' + esc(ruleText(groupRule(g))) : ''}</div>
       <div class="small muted">${members.map(([,c]) => esc(c.name)).join(' & ') || 'Nobody assigned'}</div>
     </div>`;
-  }).join('') || '<div class="empty"><p>No pairings yet. Add one for each recurring time you train someone — solo or with a partner.</p></div>'}
+  }).join('') || '<div class="empty"><p>No pairings yet.</p></div>'}
   </div>`;
 }
 
@@ -5197,21 +5362,20 @@ function viewGroups(){
 function viewPrograms(){
   if (S.sel.program) return programDetail(S.sel.program);
   if(S.sel.programsKind==='conditioning')return viewConditioning();
-  if(S.sel.programsKind!=='strength')return `<div class="page-head"><div><div class="eyebrow">PROGRAM LIBRARY</div><h2>Programs</h2><p class="muted small">Choose the kind of program you want to build or manage.</p></div></div><div class="grid program-kind-grid">
-    <button type="button" class="card program-kind-card" data-program-kind="strength"><span class="program-kind-icon">↗</span><strong>Strength programs</strong><span class="small muted">Strength training programs</span><span class="small muted num">${Object.keys(S.programs).length} saved</span></button>
-    <button type="button" class="card program-kind-card" data-program-kind="conditioning"><span class="program-kind-icon">◷</span><strong>Conditioning Program</strong><span class="small muted">Intervals, circuits, and timed blocks</span><span class="small muted num">${Object.keys(S.conditioning).length} saved</span></button>
+  if(S.sel.programsKind!=='strength')return `<div class="page-head"><div><h2>Programs</h2></div></div><div class="grid program-kind-grid">
+    <button type="button" class="card program-kind-card" data-program-kind="strength"><span class="program-kind-icon">↗</span><strong>Strength programs</strong><span class="small muted num">${Object.keys(S.programs).length} saved</span></button>
+    <button type="button" class="card program-kind-card" data-program-kind="conditioning"><span class="program-kind-icon">◷</span><strong>Conditioning programs</strong><span class="small muted num">${Object.keys(S.conditioning).length} saved</span></button>
   </div>`;
   const list = Object.entries(S.programs).map(([id,p]) => ({id,...p})).sort(byName);
   return `
-  <div class="panel spread"><div><button type="button" class="btn ghost sm" data-program-kind="chooser">← Program types</button><h2>Strength programs</h2>
-    <span class="muted small">Build the days once. They repeat for the length of the block — progress load week to week on the floor.</span></div>
+  <div class="panel spread"><div><button type="button" class="btn ghost sm" data-program-kind="chooser">← Program types</button><h2>Strength programs</h2></div>
     <button class="btn primary" id="newProgram">New program</button></div>
   <div class="grid">${list.map(p => `<div class="card" data-program="${esc(p.id)}">
     <span class="name">${esc(p.name)}</span>
     <div class="small muted num">${p.days.length} days · ${esc(p.weeks||4)} weeks</div>
     <div class="small muted">${p.days.map(d => esc(d.name)).join(' · ')}</div>
     <div class="small muted num">${Object.values(S.clients).filter(c => c.programId === p.id).length} assigned</div>
-  </div>`).join('') || '<div class="empty"><p>No programs yet. Start with one 3-day full-body block — it covers most semi-private rosters.</p></div>'}</div>`;
+  </div>`).join('') || '<div class="empty"><p>No programs yet.</p></div>'}</div>`;
 }
 function programDetail(pid){
   const p = S.programs[pid]; if (!p) return '<p>Not found.</p>';
@@ -5233,8 +5397,8 @@ function programDetail(pid){
       <input type="text" class="dayname" data-di="${di}" value="${esc(d.name)}" style="max-width:260px;font-family:'Barlow Condensed';font-size:1.2rem">
       <div class="row tight"><button class="btn sm ghost" data-dupday="${di}">Duplicate day</button><button class="btn sm danger" data-rmday="${di}">Remove day</button></div>
     </div>
-    <label class="field day-notes-field"><span>Day notes <span class="muted">(optional — shown at the top of this workout)</span></span><input type="text" class="daynotes" data-di="${di}" value="${esc(d.notes??'')}" placeholder="e.g. Keep it technical — knees stay behind toes"></label>
-    <label class="field day-cond-field"><span>Conditioning on this day <span class="muted">(optional — offered with one tap in the workout)</span></span><select class="daycond" data-di="${di}">${dayConditioningOptions(d.conditioningId)}</select></label>
+    <label class="field day-notes-field"><span>Day notes <span class="muted">(optional)</span></span><input type="text" class="daynotes" data-di="${di}" value="${esc(d.notes??'')}" placeholder="e.g. Keep it technical — knees stay behind toes"></label>
+    <label class="field day-cond-field"><span>Conditioning on this day <span class="muted">(optional)</span></span><select class="daycond" data-di="${di}">${dayConditioningOptions(d.conditioningId)}</select></label>
     <div class="tablewrap"><table class="progtable">
       <thead><tr><th style="min-width:170px">Exercise</th><th style="min-width:76px">Sets</th><th style="min-width:96px">Reps</th><th style="min-width:96px">Load<span class="rest-hint">kg or %1RM</span></th><th style="min-width:76px">RPE</th><th style="min-width:76px">RIR</th><th style="min-width:96px">Tempo<span class="rest-hint">e.g. 3-1-1-0</span></th><th style="min-width:96px">Rest<span class="rest-hint">e.g. 90s, 2 min, 1:30</span></th><th style="min-width:80px">+ kg</th><th style="min-width:200px">Notes / cues</th><th>Order</th><th></th></tr></thead>
       <tbody>${d.items.map((it,ii) => { const E = wk ? weekItem(it, wk) : it, ov = f => !!(wk && it.weeks && it.weeks[wk] && f in it.weeks[wk]); return `<tr data-di="${di}" data-ii="${ii}">
@@ -5280,8 +5444,8 @@ function newConditioningBlock(mode='intervals'){
 /* Station list for intervals / tabata / custom blocks. Older blocks (no stations) keep their timing until switched. */
 function conditioningStepsHTML(b,i){
   if(!['intervals','tabata','custom'].includes(b.mode))return '';
-  if(!isSteppedBlock(b))return `<div class="conditioning-convert"><button type="button" class="btn ghost sm" data-convert-steps="${i}">Switch to stations</button><small class="muted">Give each exercise its own work and rest time. Each exercise becomes a station, and the rounds repeat the whole list.</small></div>`;
-  return `<div class="conditioning-steps"><div class="spread"><strong>Stations <span class="muted small">— each round runs them in order</span></strong><button type="button" class="btn ghost sm" data-add-step="${i}">+ Add station</button></div>
+  if(!isSteppedBlock(b))return `<div class="conditioning-convert"><button type="button" class="btn ghost sm" data-convert-steps="${i}">Switch to stations</button><small class="muted">Gives each exercise its own work and rest time.</small></div>`;
+  return `<div class="conditioning-steps"><div class="spread"><strong>Stations</strong><button type="button" class="btn ghost sm" data-add-step="${i}">+ Add station</button></div>
     ${b.steps.map((s,si)=>`<div class="cond-step" data-step-row="${si}">
       <span class="cond-step-num" aria-hidden="true">${si+1}</span>
       <input type="text" class="cond-step-name" data-sf="name" list="exerciseNamesList" value="${esc(s.name||'')}" placeholder="Exercise (type or pick)" aria-label="Station ${si+1} name">
@@ -5289,7 +5453,7 @@ function conditioningStepsHTML(b,i){
       <label class="cond-step-time"><span>Rest (s)</span><input type="number" inputmode="numeric" min="0" data-sf="restSeconds" value="${esc(s.restSeconds??0)}"></label>
       <div class="cond-step-actions"><button type="button" class="btn sm ghost" data-move-step="${i}.${si}.-1" aria-label="Move station ${si+1} up" ${si===0?'disabled':''}>↑</button><button type="button" class="btn sm ghost" data-move-step="${i}.${si}.1" aria-label="Move station ${si+1} down" ${si===b.steps.length-1?'disabled':''}>↓</button><button type="button" class="btn sm danger" data-remove-step="${i}.${si}" aria-label="Remove station ${si+1}" ${b.steps.length<2?'disabled':''}>✕</button></div>
     </div>`).join('')}
-    <p class="small muted">Rest after the last station is the break between rounds${Number(b.restBetweenRounds)>0?` — currently ${esc(b.restBetweenRounds)} s`:' (or set it separately above)'}.</p></div>`;
+    </div>`;
 }
 /* Only the fields a mode actually uses. Values of hidden fields stay stored, so switching mode back restores them. */
 function conditioningModeFieldsHTML(b){
@@ -5307,18 +5471,25 @@ function conditioningLines(block){return (block.exercises||[]).map(e=>`${e.name|
 function viewConditioning(){
   if(S.sel.conditioningId) return conditioningDetail(S.sel.conditioningId);
   const all=Object.entries(S.conditioning).map(([id,w])=>({id,...w})).sort((a,b)=>(a.name||'').localeCompare(b.name||''));
-  return `<div class="page-head"><div><button type="button" class="btn ghost sm" data-program-kind="chooser">← Program types</button><div class="eyebrow">ENGINE · BLOCK · TIMER</div><h2>Conditioning Program</h2><p class="muted small">Build reusable sessions from warm-ups, independently timed blocks, and finishers.</p></div><button class="btn primary" id="newConditioning">New conditioning program</button></div>
-    ${all.length?`<div class="grid">${all.map(w=>`<button type="button" class="conditioning-card" data-open-conditioning="${esc(w.id)}" title="Edit conditioning template" aria-label="Edit conditioning template ${esc(w.name)}"><span class="conditioning-card-icon">◷</span><strong>${esc(w.name)}</strong><span>${(w.blocks||[]).length} block${(w.blocks||[]).length===1?'':'s'} · ${(w.blocks||[]).map(b=>conditioningModeName(b.mode)).join(' + ')||'No timer mode'}</span><span class="conditioning-card-edit-hint">Click to edit template →</span></button>`).join('')}</div>`:`<div class="panel empty"><p>No conditioning templates yet. Create one, add warm-up and finisher notes, then combine blocks using any timer mode.</p><button class="btn primary" id="newConditioningEmpty">Create a conditioning template</button></div>`}`;
+  // Same layout as Strength programs: one header with one "New program" button, then plain cards.
+  return `
+  <div class="panel spread"><div><button type="button" class="btn ghost sm" data-program-kind="chooser">← Program types</button><h2>Conditioning programs</h2></div>
+    <button class="btn primary" id="newConditioning">New program</button></div>
+  <div class="grid">${all.map(w=>{const blocks=w.blocks||[];return `<div class="card" data-open-conditioning="${esc(w.id)}">
+    <span class="name">${esc(w.name)}</span>
+    <div class="small muted num">${blocks.length} block${blocks.length===1?'':'s'}${blocks.length?' · '+esc([...new Set(blocks.map(b=>conditioningModeName(b.mode)))].join(' + ')):''}</div>
+    <div class="small muted">${blocks.map(b=>esc(b.name||conditioningModeName(b.mode))).join(' · ')}</div>
+  </div>`;}).join('') || '<div class="empty"><p>No conditioning programs yet.</p></div>'}</div>`;
 }
 function conditioningDetail(id){
-  const source=S.conditioning[id]; if(!source) return '<div class="empty"><p>Conditioning template not found.</p><button class="btn ghost" data-back-conditioning>Back</button></div>';
+  const source=S.conditioning[id]; if(!source) return '<div class="empty"><p>Conditioning program not found.</p><button class="btn ghost" data-back-conditioning>Back</button></div>';
   const w=S.sel.conditioningDraft || (S.sel.conditioningDraft=JSON.parse(JSON.stringify(source)));
   if(!Array.isArray(w.blocks)) w.blocks=[];
   const blockOptions=(w.blocks||[]).map((b,i)=>`<option value="${i}">Block ${i+1} · ${esc(b.name||conditioningModeName(b.mode))}</option>`).join('');
   return `<datalist id="exerciseNamesList">${activeExercises().slice().sort(byName).map(e=>`<option value="${esc(e.name)}"></option>`).join('')}</datalist>
-    <div class="conditioning-toolbar"><button class="btn ghost" data-back-conditioning>← Templates</button><div class="row tight"><button class="btn ghost" id="duplicateConditioning">Duplicate</button><button class="btn primary" id="saveConditioning">Save template</button></div></div>
-    <div class="conditioning-title"><label class="field"><span>Template name</span><input id="conditioningName" type="text" value="${esc(w.name||'')}" placeholder="Conditioning A"></label><span class="pill">${(w.blocks||[]).length} blocks</span></div>
-    <section class="conditioning-bookend"><span class="conditioning-section-mark">01</span><div><h3>Warm-up</h3><p class="small muted">Optional prep, movement, and coaching notes.</p><textarea id="conditioningWarmup" placeholder="5 min easy bike, then dynamic mobility">${esc(w.warmup||'')}</textarea>
+    <div class="conditioning-toolbar"><button class="btn ghost" data-back-conditioning>← Conditioning programs</button><div class="row tight"><button class="btn ghost" id="duplicateConditioning">Duplicate</button><button class="btn primary" id="saveConditioning">Save</button></div></div>
+    <div class="conditioning-title"><label class="field"><span>Program name</span><input id="conditioningName" type="text" value="${esc(w.name||'')}" placeholder="Conditioning A"></label><span class="pill">${(w.blocks||[]).length} blocks</span></div>
+    <section class="conditioning-bookend"><span class="conditioning-section-mark">01</span><div><h3>Warm-up <span class="muted small">(optional)</span></h3><textarea id="conditioningWarmup" placeholder="5 min easy bike, then dynamic mobility">${esc(w.warmup||'')}</textarea>
       <label class="row tight small conditioning-check"><input type="checkbox" id="timedWarmup" ${(w.blocks||[]).some(b=>b.role==='warmup')?'checked':''} style="width:auto"> Run the warm-up as a timed block</label></div></section>
     <section class="conditioning-flow panel"><h3>How the session flows</h3>
       <div class="inline-fields">
@@ -5326,25 +5497,24 @@ function conditioningDetail(id){
         <label class="field"><span>Rest between blocks (seconds)</span><input id="conditioningTransition" type="number" min="0" step="1" inputmode="numeric" value="${esc(w.transitionSeconds??0)}"></label>
       </div>
       <label class="row tight small conditioning-check"><input type="checkbox" id="conditioningAutoAdvance" ${w.autoAdvance?'checked':''} style="width:auto"> Start the next block automatically when one finishes</label>
-      <p class="small muted">The get-ready countdown runs before every block (beeps for the last 3 seconds). With automatic start, the rest between blocks runs first and results are kept from the timer — add details afterwards from the Results list.</p>
     </section>
-    <div class="conditioning-section-head"><div><span class="eyebrow">WORKOUT BUILDER</span><h3>Timed blocks</h3></div><button class="btn ghost" id="addConditioningBlock">+ Add block</button></div>
+    <div class="conditioning-section-head"><div><h3>Timed blocks</h3></div><button class="btn ghost" id="addConditioningBlock">+ Add block</button></div>
     ${(w.blocks||[]).map((b,i)=>`<section class="conditioning-block" data-conditioning-block="${i}"><header class="conditioning-block-head"><span class="conditioning-section-mark">${String(i+2).padStart(2,'0')}</span><input class="conditioning-block-name" type="text" data-cf="name" value="${esc(b.name||'Block '+(i+1))}" aria-label="Block ${i+1} name">${b.role?`<span class="pill">${b.role==='warmup'?'Warm-up':'Finisher'}</span>`:''}
         <div class="conditioning-block-tools"><button class="btn ghost sm" type="button" data-move-block="${i}.-1" aria-label="Move block ${i+1} up" ${i===0?'disabled':''}>↑</button><button class="btn ghost sm" type="button" data-move-block="${i}.1" aria-label="Move block ${i+1} down" ${i===(w.blocks||[]).length-1?'disabled':''}>↓</button><button class="btn ghost sm" type="button" data-dup-block="${i}">Duplicate</button><button class="btn danger sm" type="button" data-remove-conditioning-block="${i}">Remove</button></div></header>
       <div class="conditioning-fields"><label class="field"><span>Timer mode</span><select data-cf="mode">${CONDITIONING_MODES.map(([k,n])=>`<option value="${k}" ${b.mode===k?'selected':''}>${n}</option>`).join('')}</select></label>
         ${conditioningModeFieldsHTML(b)}</div>
-      ${b.mode==='custom'?'<p class="small muted conditioning-mode-help">Custom currently runs like Intervals (work / rest / rounds). Use it for your own format names.</p>':b.mode==='forTime'?'<p class="small muted conditioning-mode-help">For Time counts up. It stops on its own when you tap “Complete round” for the last target round, or at the time cap. Leave both empty to stop it yourself.</p>':b.mode==='emom'?'<p class="small muted conditioning-mode-help">A new movement starts every interval. Set the interval to 120 for an E2MOM, 90 for E1.5MOM.</p>':''}
+      ${b.mode==='forTime'?'<p class="small muted conditioning-mode-help">Leave both empty to stop the timer yourself.</p>':''}
       ${conditioningStepsHTML(b,i)}
-      ${isSteppedBlock(b)?'':`<label class="field conditioning-exercises"><span>Exercises${b.mode==='emom'?' · one line per interval':''}</span><textarea data-cf="exercises" placeholder="Sprint | 30 seconds&#10;Kettlebell swings | 15 reps">${esc(conditioningLines(b))}</textarea><small class="muted">One movement per line. Optional prescription after a |, such as 12 reps.</small></label>`}
+      ${isSteppedBlock(b)?'':`<label class="field conditioning-exercises"><span>Exercises${b.mode==='emom'?' · one line per interval':''}</span><textarea data-cf="exercises" placeholder="Sprint | 30 seconds&#10;Kettlebell swings | 15 reps">${esc(conditioningLines(b))}</textarea><small class="muted">One per line. Add reps after a | (e.g. Swings | 15).</small></label>`}
     </section>`).join('')||'<div class="panel empty"><p>Add your first timed block.</p></div>'}
     <button class="btn ghost conditioning-add-bottom" id="addConditioningBlockBottom">+ Add block</button>
-    <section class="conditioning-bookend conditioning-finisher"><span class="conditioning-section-mark">FIN</span><div><h3>Finisher</h3><p class="small muted">Optional final work or cooldown.</p><textarea id="conditioningFinisher" placeholder="Easy walk and breathing">${esc(w.finisher||'')}</textarea>
+    <section class="conditioning-bookend conditioning-finisher"><span class="conditioning-section-mark">FIN</span><div><h3>Finisher <span class="muted small">(optional)</span></h3><textarea id="conditioningFinisher" placeholder="Easy walk and breathing">${esc(w.finisher||'')}</textarea>
       <label class="row tight small conditioning-check"><input type="checkbox" id="timedFinisher" ${(w.blocks||[]).some(b=>b.role==='finisher')?'checked':''} style="width:auto"> Run the finisher as a timed block</label></div></section>
-    <section class="conditioning-timer panel"><div class="conditioning-timer-config"><div><span class="timer-kicker">TIMER ENGINE</span><h3 id="conditioningTimerMode">Ready</h3></div><label class="field"><span>Block</span><select id="conditioningTimerBlock">${blockOptions||'<option value="">Add a block to start</option>'}</select></label></div>
+    <section class="conditioning-timer panel"><div class="conditioning-timer-config"><div><span class="timer-kicker">PREVIEW</span><h3 id="conditioningTimerMode">Ready</h3></div><label class="field"><span>Block</span><select id="conditioningTimerBlock">${blockOptions||'<option value="">Add a block to start</option>'}</select></label></div>
       <div class="conditioning-timer-display"><span id="conditioningTimerPhase">Ready</span><strong id="conditioningTimerClock" class="num">00:00</strong><span id="conditioningTimerRound">Select a block to begin</span><span id="conditioningTimerExercise" class="conditioning-timer-exercise"></span></div>
       <div class="row tight conditioning-timer-actions"><button class="btn primary" id="conditioningTimerStart" ${w.blocks.length?'':'disabled'}>Start</button><button class="btn ghost" id="conditioningTimerPause" disabled>Pause</button><button class="btn ghost" id="conditioningTimerRoundDone" hidden>Complete round</button><button class="btn ghost" id="conditioningTimerFinish" disabled>Finish</button></div>
     </section>
-    <div class="conditioning-footer"><button class="btn danger" id="deleteConditioning">Delete template</button><button class="btn primary" id="saveConditioningBottom">Save template</button></div>`;
+    <div class="conditioning-footer"><button class="btn danger" id="deleteConditioning">Delete program</button><button class="btn primary" id="saveConditioningBottom">Save</button></div>`;
 }
 function readConditioningEditor(){
   const id=S.sel.conditioningId, w=S.sel.conditioningDraft; if(!id||!w)return null;
@@ -5380,10 +5550,10 @@ function readConditioningEditor(){
   return w;
 }
 async function saveConditioningDraft(){
-  const w=readConditioningEditor(); if(!w||!w.name){toast('Template name is required');return false;}
+  const w=readConditioningEditor(); if(!w||!w.name){toast('Program name is required');return false;}
   const saved=JSON.parse(JSON.stringify(w));
   try { await Store.put('conditioning',S.sel.conditioningId,saved); } catch(e){ showSaveError(e); return false; }
-  S.conditioning[S.sel.conditioningId]=saved; toast('Conditioning template saved'); return true;
+  S.conditioning[S.sel.conditioningId]=saved; toast('Conditioning program saved'); return true;
 }
 /* Everything the timer needs from a block. */
 function conditioningTimerConfig(b){
@@ -5730,7 +5900,7 @@ function openConditioningResultDialog(ss,idx){
   const group=!!sessionClientIds(ss),people=group?ss.clientIds:[null];   // group: one set of fields per client
   const resultOf=k=>k===0?((ss.results||{})[idx]||{}):((((ss.partnerResults||{})[people[k]])||{})[idx]||{});
   const fieldsFor=k=>conditioningResultFieldsHTML(mode,resultOf(k),group?'_'+k:'');
-  const body=`<p class="small muted">${esc(block.name||'Block '+(idx+1))} · ${esc(conditioningModeName(mode))}. ${group?'Filled in from the shared timer — adjust each person\'s result, or skip.':'Filled in from the timer — adjust anything, or skip.'}</p>`
+  const body=`<p class="small muted">${esc(block.name||'Block '+(idx+1))} · ${esc(conditioningModeName(mode))}. Filled in from the timer.</p>`
     +people.map((cid,k)=>group?`<fieldset class="cr-person"><legend>${esc((S.clients[cid]||{}).name||'Client')}</legend>${fieldsFor(k)}</fieldset>`:fieldsFor(k)).join('');
   dialog('Block result',body,[
     {label:'Skip'},
@@ -5969,8 +6139,7 @@ function viewExercises(){
   ${archivedAll.length && (!q || archived.length) ? `<div class="panel">
     <div class="spread"><h3 class="muted">Archived exercises</h3>
       <button type="button" class="btn sm ghost" id="toggleArchivedExercises">${showArchived ? 'Hide archived' : 'Show archived (' + archived.length + ')'}</button></div>
-    ${showArchived ? `<p class="small muted">Hidden from pickers. Programs and history that already use them are unaffected.</p>
-    <div class="tablewrap"><table class="exercise-library-table"><tbody>
+    ${showArchived ? `<div class="tablewrap"><table class="exercise-library-table"><tbody>
     ${archived.map(e => `<tr><td>${esc(e.name)}</td><td class="muted small">${esc([e.category, e.equipment].filter(Boolean).join(' · '))}</td>
       <td class="ex-actions"><button class="btn sm ghost" data-restoreex="${esc(e.id)}">Restore</button></td></tr>`).join('')}
     </tbody></table></div>` : ''}
@@ -5981,18 +6150,17 @@ function viewExercises(){
 function viewProgress(){
   if (S.sel.historyClient) return historyDetail(S.sel.historyClient);
   const everyone = Object.entries(S.clients).map(([id,c]) => ({id,...c})).sort(byName);
-  if (!everyone.length) return '<div class="empty"><p>Add clients and log a few sessions — their history shows up here.</p></div>';
+  if (!everyone.length) return '<div class="empty"><p>No history yet.</p></div>';
   const hasArchived = everyone.some(c => c.status === 'archived');
-  const clients = everyone.filter(c => (S.search.historyArchived || c.status !== 'archived') && clientMatches(c, S.search.history));
+  // No search box here: the search icon in the header finds clients.
+  const clients = everyone.filter(c => S.search.historyArchived || c.status !== 'archived');
   return `
-  <div class="panel"><h2>History</h2>
-    <span class="muted small">Pick a client to see every workout they've logged, most recent first.</span>
-    <div class="row" style="margin-top:.6rem">${searchBoxHTML('history', 'Search history')}
-      ${hasArchived ? `<label class="row tight small" style="gap:.3rem"><input type="checkbox" id="showArchivedHistory" ${S.search.historyArchived?'checked':''} style="width:auto"> Show archived</label>` : ''}</div></div>
-  ${!clients.length ? `<div class="empty"><p>No clients match.</p></div>` : ''}
+  <div class="panel${hasArchived ? ' spread' : ''}"><h2>History</h2>
+      ${hasArchived ? `<label class="row tight small" style="gap:.3rem"><input type="checkbox" id="showArchivedHistory" ${S.search.historyArchived?'checked':''} style="width:auto"> Show archived</label>` : ''}</div>
+  ${!clients.length ? `<div class="empty"><p>No active clients.</p></div>` : ''}
   <div class="stack">${clients.map(c => {
     const logs = clientLogs(c.id);
-    return `<div class="card" data-historyclient="${esc(c.id)}">
+    return `<div class="card person-card" data-historyclient="${esc(c.id)}">
       <span class="name" style="display:flex;align-items:center;gap:.5rem">${avatarHTML(c.name)}${esc(c.name)}${c.status==='archived' ? ' <span class="pill warn">Archived</span>' : ''}</span>
       <div class="small muted num">${logs.length} session${logs.length===1?'':'s'} logged</div>
       <div class="small muted">${logs.length ? 'Last trained ' + esc(logs[0].date) : 'No sessions yet'}</div>
@@ -6376,7 +6544,7 @@ function storageUsageHTML(){
     const level = pct >= 90 ? 'full' : pct >= 75 ? 'warn' : '';
     return `<div id="storageBox"><div class="small"><strong>Storage used by this app:</strong> about ${mb} MB (${pct}% of what this browser allows)</div>
       <div class="storage-meter ${level}" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="Storage used"><i style="width:${Math.max(pct,1)}%"></i></div>
-      <div class="small ${level ? '' : 'muted'}">${level ? 'Storage is getting full — export a backup now.' : 'Plenty of room. Browsers allow far more than 5 MB for this kind of storage.'}</div></div>`;
+      <div class="small ${level ? '' : 'muted'}">${level ? 'Storage is getting full — export a backup now.' : ''}</div></div>`;
   }
   const { used, pct } = localStorageUsage();
   const mb = (used / 1000000).toFixed(used < 100000 ? 2 : 1);
@@ -6409,33 +6577,31 @@ function dataSectionNavHTML(cur){
   }).join('')}</nav>`;
 }
 function dataBackupSection(){
-  const counts = COLLS.map(c => `${Object.keys(S[c]).length} ${c}`).join(' · ');
   return `
   <div class="panel stack">
     <h2>Where your data lives</h2>
     <p class="small muted">${
-      MODE === 'file' ? `Connected to <strong>${esc(FILE_HANDLE ? FILE_HANDLE.name : 'a file')}</strong> on this computer. Every change writes straight to that file — nothing is kept in this browser at all. After a refresh or your next visit, you'll be asked to reconnect with one click.`
-      : `This copy currently saves to this browser's storage. Nothing is sent anywhere unless you sign in to the Online account, and it does sit on this device until you export or connect a file.`
+      MODE === 'file' ? `Saving to <strong>${esc(FILE_HANDLE ? FILE_HANDLE.name : 'a file')}</strong>. You'll be asked to reconnect after a refresh.`
+      : `Saved in this browser on this device.`
     }</p>
   </div>
 
   <div class="panel stack">
-    <h3>Store to a file you control</h3>
-    <p class="small muted">Point the app at a single .json file on your computer — a USB drive or a synced folder works too. Every change saves there directly, the same way a spreadsheet does. Nothing touches browser storage or any server. Needs Chrome, Edge or Opera on desktop.</p>
+    <h3>Save to a file</h3>
+    <p class="small muted">Chrome, Edge or Opera on a computer.</p>
     ${MODE === 'file'
       ? `<div class="row"><button class="btn danger sm" id="fileDisconnect">Disconnect this file</button></div>`
       : `<div class="row">
           <button class="btn primary sm" id="fileOpen">Open an existing data file…</button>
           <button class="btn ghost sm" id="fileNew">Start a new data file…</button>
         </div>
-        ${!fsApiSupported() ? '<p class="small muted">This browser doesn\'t support direct file access. Use Export below before closing, and Import when you come back — nothing auto-saves in between, so nothing sits in the browser either.</p>' : ''}`}
+        ${!fsApiSupported() ? '<p class="small muted">Not available in this browser. Use Export and Import below.</p>' : ''}`}
   </div>
 
   ${backupsPanelHTML(S.snapshotList)}
 
   <div class="panel stack">
     <h3>Backup and transfer</h3>
-    <p class="small num">${esc(counts)} · ${S.exercises.length} exercises</p>
     ${MODE === 'local' ? storageUsageHTML() : ''}
     <div class="row">
       <button class="btn ghost" id="exportJson">Export everything (JSON)</button>
@@ -6458,14 +6624,19 @@ function dataGeneralSection(){
   </div>
 
   <div class="panel stack">
+    <h3>Workout sounds</h3>
+    <label class="small" style="display:flex;flex-wrap:nowrap;gap:.6rem;align-items:flex-start;cursor:pointer"><input type="checkbox" id="soundCues" ${Cues.muted() ? '' : 'checked'} style="width:auto;flex:none;margin-top:.15rem"><span style="flex:1;min-width:0">Beeps and vibration for the rest timer and conditioning intervals</span></label>
+  </div>
+
+  <div class="panel stack">
     <h3>Reset</h3>
-    <p class="small muted">Removes every client, program and session from this device, and can remove your online copy too. Export a backup first if you might want any of it.</p>
+    <p class="small muted">Removes all clients, programs and sessions from this device. Export a backup first.</p>
     <div class="row"><button class="btn danger" id="wipe">Delete all data</button></div>
   </div>`;
 }
 /* Recent activity is long, so it lives on its own page; the Online account section only has a button for it. */
 function activityLinkHTML(){
-  return `<div class="panel spread"><div><h3>Recent activity</h3><p class="small muted">Sign-ins, exports, device changes and deletions.</p></div><button type="button" class="btn ghost sm" data-dsec="activity">View</button></div>`;
+  return `<div class="panel spread"><div><h3>Recent activity</h3></div><button type="button" class="btn ghost sm" data-dsec="activity">View</button></div>`;
 }
 function viewData(){
   const cur = dataSectionNow();
@@ -6876,7 +7047,7 @@ function wire(){
   m.querySelectorAll('[data-start-workout]').forEach(el => el.onclick = e => {
     e.stopPropagation();
     const cid = el.dataset.startWorkout;
-    const dlg = dialog('Log session', `<p class="small muted">Choose how this session should begin.</p><div class="grid start-workout-choices"><button type="button" class="card program-kind-card" id="startNormalProgram"><span class="program-kind-icon">↗</span><strong>Normal program</strong><span class="small muted">Start the client’s strength workout.</span></button><button type="button" class="card program-kind-card" id="startConditioningProgram"><span class="program-kind-icon">◷</span><strong>Conditioning program</strong><span class="small muted">Choose a conditioning template and start conditioning on its own.</span></button></div>`, [{label:'Cancel'}]);
+    const dlg = dialog('Log session', `<div class="grid start-workout-choices"><button type="button" class="card program-kind-card" id="startNormalProgram"><span class="program-kind-icon">↗</span><strong>Strength</strong></button><button type="button" class="card program-kind-card" id="startConditioningProgram"><span class="program-kind-icon">◷</span><strong>Conditioning</strong></button></div>`, [{label:'Cancel'}]);
     dlg.querySelector('#startNormalProgram').onclick = () => { dlg.close(); beginClientWorkout(cid, 'strength'); };
     dlg.querySelector('#startConditioningProgram').onclick = () => openConditioningChooser(cid);
   });
@@ -6929,7 +7100,7 @@ function wire(){
   const openSessionConditioning=document.getElementById('openSessionConditioning');
   if(openSessionConditioning)openSessionConditioning.onclick=()=>{
     const d=S.sel.draft,cid=S.sel.logClient,options=Object.entries(S.conditioning).map(([id,w])=>`<option value="${esc(id)}" ${d.conditioningTemplateId===id?'selected':''}>${esc(w.name||'Conditioning program')}</option>`).join('');if(!options)return;
-    dialog('Add conditioning block',`<label class="field"><span>Choose a conditioning template</span><select id="sessionConditioningProgram">${options}</select></label><p class="small muted">Your normal workout stays in this session while the conditioning timer is open.</p>`,[
+    dialog('Add conditioning block',`<label class="field"><span>Choose a conditioning program</span><select id="sessionConditioningProgram">${options}</select></label>`,[
       {label:'Cancel'},
       {label:'Start conditioning',kind:'primary',onClick:()=>{const templateId=val('sessionConditioningProgram');if(!templateId)return false;startSessionConditioning(templateId);}}
     ]);
@@ -6968,11 +7139,28 @@ function wire(){
       {label:'Save notes',kind:'primary',onClick:()=>{dlg.querySelectorAll('[data-edit-set-note]').forEach(input=>{entry.sets[Number(input.dataset.editSetNote)].note=input.value;});markStrengthActivity();render();}}
     ]);
   });
+  // Finished exercises: tap the title to open or fold them (see foldFinishedExercises).
+  m.querySelectorAll('[data-fold]').forEach(h => {
+    const ei = Number(h.dataset.fold);
+    const toggle = e => { if (e.target.closest('.exercise-actions-menu')) return; const en = S.sel.draft?.entries?.[ei]; if (!en) return;
+      // Focus left in another exercise would come back on redraw and fold this one again, so drop it first.
+      const a = document.activeElement; if (a && a !== document.body && !h.closest('.exblock').contains(a)) a.blur();
+      if (exerciseFolded(S.sel.draft, ei)) en.uiOpen = true; else delete en.uiOpen; render({ keepScroll:true }); };
+    h.onclick = toggle;
+    h.onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target === h){ e.preventDefault(); toggle(e); } };
+  });
   m.querySelectorAll('.exblock').forEach(block => {
     const ei = Number(block.dataset.ei);
+    // Moving on to another exercise folds any finished one that was opened again (without redrawing, so typing isn't interrupted).
+    block.addEventListener('focusin', () => {
+      const d = S.sel.draft; if (!d) return;
+      d.entries.forEach((x, i) => { if (i === ei || !x.uiOpen) return; delete x.uiOpen;
+        const b = m.querySelector(`.exblock[data-ei="${i}"]`); if (b && exerciseFolded(d, i)){ b.classList.add('folded'); b.querySelector('header')?.setAttribute('aria-expanded', 'false'); } });
+    });
     block.querySelectorAll('.setrow').forEach(row => {
       const si = Number(row.dataset.si);
-      const setInputs=[...row.querySelectorAll('[data-set-input]'),...(row.closest('.set-swipe-wrap')?.nextElementSibling?.querySelectorAll('[data-set-input]')||[])];
+      const more=row.closest('.set-swipe-wrap')?.nextElementSibling;   // an optional per-set panel; never the next set's row
+      const setInputs=[...row.querySelectorAll('[data-set-input]'),...(more&&more.classList.contains('set-more')?more.querySelectorAll('[data-set-input]'):[])];
       const setBox=field=>row.querySelector(`[data-set-input="${field}"]`);
       setInputs.forEach(inp=>{
         const field=inp.dataset.setInput;
@@ -7012,10 +7200,11 @@ function wire(){
         completeWorkoutSet(ei,si,{advance:true});
       };
       let swipe=null;
-      row.onpointerdown=event=>{if(event.pointerType==='mouse'&&event.button!==0)return;if(event.target.closest('button,select,textarea,summary,input'))return;swipe={id:event.pointerId,x:event.clientX,y:event.clientY,dx:0,active:false};};
-      row.onpointermove=event=>{if(!swipe||swipe.id!==event.pointerId)return;const dx=event.clientX-swipe.x,dy=event.clientY-swipe.y;if(!swipe.active&&Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)*1.2){swipe.active=true;row.classList.add('swiping');try{row.setPointerCapture(event.pointerId);}catch{}}
+      // A swipe can start anywhere on the row, the kg and reps boxes included (they fill most of it); only the tick button is left out.
+      row.onpointerdown=event=>{if(event.pointerType==='mouse'&&event.button!==0)return;if(event.target.closest('button,select,textarea,summary'))return;swipe={id:event.pointerId,x:event.clientX,y:event.clientY,dx:0,active:false};};
+      row.onpointermove=event=>{if(!swipe||swipe.id!==event.pointerId)return;const dx=event.clientX-swipe.x,dy=event.clientY-swipe.y;if(!swipe.active&&Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)*1.2){swipe.active=true;row.classList.add('swiping');if(row.contains(document.activeElement))document.activeElement.blur();try{row.setPointerCapture(event.pointerId);}catch{}}
         if(!swipe.active)return;event.preventDefault();swipe.dx=Math.max(-row.clientWidth*.78,Math.min(row.clientWidth*.78,dx));row.style.transform=`translateX(${swipe.dx}px)`;row.closest('.set-swipe-wrap')?.classList.toggle('swipe-copying',swipe.dx>0);row.closest('.set-swipe-wrap')?.classList.toggle('swipe-deleting',swipe.dx<0);};
-      const finishSwipe=event=>{if(!swipe||swipe.id!==event.pointerId)return;const state=swipe;swipe=null;row.classList.remove('swiping');row.style.transform='';const wrap=row.closest('.set-swipe-wrap');wrap?.classList.remove('swipe-copying','swipe-deleting');if(!state.active)return;const threshold=Math.max(90,row.clientWidth*.65),entry=S.sel.draft.entries[ei];
+      const finishSwipe=event=>{if(!swipe||swipe.id!==event.pointerId)return;const state=swipe;swipe=null;row.classList.remove('swiping');row.style.transform='';const wrap=row.closest('.set-swipe-wrap');wrap?.classList.remove('swipe-copying','swipe-deleting');if(!state.active)return;const threshold=Math.max(80,row.clientWidth*.35),entry=S.sel.draft.entries[ei];   // about a third of the row
         if(state.dx<=-threshold)deleteSetAt(ei,si);
         else if(state.dx>=threshold)copyPreviousSet(ei,si);
       };
@@ -7085,7 +7274,10 @@ function wire(){
   const notesBanner = document.getElementById('clientNotesBanner');
   if (notesBanner) notesBanner.ontoggle = () => { S.sel.notesCollapsed = !notesBanner.open; };
   const sn = document.getElementById('sessNotes');
-  if (sn) sn.oninput = () => {S.sel.draft.notes = sn.value;markStrengthActivity();};
+  if (sn) sn.oninput = () => {S.sel.draft.notes = sn.value;markStrengthActivity();const pv=document.getElementById('sessNotesPreview');if(pv)pv.textContent=sn.value.trim().split('\n')[0].slice(0,60);};
+  // Session notes fold to one line; open/closed is screen state only (kept across redraws, never saved).
+  const snFold = document.getElementById('sessNotesFold');
+  if (snFold) snFold.ontoggle = () => { S.sel.sessNotesOpen = snFold.open; };
   const up = document.getElementById('usePack');
   if (up) up.onchange = () => {S.sel.draft.usePack = up.checked;scheduleWorkoutAutosave();};
 
@@ -7589,6 +7781,8 @@ function wire(){
     else document.documentElement.removeAttribute('data-theme');
     try { localStorage.setItem('nyaega:theme', t); } catch {}
   });
+  const soundCues = document.getElementById('soundCues');
+  if (soundCues) soundCues.onchange = () => { Cues.setMuted(!soundCues.checked); Cues.unlock(); toast(soundCues.checked ? 'Workout sounds on' : 'Workout sounds off'); };
   const fileOpen = document.getElementById('fileOpen');
   if (fileOpen) fileOpen.onclick = openDataFile;
   const fileNew = document.getElementById('fileNew');
@@ -7711,7 +7905,9 @@ const NAV_ICON = {
   history:  '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
   settings: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
   search:   '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',
-  profile:  '<circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20c.8-3.6 3.8-5.6 7.5-5.6s6.7 2 7.5 5.6"/>'
+  profile:  '<circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20c.8-3.6 3.8-5.6 7.5-5.6s6.7 2 7.5 5.6"/>',
+  logout:   '<path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M10 16l-4-4 4-4M6 12h10"/>',
+  login:    '<path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M11 8l4 4-4 4M15 12H4"/>'
 };
 const MOBILE_NAV = [['clients', 'Clients'], ['programs', 'Programs'], ['exercises', 'Exercises'], ['history', 'History'], ['pairings', 'Pairings']];
 const navSvg = (paths, w = 1.9) => `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
@@ -7760,7 +7956,7 @@ function closeNavMenu(){
 function openNavMenu(anchor, items, headHTML = ''){
   const m = document.getElementById('navMenu'); if (!m) return;
   m.dataset.anchor = anchor; m.hidden = false;
-  m.innerHTML = headHTML + items.map((it, i) => `<button type="button" role="menuitem" data-mi="${i}">${it.icon ? navSvg(NAV_ICON[it.icon]) : ''}<span>${esc(it.label)}${it.note ? `<small>${esc(it.note)}</small>` : ''}</span></button>`).join('');
+  m.innerHTML = headHTML + items.map((it, i) => `<button type="button" role="menuitem" data-mi="${i}"${it.danger ? ' class="menu-danger"' : ''}>${it.icon ? navSvg(NAV_ICON[it.icon]) : ''}<span>${esc(it.label)}${it.note ? `<small>${esc(it.note)}</small>` : ''}</span></button>`).join('');
   m.querySelectorAll('[data-mi]').forEach(b => b.onclick = () => { const it = items[Number(b.dataset.mi)]; closeNavMenu(); it.go(); });
   const f = document.getElementById('fab'); if (f && anchor === 'fab'){ f.setAttribute('aria-expanded', 'true'); f.classList.add('open'); }
   const p = document.getElementById('hdrProfile'); if (p && anchor === 'profile') p.setAttribute('aria-expanded', 'true');
@@ -7797,8 +7993,19 @@ function openProfileMenu(){
   const head = `<div class="menu-head"><strong>${esc(who)}</strong><span>${esc(role)}</span></div>`;
   openNavMenu('profile', [
     { label:'Profile', note:'Account details', icon:'profile', go:() => { S.dataSection = 'online'; navigateTo('dashboard', 'data'); } },
-    { label:'Settings and data', note:'Backup, restore, preferences', icon:'settings', go:() => { S.dataSection = undefined; navigateTo('dashboard', 'data'); } }
+    { label:'Settings and data', note:'Backup, restore, preferences', icon:'settings', go:() => { S.dataSection = undefined; navigateTo('dashboard', 'data'); } },
+    signedIn
+      ? { label:'Log out', icon:'logout', danger:true, go:confirmLogOut }
+      : { label:'Sign in', note:'Sync with your other devices', icon:'login', go:() => Lock.show({ view:'credentials', closable:true }) }
   ], head);
+}
+/* Same sign-out as Settings and data > Online account. Data on this device stays; changes not yet uploaded wait for the next sign-in. */
+function confirmLogOut(){
+  const waiting = Sync.pending > 0 ? `<p class="small"><strong>${Sync.pending} change${Sync.pending === 1 ? '' : 's'} not uploaded yet.</strong> They stay on this device and upload when you sign in again.</p>` : '';
+  dialog('Log out?', `<p>Your clients and sessions stay on this device. Syncing with your other devices stops until you sign in again.</p>${waiting}`, [
+    { label:'Cancel' },
+    { label:'Log out', kind:'danger', onClick: async () => { await Sync.signOut(); render({ keepScroll:true }); toast('Logged out'); } }
+  ]);
 }
 
 /* ---- header search: clients, pairings, programs and exercises ---- */
@@ -7824,7 +8031,7 @@ function openSearch(){
   let found = [];
   const draw = () => {
     const q = input.value.trim(); found = searchResults(q).slice(0, 40);
-    if (!q){ box.innerHTML = '<p class="small muted">Type a name to find a client, pairing, program or exercise.</p>'; return; }
+    if (!q){ box.innerHTML = ''; return; }
     if (!found.length){ box.innerHTML = `<p class="small muted">Nothing matches “${esc(q)}”.</p>`; return; }
     let last = '';
     box.innerHTML = found.map((r, i) => { const head = r.kind !== last ? `<div class="eyebrow">${esc(r.kind)}</div>` : ''; last = r.kind;
@@ -7891,6 +8098,90 @@ function openQuickAttendance(){
   wireRows();
   dlg.addEventListener('close', () => { if (!sessionOpen()) render({ keepScroll:true }); }, { once:true });
 }
+/* ---------------------------------------------------------------
+   Phone back button / back gesture.
+   The app draws every screen in one page, so without this the browser had no history and "back" closed the app.
+   Each screen the coach moves to becomes a browser history entry (pushState); back (popstate) brings the previous
+   screen back, with its scroll position. Home is the bottom entry, so back from Home leaves the app (as phone apps do).
+   - Back with a dialog or a menu open closes just that, and the screen underneath is left exactly as it was.
+   - Back under the lock screen does nothing (it can't be used to get past the PIN).
+   - Back from a workout parks it (nothing is lost; the "Workout in progress" bar resumes it).
+   - An in-app Back button that leads to the previous screen steps back through history too, so both stay in step.
+----------------------------------------------------------------*/
+const NAV_SEL_KEYS = ['client', 'clientPanel', 'program', 'programsKind', 'conditioningId', 'historyClient', 'historyDay', 'logClient', 'conditioningClient'];
+const NAV_HOME = { view:'dashboard', sub:'today', ds:'', sel:{} };
+const Nav = { started:false, idx:0, keys:[], restoring:false, expectBackTo:null, ignorePop:false };
+
+function navRouteNow(){
+  const view = S.view || 'dashboard', sub = view === 'dashboard' ? (S.sub || 'today') : '';
+  const sel = {};
+  NAV_SEL_KEYS.forEach(k => { const v = S.sel && S.sel[k]; if (v !== undefined && v !== null && v !== '') sel[k] = v; });
+  return { view, sub, ds: sub === 'data' ? (S.dataSection || '') : '', sel };
+}
+const navKey = r => JSON.stringify([r.view, r.sub, r.ds, NAV_SEL_KEYS.map(k => r.sel[k] ?? '')]);
+const navState = (route, idx, scrollY) => ({ nyaega:'route', route, key:navKey(route), idx, scrollY:scrollY || 0 });
+
+/* Called at the end of every render(). `prevScrollY` is where the screen being left was scrolled to. */
+function navHistorySync(prevScrollY){
+  if (S.bootState !== 'ready') return;
+  const route = navRouteNow(), key = navKey(route);
+  try {
+    if (!Nav.started){
+      Nav.started = true;
+      const prev = history.state, idx = prev && prev.nyaega === 'route' ? prev.idx : 0;   // after a reload, keep the place in history
+      if (idx === 0 && key !== navKey(NAV_HOME)){   // Home is always underneath
+        history.replaceState(navState(NAV_HOME, 0, 0), ''); history.pushState(navState(route, 1, 0), '');
+        Nav.idx = 1; Nav.keys = [navKey(NAV_HOME), key]; return;
+      }
+      history.replaceState(navState(route, idx, 0), ''); Nav.idx = idx; Nav.keys = []; Nav.keys[idx] = key; return;
+    }
+    if (Nav.restoring || key === Nav.keys[Nav.idx] || key === Nav.expectBackTo) return;   // same screen redrawn, or a back step under way
+    if (Nav.idx >= 1 && key === Nav.keys[Nav.idx - 1]){ Nav.expectBackTo = key; history.back(); return; }   // in-app Back
+    const cur = history.state;
+    if (cur && cur.nyaega === 'route') history.replaceState({ ...cur, scrollY:prevScrollY || 0 }, '');   // remember where we were
+    history.pushState(navState(route, Nav.idx + 1, 0), '');
+    Nav.keys = Nav.keys.slice(0, Nav.idx + 1).concat(key); Nav.idx++;
+  } catch (e) { console.warn('Back-button history unavailable', e); }
+}
+
+/* Show a remembered screen. A workout screen comes back only if that workout is still open (parked). */
+function navApplyRoute(route, scrollY){
+  let r = route || NAV_HOME;
+  Nav.restoring = true;
+  try {
+    if (r.view === 'session'){
+      const cid = r.sel.logClient || r.sel.conditioningClient, parked = cid && sessionFor(cid);
+      if (parked){ flushProgramEditor(); resumeParkedWorkout(sessionKey(parked)); return; }
+      r = NAV_HOME;
+    }
+    flushProgramEditor(); if (sessionOpen()) parkWorkout();
+    S.view = r.view; if (r.view === 'dashboard') S.sub = r.sub;
+    if (r.view === 'dashboard' && r.sub === 'data') S.dataSection = r.ds || undefined;
+    S.sel = { ...r.sel }; if (S.sel.conditioningId) S.sel.conditioningDraft = null;
+    if (r.view === 'programs' && !S.sel.programsKind && !S.sel.program) S.sel.programSection = 'programs';
+    render();
+  } finally { Nav.restoring = false; }
+  Nav.keys[Nav.idx] = navKey(navRouteNow());
+  window.scrollTo(0, scrollY || 0);
+}
+
+window.addEventListener('popstate', e => {
+  if (!Nav.started || S.bootState !== 'ready') return;
+  const st = e.state && e.state.nyaega === 'route' ? e.state : null;
+  if (Nav.ignorePop){ Nav.ignorePop = false; if (st) Nav.idx = st.idx; return; }   // our own step forward, below
+  // An in-app Back button already drew this screen: record where history is and restore the scroll.
+  if (Nav.expectBackTo && st && st.key === Nav.expectBackTo){ Nav.expectBackTo = null; Nav.idx = st.idx; window.scrollTo(0, st.scrollY || 0); return; }
+  Nav.expectBackTo = null;
+  // Something is on top of the screen: close it (if it may be closed), then step forward again so the screen stays.
+  const keepScreen = () => { if (st && st.idx < Nav.idx){ Nav.ignorePop = true; history.go(1); } };
+  const lock = document.getElementById('lockScreen');
+  if (lock && !lock.hidden){ keepScreen(); return; }
+  const dlg = document.getElementById('dlg');
+  if (dlg && dlg.open){ if (!dlg.oncancel) dlg.close(); keepScreen(); return; }   // a dialog that must be answered stays open
+  if (typeof navMenuIsOpen === 'function' && navMenuIsOpen()){ closeNavMenu(); keepScreen(); return; }
+  Nav.idx = st ? st.idx : 0;
+  navApplyRoute(st ? st.route : NAV_HOME, st ? st.scrollY : 0);
+});
 </script>
 </body>
 </html>
