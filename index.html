@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-td6YHD+X0ACY68XNU6n0CsW3x5HrnBewRIwEE128a1s=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-B+wZMZZ1haP4PRYcVFCZWBQ3wpHH5uzX7c68lzKDLWs=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -8731,13 +8731,21 @@ if (IS_IOS && IS_STANDALONE) installEdgeSwipeBack();
 if (IS_IOS || IS_ANDROID || navigator.maxTouchPoints > 0) lockPinchZoom();
 
 /* iPhone / iPad Safari ignores user-scalable=no in the viewport, and some Android browsers can be set to override it
-   ("force enable zoom"), so pinch-zoom (in or out) is also stopped here: Safari's own gesture events, and any move
-   with two fingers on the screen. Double-tap zoom is off through touch-action in the styles. One-finger scrolling,
-   swipes and the edge-back are not affected. */
+   ("force enable zoom", Samsung Internet's "Manual zoom"), so pinch-zoom (in or out) is also stopped here: Safari's
+   own gesture events, a second finger landing on the screen, and any move with two fingers. If the page still ends up
+   zoomed, the screen setting is applied again, which puts it back to normal size where the browser allows it.
+   Double-tap zoom is off through touch-action in the styles. One-finger taps, scrolling, swipes and the edge-back are
+   not affected. */
 function lockPinchZoom(){
-  const stop = e => e.preventDefault();
+  const stop = e => e.preventDefault(), multi = e => { if (e.touches && e.touches.length > 1) e.preventDefault(); };
   ['gesturestart', 'gesturechange', 'gestureend'].forEach(t => document.addEventListener(t, stop, { passive:false }));
-  document.addEventListener('touchmove', e => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive:false });
+  document.addEventListener('touchstart', multi, { passive:false });
+  document.addEventListener('touchmove', multi, { passive:false });
+  const vv = window.visualViewport, meta = document.querySelector('meta[name="viewport"]');
+  if (vv && meta) vv.addEventListener('resize', () => {
+    if (Math.abs(vv.scale - 1) < 0.01) return;   // (the keyboard opening also resizes it, at scale 1)
+    const content = meta.content; meta.content = content + ', '; setTimeout(() => { meta.content = content; }, 30);
+  });
 }
 
 /* Swipe in from the left edge to go back, with an arrow that follows the thumb (lime once far enough to count). */
