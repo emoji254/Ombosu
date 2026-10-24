@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-M7qffwh+CFR+tLlzicVAzu1rByouVcxVGsDaHKBVNVc=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-td6YHD+X0ACY68XNU6n0CsW3x5HrnBewRIwEE128a1s=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -618,7 +618,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent-mid);box-shado
 @media(max-width:700px){.conditioning-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.conditioning-toolbar{align-items:flex-start}.conditioning-bookend{grid-template-columns:34px 1fr;padding:.8rem;gap:.6rem}.conditioning-timer-config{align-items:stretch;flex-direction:column}.conditioning-timer-config .field{min-width:0}.conditioning-section-head{align-items:flex-end}}
 /* Responsive layout hardening for phones, tablets, and compact laptops. */
 html,body{max-width:100%}
-html{touch-action:pan-x pan-y;overflow-x:clip}   /* scrolling only: no pinch or double-tap zoom (with the viewport setting and lockIOSZoom); nothing wider than the screen to zoom out to */
+html{touch-action:pan-x pan-y;overflow-x:clip}   /* scrolling only: no pinch or double-tap zoom (with the viewport setting and lockPinchZoom); nothing wider than the screen to zoom out to */
 body{overflow-x:clip;font-size:clamp(15px,1vw + 11px,16px)}
 main,#main,.shell,.panel,.card,.grid,.row,.spread,.exblock,.slot,.conditioning-bookend,.conditioning-block,.conditioning-timer{min-width:0}
 .grid>*,.row>*,.spread>*{min-width:0;max-width:100%}
@@ -8728,12 +8728,13 @@ const IS_ANDROID = /Android/i.test(navigator.userAgent);
 const IS_STANDALONE = navigator.standalone === true || !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches);
 if (IS_ANDROID || IS_IOS) document.documentElement.classList.add('has-system-back');
 if (IS_IOS && IS_STANDALONE) installEdgeSwipeBack();
-if (IS_IOS) lockIOSZoom();
+if (IS_IOS || IS_ANDROID || navigator.maxTouchPoints > 0) lockPinchZoom();
 
-/* iPhone / iPad Safari ignores user-scalable=no in the viewport (Android honours it), so pinch-zoom is stopped here:
-   Safari's own gesture events, and any move with two fingers on the screen. Double-tap zoom is off through
-   touch-action in the styles. One-finger scrolling, swipes and the edge-back are not affected. */
-function lockIOSZoom(){
+/* iPhone / iPad Safari ignores user-scalable=no in the viewport, and some Android browsers can be set to override it
+   ("force enable zoom"), so pinch-zoom (in or out) is also stopped here: Safari's own gesture events, and any move
+   with two fingers on the screen. Double-tap zoom is off through touch-action in the styles. One-finger scrolling,
+   swipes and the edge-back are not affected. */
+function lockPinchZoom(){
   const stop = e => e.preventDefault();
   ['gesturestart', 'gesturechange', 'gestureend'].forEach(t => document.addEventListener(t, stop, { passive:false }));
   document.addEventListener('touchmove', e => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive:false });
