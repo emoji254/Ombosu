@@ -3,13 +3,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-LODgme72smcEZfr5C/ItuJSQuLHMhVWVqDS4YbVQI6s=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-58B9NImROui6mDcJueJEvqgBdc+5Oj2Eswh9XcK/PG4=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="theme-color" content="#142b25">
+<meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Nyaega — 1:1 and semi-private coaching</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js" integrity="sha384-fCAW/rDWORTbQXSiB7mOg0QtQ5c+r0f544y6XoKjuVva0nMBlCpNUjiFeG5iMdS3" crossorigin="anonymous"></script>
@@ -30,6 +31,7 @@
   --focus:#648b68;
   --font-ui:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --plate-blue:var(--accent); --plate-red:var(--bad); --plate-green:var(--good); --plate-yellow:var(--warn);
+  --series-2:var(--good); /* a second marker colour (solo slots, Est. 1RM line, avatars); soft white in dark so it isn't lime twice */
   --ink:var(--text); --ink-2:var(--text-muted); --panel:var(--surface);
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -37,30 +39,33 @@
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
+  /* Dark is black and neutral greys; lime stays the accent. */
   :root:not([data-theme="light"]){
-    --accent:#c4e58d; --accent-text:#c4e58d; --accent-mid:#6a9c83; --accent-soft:#7aa88a;
-    --surface:#202e27; --surface-2:#1b2922; --floor:#17221d;
-    --text:#eff3ed; --text-muted:#a7b3ab;
-    --line:#35443b; --line-soft:#2c3a32; --line-strong:#3e4f44;
-    --good:#9ac58f; --good-text:#a9d1ab;
-    --warn:#e6be76; --warn-text:#e6be76; --warn-bg:#3a3221;
-    --bad:#ef9a82; --bad-text:#ef9a82; --bad-bg:#3b2822; --bad-line:#6b4338;
-    --tint:#2a3a31; --tint-2:#34473c;
-    --btn-primary:#c4e58d; --btn-primary-hover:#d6ef9e; --on-primary:#142b25;
+    --accent:#c4e58d; --accent-text:#c4e58d; --accent-mid:#8c8c8c; --accent-soft:#a3a3a3;
+    --surface:#161616; --surface-2:#111111; --floor:#000000;
+    --text:#f2f2f2; --text-muted:#a3a3a3;
+    --line:#2e2e2e; --line-soft:#232323; --line-strong:#3a3a3a;
+    --good:#c4e58d; --good-text:#c4e58d;
+    --warn:#e6be76; --warn-text:#e6be76; --warn-bg:#2e2718;
+    --bad:#ef9a82; --bad-text:#ef9a82; --bad-bg:#2e1c17; --bad-line:#6b4338;
+    --tint:#1f1f1f; --tint-2:#2a2a2a;
+    --btn-primary:#c4e58d; --btn-primary-hover:#d6ef9e; --on-primary:#111111;
+    --pine:#1c1c1c; --pine-2:#262626; --on-lime:#111111; --series-2:#e5e5e5;
     --focus:#c4e58d;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --accent:#c4e58d; --accent-text:#c4e58d; --accent-mid:#6a9c83; --accent-soft:#7aa88a;
-  --surface:#202e27; --surface-2:#1b2922; --floor:#17221d;
-  --text:#eff3ed; --text-muted:#a7b3ab;
-  --line:#35443b; --line-soft:#2c3a32; --line-strong:#3e4f44;
-  --good:#9ac58f; --good-text:#a9d1ab;
-  --warn:#e6be76; --warn-text:#e6be76; --warn-bg:#3a3221;
-  --bad:#ef9a82; --bad-text:#ef9a82; --bad-bg:#3b2822; --bad-line:#6b4338;
-  --tint:#2a3a31; --tint-2:#34473c;
-  --btn-primary:#c4e58d; --btn-primary-hover:#d6ef9e; --on-primary:#142b25;
+  --accent:#c4e58d; --accent-text:#c4e58d; --accent-mid:#8c8c8c; --accent-soft:#a3a3a3;
+  --surface:#161616; --surface-2:#111111; --floor:#000000;
+  --text:#f2f2f2; --text-muted:#a3a3a3;
+  --line:#2e2e2e; --line-soft:#232323; --line-strong:#3a3a3a;
+  --good:#c4e58d; --good-text:#c4e58d;
+  --warn:#e6be76; --warn-text:#e6be76; --warn-bg:#2e2718;
+  --bad:#ef9a82; --bad-text:#ef9a82; --bad-bg:#2e1c17; --bad-line:#6b4338;
+  --tint:#1f1f1f; --tint-2:#2a2a2a;
+  --btn-primary:#c4e58d; --btn-primary-hover:#d6ef9e; --on-primary:#111111;
+  --pine:#1c1c1c; --pine-2:#262626; --on-lime:#111111; --series-2:#e5e5e5;
   --focus:#c4e58d;
   color-scheme:dark;
 }*,*::before,*::after{box-sizing:border-box}
@@ -348,8 +353,8 @@ body.has-timer-bar .undo-toast{bottom:calc(6.4rem + env(safe-area-inset-bottom,0
 @media(max-width:600px){.conflict-cols{grid-template-columns:1fr}}
 body.assistant .owner-only,body.assistant #exportJson,body.assistant #exportEnc,body.assistant #exportCsv,body.assistant #exportAtt,body.assistant #exportRoster,body.assistant #importBtn,body.assistant #wipe,body.assistant #newClient,body.assistant #newGroup,body.assistant [data-delclient],body.assistant [data-archiveclient],body.assistant [data-restoreclient],body.assistant [data-dlprogram],body.assistant [data-dlsummary],body.assistant [data-dlhistory],body.assistant [data-dlmydata],body.assistant #reminderExport,body.assistant #deleteAccount{display:none!important}
 :root{--lk-bg:#f7f6f1;--lk-card:#fff;--lk-text:#18231f;--lk-muted:#68736d;--lk-line:#e6e5dd;--lk-accent:#17372d;--lk-hover:#24483d;--lk-on-accent:#fff;--lk-soft:#efeee8;--lk-focus:#6a9c83;--lk-error:#bd3b35;--lk-key:#fff;--lk-shadow:0 24px 70px rgba(23,55,45,.10)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--lk-bg:#101713;--lk-card:#19231d;--lk-text:#edf4ee;--lk-muted:#a0afa5;--lk-line:#344239;--lk-accent:#c8ef83;--lk-hover:#d1f2a4;--lk-on-accent:#17241e;--lk-soft:#26372b;--lk-focus:#a8d979;--lk-error:#ff9b8e;--lk-key:#1e2b24;--lk-shadow:0 28px 80px rgba(0,0,0,.36)}}
-:root[data-theme="dark"]{--lk-bg:#101713;--lk-card:#19231d;--lk-text:#edf4ee;--lk-muted:#a0afa5;--lk-line:#344239;--lk-accent:#c8ef83;--lk-hover:#d1f2a4;--lk-on-accent:#17241e;--lk-soft:#26372b;--lk-focus:#a8d979;--lk-error:#ff9b8e;--lk-key:#1e2b24;--lk-shadow:0 28px 80px rgba(0,0,0,.36)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--lk-bg:#000000;--lk-card:#161616;--lk-text:#f2f2f2;--lk-muted:#a3a3a3;--lk-line:#2e2e2e;--lk-accent:#c8ef83;--lk-hover:#d1f2a4;--lk-on-accent:#111111;--lk-soft:#232323;--lk-focus:#a8d979;--lk-error:#ff9b8e;--lk-key:#1c1c1c;--lk-shadow:0 28px 80px rgba(0,0,0,.5)}}
+:root[data-theme="dark"]{--lk-bg:#000000;--lk-card:#161616;--lk-text:#f2f2f2;--lk-muted:#a3a3a3;--lk-line:#2e2e2e;--lk-accent:#c8ef83;--lk-hover:#d1f2a4;--lk-on-accent:#111111;--lk-soft:#232323;--lk-focus:#a8d979;--lk-error:#ff9b8e;--lk-key:#1c1c1c;--lk-shadow:0 28px 80px rgba(0,0,0,.5)}
 #lockScreen{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--lk-accent) 9%,transparent),transparent 48%),var(--lk-bg);color:var(--lk-text);overflow:auto;font-family:var(--font-ui)}
 #lockScreen *{box-sizing:border-box}
 .lock-top{position:fixed;top:max(env(safe-area-inset-top,0px),.75rem);right:.75rem;z-index:2}
@@ -425,7 +430,7 @@ body.assistant .owner-only,body.assistant #exportJson,body.assistant #exportEnc,
 .progress-panel>summary{cursor:pointer}
 .pr-summary{margin:0;padding-left:1.2rem;display:grid;gap:.3rem}
 .cal-cell .slots i{width:12px;height:4px;border-radius:2px;background:var(--plate-blue);opacity:.65}
-.cal-cell .slots i.solo{background:var(--plate-green)}
+.cal-cell .slots i.solo{background:var(--series-2)}
 .cal-cell .slots i.oneoff{background:var(--ink-2)}
 .sched-actions{display:flex;gap:.4rem;flex-wrap:wrap;padding:.2rem .7rem .5rem}
 .upcoming-row{display:flex;justify-content:space-between;gap:.6rem;padding:.35rem 0;border-top:1px solid var(--line)}
@@ -640,12 +645,162 @@ h1,h2,h3,p,.name,.dash-value,td,th,.conditioning-card{overflow-wrap:anywhere}
 .program-exercise-cell .exercise-group-chip{display:block;width:max-content}
 .exercise-title-line{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem .55rem;min-width:0}
 .exhead-right .exercise-actions-menu{flex:0 0 auto}
-.history-session-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem;margin-top:.55rem;padding-top:.55rem;border-top:1px solid var(--line-soft)}
-.history-session-metric{min-width:0;padding:.35rem .5rem;border-radius:7px;background:var(--floor)}
-.history-session-metric span{display:block;color:var(--ink-2);font-size:.6rem;font-weight:750;letter-spacing:.06em;text-transform:uppercase}
-.history-session-metric strong{display:block;margin-top:.1rem;font-size:.8rem;line-height:1.2;overflow-wrap:anywhere}
-.history-pr-list{font-size:.68rem;line-height:1.25;color:var(--ink-2);font-weight:500}
-@media(max-width:560px){.history-session-metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:.3rem}.history-session-metric{padding:.35rem .4rem}.history-session-metric span{font-size:.55rem}.history-session-metric strong{font-size:.72rem}.history-pr-list{font-size:.62rem}}
+.history-stats{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .9rem;margin-top:.55rem;padding-top:.5rem;border-top:1px solid var(--line-soft)}
+.history-stat{display:inline-flex;align-items:center;gap:.3rem;color:var(--ink-2);font-size:.8rem;font-weight:650;white-space:nowrap}
+.history-stat svg{flex:none;opacity:.8}
+.history-stat.has-pr{padding:.1rem .5rem .1rem .4rem;border-radius:999px;background:var(--lime);color:var(--on-lime)}
+.history-stat.has-pr svg{opacity:1}
+.history-day-stats .history-stats{margin-top:0;padding-top:0;border-top:0}
+/* ---- Plate calculator (40-plate-calculator.js) ---- */
+.pc{display:grid;gap:.9rem}
+.pc-row{display:grid;grid-template-columns:1fr auto;gap:.6rem;align-items:end}
+.pc-unit{display:inline-flex;padding:3px;border-radius:999px;background:var(--tint)}
+.pc-unit button{min-width:52px;min-height:40px;padding:0 .8rem;border:0;border-radius:999px;background:transparent;color:var(--text-muted);font:inherit;font-weight:650;cursor:pointer}
+.pc-unit button[aria-checked="true"]{background:var(--surface);color:var(--text);box-shadow:0 1px 3px #0002}
+.pc-target{display:grid;grid-template-columns:48px 1fr 48px;gap:.4rem;align-items:center}
+.pc-target button{min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);font-size:1.3rem;font-weight:600;cursor:pointer}
+.pc-target input{min-height:48px;text-align:center;font-size:1.35rem;font-weight:700}
+.pc-plates{display:flex;flex-wrap:wrap;gap:.35rem;margin:0;padding:0;border:0}
+.pc-plates legend{margin-bottom:.35rem;font-size:.82rem;color:var(--text-muted)}
+.pc-chip{display:inline-flex;align-items:center;gap:.3rem;min-height:36px;padding:0 .7rem;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:.85rem;font-weight:600;cursor:pointer}
+.pc-chip input{width:auto;min-height:0;margin:0;accent-color:var(--accent)}
+.pc-chip:has(input:not(:checked)){opacity:.5;text-decoration:line-through}
+.pc-result{padding:.85rem;border-radius:16px;background:var(--surface-2);border:1px solid var(--line-soft)}
+.pc-head{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;flex-wrap:wrap}
+.pc-head strong{font-size:1.05rem}
+.pc-head span{color:var(--text-muted);font-size:.85rem}
+.pc-msg{margin:.5rem 0 0;font-size:.88rem}
+.pc-msg.err{color:var(--bad-text)}
+.pc-msg button{margin:.35rem .35rem 0 0}
+/* The bar: plates on both sleeves, biggest next to the collar. Heights follow the plate weight. */
+.pc-bar{display:flex;align-items:center;justify-content:center;height:120px;margin:.7rem 0 .4rem;overflow:hidden}
+.pc-sleeve{display:flex;align-items:center;gap:2px;min-width:0}
+.pc-sleeve.l{flex-direction:row-reverse}
+.pc-collar{width:7px;height:34px;border-radius:2px;background:var(--text-muted)}
+.pc-shaft{flex:0 1 110px;min-width:46px;height:9px;border-radius:3px;background:linear-gradient(var(--text-muted),color-mix(in srgb,var(--text-muted) 60%,transparent))}
+.pc-stub{width:14px;height:12px;background:var(--text-muted);opacity:.7}
+.pc-plate{display:grid;place-items:center;border-radius:4px;color:#111;font-size:.6rem;font-weight:800;writing-mode:vertical-rl;transform:rotate(180deg);box-shadow:inset 0 0 0 1px #0003}
+.pc-list{display:flex;flex-wrap:wrap;gap:.35rem;margin:.4rem 0 0;padding:0;list-style:none}
+.pc-list li{padding:.25rem .6rem;border-radius:999px;background:var(--tint);font-size:.85rem;font-weight:650}
+.exblock-foot{display:flex;gap:.4rem;padding:.4rem .7rem}
+/* Reordering a workout: press and hold the exercise title, then drag. */
+.exblock>header{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.exblock.ex-dragging{position:relative;z-index:30;transition:none;box-shadow:0 14px 34px #0004;opacity:.97;cursor:grabbing}
+.exblock.drop-before{box-shadow:0 -4px 0 var(--accent)}
+.exblock.drop-after{box-shadow:0 4px 0 var(--accent)}
+.exblock.ex-dropped{animation:exDropped .6s ease}
+@keyframes exDropped{from{background:color-mix(in srgb,var(--lime) 35%,var(--surface))}to{background:var(--surface)}}
+body.ex-reordering{-webkit-user-select:none;user-select:none;cursor:grabbing}
+/* Bar chip by the "Kg" header: icon, the bar's weight, arrow; an invisible 44 × 44 px touch area. */
+.kg-head{display:inline-flex;align-items:center;gap:4px;min-width:0;max-width:100%;white-space:nowrap}
+/* Bar chip: a small bordered tag — barbell (green), the bar's weight, caret. */
+.bar-chip{position:relative;flex:0 1 auto;min-width:0;display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 4px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);box-shadow:0 1px 1px rgba(0,0,0,.04);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background .15s}
+.bar-chip-icon{flex:none;color:var(--accent-text)}
+.bar-chip-kg{font-size:.68rem;font-weight:750;line-height:1.25;letter-spacing:0;text-transform:none;white-space:nowrap}
+.bar-chip-unit{margin-left:1px;color:var(--text-muted);font-size:.56rem;font-weight:650}
+.bar-chip-caret{flex:none;color:var(--text-muted)}
+@media(max-width:370px){.bar-chip-caret{display:none}}   /* narrow phones: the border alone says it's a button */
+@media(max-width:340px){.bar-chip-unit{display:none}}   /* the smallest phones: barbell and number (the column says Kg) */
+.bar-chip::before{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
+.bar-chip:hover{border-color:var(--accent-mid)}
+.bar-chip:active{background:var(--tint)}
+.bar-chip:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+/* Bottom sheet (the bar picker) */
+dialog.as-sheet{margin:auto auto 0;width:100%;max-width:560px;border-bottom:0;border-radius:20px 20px 0 0;animation:sheetUp .2s ease-out}
+@keyframes sheetUp{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
+.bar-sheet-list{display:grid;gap:2px}
+.bar-group{margin:.55rem 0 .15rem;color:var(--text-muted);font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.bar-opt{display:flex;align-items:center;justify-content:space-between;gap:.6rem;width:100%;min-height:46px;padding:.5rem .75rem;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--text);font:inherit;font-size:.95rem;text-align:left;cursor:pointer}
+.bar-opt:hover{background:var(--surface-2)}
+.bar-opt[aria-checked="true"]{border-color:var(--accent-mid);background:var(--tint);font-weight:650}
+.bar-opt-kg{color:var(--text-muted);font-size:.85rem;font-weight:600}
+.bar-opt-custom{display:flex;align-items:center;gap:.5rem}
+.bar-opt-custom .bar-opt{flex:1}
+.bar-custom-kg{display:flex;align-items:center;gap:.3rem;color:var(--text-muted);font-size:.85rem}
+.bar-custom-kg input{width:4.5rem;min-height:40px;text-align:center}
+/* Warm-up sets: the W badge (workout rows and History) and the "Add warm-up sets" pop-up (41-warmup-sets.js). */
+.set-w{display:inline-grid;place-items:center;width:1.35rem;height:1.35rem;border-radius:7px;background:color-mix(in srgb,var(--lime) 55%,var(--surface));color:var(--on-lime);font-size:.7rem;font-weight:800;letter-spacing:0}
+.setrow .idx.set-w{justify-self:center;align-self:center}
+/* History: warm-ups as one line that opens to show their rows. */
+table:not(.wu-open) tr.hist-wu-set{display:none}
+tr.hist-wu-sum td{padding:0}
+.hist-wu-toggle{display:flex;align-items:center;gap:.5rem;width:100%;min-height:44px;margin:0;padding:.35rem .6rem;border:0;border-radius:0;background:color-mix(in srgb,var(--lime) 10%,transparent);color:var(--text);font:inherit;font-size:.88rem;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hist-wu-toggle .muted{font-size:.8rem}
+.hist-wu-caret{margin-left:auto;flex:none;color:var(--text-muted);transition:transform .15s}
+.wu-open .hist-wu-caret{transform:rotate(180deg)}
+.hist-wu-toggle:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+/* Done warm-ups leave the screen; the first working set after them is filled in and marked as next. */
+.setrow.is-next{box-shadow:inset 3px 0 0 var(--accent-text)}
+/* The warm-up pop-up keeps a phone width on bigger screens; Restore / Cancel / Insert share one row. */
+dialog.wu-dialog{width:min(440px,calc(100vw - 1rem))}
+dialog.wu-dialog .dlg-foot{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem}
+dialog.wu-dialog .dlg-foot .btn{width:100%;min-width:0;padding-left:.5rem;padding-right:.5rem}
+.wu-work{max-width:220px}
+.wu-work input{font-size:1.15rem;font-weight:700}
+.wu-head,.wu-row{display:grid;grid-template-columns:2rem 7.7rem minmax(0,1fr) 40px;gap:.45rem;align-items:center}
+.wu-head{padding:0 .1rem .3rem;color:var(--text-muted);font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.wu-list{display:grid;gap:.4rem}
+.wu-row{min-height:52px;padding:.35rem .45rem;border:1px solid var(--line-soft);border-radius:14px;background:var(--surface-2)}
+.wu-row.is-skipped{opacity:.55}
+.wu-badge{display:grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:8px;background:color-mix(in srgb,var(--lime) 55%,var(--surface));color:var(--on-lime);font-size:.8rem;font-weight:800}
+.wu-pill{display:inline-flex;align-items:center;gap:.2rem;width:max-content;padding:.25rem .3rem;border-radius:12px;background:var(--tint);color:var(--text-muted);font-size:.85rem;font-weight:650}
+/* Small rounded boxes that sit inside the pill (not the app's 44 px input). */
+dialog .wu-pill input{width:2.4rem;height:36px;min-height:36px;padding:0;border:1px solid var(--line-soft);border-radius:8px;background:var(--surface);color:var(--text);font-size:.9rem;font-weight:700;text-align:center;box-shadow:none;-moz-appearance:textfield;appearance:textfield}
+dialog .wu-pill input::-webkit-inner-spin-button,dialog .wu-pill input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+dialog .wu-pill input:focus{outline:2px solid var(--focus);outline-offset:0;box-shadow:none}
+.wu-x{margin:0 .1rem}
+.wu-kg{display:grid;line-height:1.15}
+.wu-kg strong{font-size:1rem;white-space:nowrap}
+@media (max-width:340px){
+  dialog.wu-dialog .dlg-body{padding-left:1rem;padding-right:1rem}
+  .wu-head,.wu-row{grid-template-columns:1.6rem 7.1rem minmax(0,1fr) 32px;gap:.3rem}
+  .wu-row{padding:.3rem}
+  .wu-badge{width:1.5rem;height:1.5rem}
+  .wu-del,.wu-del-spacer{width:32px}
+  .wu-pill{padding:.25rem}
+  dialog .wu-pill input{width:2.15rem}
+}
+.wu-kg small{color:var(--text-muted);font-size:.7rem;font-weight:600}
+.wu-skip{color:var(--text-muted);font-size:.8rem;font-style:italic}
+.wu-del{display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:10px;background:transparent;color:var(--bad-text);cursor:pointer}
+.wu-del:hover{background:var(--bad-bg)}
+.wu-del-spacer{width:40px;height:40px}
+.wu-bar-label{padding:0 .25rem;color:var(--text);font-weight:700}
+.wu-row.is-bar{border-style:dashed}
+.wu-from{min-height:1em;margin:-.35rem 0 .5rem}
+.wu-rec{display:inline-block;margin-left:.3rem;padding:.05rem .45rem;border-radius:999px;background:color-mix(in srgb,var(--lime) 30%,transparent);color:var(--text);font-size:.65rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle}
+.wu-rec[hidden]{display:none}
+.wu-from:empty{display:none}
+.wu-add{width:100%;margin-top:.55rem;border-style:dashed}
+.wu-empty{padding:.6rem 0}
+.exercise-actions-hint{margin:0;padding:.45rem .8rem .35rem;color:var(--text-muted);font-size:.74rem;font-weight:600}
+/* Bar exercises: one box that looks like the others, the weight per side on top and the total in small text
+   inside it, at the bottom. Same height as the Reps box, so the row stays even. */
+.kg-cell{display:flex;flex-direction:column;justify-content:center;min-width:0;min-height:46px;padding:.2rem .7rem;border:1px solid var(--line-strong);border-radius:10px;background:var(--floor);cursor:text;transition:border-color .15s,box-shadow .15s}
+.setrow .kg-cell input{width:100%;min-width:0;min-height:0;height:auto;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;outline:none;line-height:1.2}
+.setrow .kg-cell input:focus{border:0;box-shadow:none}
+@media(max-width:430px){.kg-cell{min-height:44px;padding:.15rem .32rem}.setrow .kg-cell input{font-size:.92rem}}
+.kg-cell:focus-within{border-color:var(--accent-mid);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent-mid) 10%,transparent)}
+.kg-total{margin-top:1px;color:var(--text-muted);font-size:.62rem;font-weight:600;line-height:1.1;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kg-total:empty{display:none}
+/* History: the recorded bar under the exercise name (the Plate/side column is in the set table). */
+.history-bar{margin:-.15rem 0 .45rem;color:var(--text-muted);font-size:.8rem;font-weight:600}
+/* Phones go back with their own gesture (see 39-back-button.js): the in-app Back buttons are hidden there. */
+.has-system-back :is([data-back],[data-back-conditioning],[data-program-kind="chooser"],#leaveConditioningWorkout,.nav-back){display:none!important}
+.has-system-back .conditioning-toolbar{justify-content:flex-end}
+#edgeBack{position:fixed;left:0;top:0;z-index:200;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--surface);color:var(--text);box-shadow:0 4px 16px #0003;opacity:0;pointer-events:none;transform:translate(-44px,-100px);transition:opacity .12s,background .12s,color .12s}
+#edgeBack.show{opacity:1}
+#edgeBack.ready{background:var(--lime);color:var(--on-lime)}
+/* Conditioning screen: the session clock alone (the block timer handles work and rest). */
+.session-timer.session-only{grid-template-columns:1fr}
+.history-pr-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin:.15rem 0 .45rem}
+.history-pr-tag{display:inline-flex;align-items:center;gap:.25rem;padding:.12rem .55rem .12rem .4rem;border-radius:999px;background:var(--lime);color:var(--on-lime);font-size:.72rem;font-weight:700}
+.history-pr-tag svg{width:13px;height:13px}
+tr.pr-set td{background:color-mix(in srgb,var(--lime) 30%,transparent)}
+:root[data-theme="dark"] tr.pr-set td{background:color-mix(in srgb,var(--lime) 10%,transparent)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) tr.pr-set td{background:color-mix(in srgb,var(--lime) 10%,transparent)}}
+.pr-mark{display:inline-flex;vertical-align:-2px;margin-left:.25rem;color:var(--accent-text)}
+.pr-mark svg{width:13px;height:13px}
 .group-choice-list{display:grid;gap:.4rem;max-height:45vh;overflow:auto}
 .group-choice{display:flex;align-items:center;gap:.6rem;padding:.55rem .65rem;border:1px solid var(--line);border-radius:8px;background:var(--floor);color:var(--ink)}
 .group-choice input{width:1.1rem;height:1.1rem;min-height:0;accent-color:var(--plate-blue)}
@@ -853,7 +1008,7 @@ header.top .status{position:absolute;top:calc(100% + .45rem);left:50%;right:auto
   nav.tabs:before{color:var(--text-muted)}
   nav.tabs button{color:var(--text-muted)}
   nav.tabs button:hover{background:var(--floor);color:var(--text)}
-  nav.tabs button[aria-current="true"]{background:var(--lime);color:#17372d;border-left-color:#17372d}
+  nav.tabs button[aria-current="true"]{background:var(--lime);color:var(--on-lime);border-left-color:var(--on-lime)}
   main{padding-top:calc(var(--hdr-h) + 1.5rem)}
   main:before{display:none}
 }
@@ -867,7 +1022,7 @@ nav.subtabs button[aria-current="true"]{background:var(--pine);border-color:var(
 /* Bottom bar: white surface, muted icons, the current tab in lime. */
 #bottomNav{background:var(--surface);border-top:1px solid var(--line);border-radius:0;box-shadow:0 -6px 20px #17372d12}
 #bottomNav button{color:var(--text-muted)}
-#bottomNav button[aria-current="true"]{color:#17372d;background:var(--lime)}
+#bottomNav button[aria-current="true"]{color:var(--on-lime);background:var(--lime)}
 #bottomNav button[aria-current="true"] svg{filter:none}
 #bottomNav button:focus-visible,#fab:focus-visible,#navMenu button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 /* "+" button: the primary colour, no glow. */
@@ -907,7 +1062,7 @@ header.top{background:var(--floor);gap:.75rem;padding:0 clamp(.9rem,3vw,1.75rem)
 header.top h1{font-family:var(--font-ui);font-size:1rem;font-weight:inherit;letter-spacing:0}
 header.top .brand{gap:.75rem;padding:.25rem .5rem .25rem 0}
 header.top .mark{width:48px;height:48px;border-radius:13px;background:var(--lime)}
-header.top .mark:after{font-family:var(--font-ui);font-size:26px;font-weight:600;letter-spacing:0;color:#17372d}
+header.top .mark:after{font-family:var(--font-ui);font-size:26px;font-weight:600;letter-spacing:0;color:var(--on-lime)}
 .brand-text{display:flex;flex-direction:column;align-items:flex-start;line-height:1.1;min-width:0}
 .brand-name{font-size:1.55rem;font-weight:650;letter-spacing:-.02em;color:var(--text)}
 .brand-sub{margin-top:.18rem;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
@@ -915,9 +1070,9 @@ header.top .mark:after{font-family:var(--font-ui);font-size:26px;font-weight:600
 .top-actions button{width:48px;height:48px;border-radius:50%;background:color-mix(in srgb,var(--pine) 8%,var(--floor));color:var(--text)}
 .top-actions button:hover{background:color-mix(in srgb,var(--pine) 13%,var(--floor))}
 .top-actions button svg{width:22px;height:22px}
-.top-actions #hdrProfile{background:var(--lime);color:#17372d}
+.top-actions #hdrProfile{background:var(--lime);color:var(--on-lime)}
 .top-actions button[aria-current="true"],.top-actions button[aria-expanded="true"]{background:color-mix(in srgb,var(--pine) 8%,var(--floor));box-shadow:inset 0 0 0 2px var(--pine)}
-.top-actions #hdrProfile[aria-current="true"],.top-actions #hdrProfile[aria-expanded="true"]{background:var(--lime);box-shadow:inset 0 0 0 2px #17372d}
+.top-actions #hdrProfile[aria-current="true"],.top-actions #hdrProfile[aria-expanded="true"]{background:var(--lime);box-shadow:inset 0 0 0 2px var(--on-lime)}
 @media(max-width:420px){
   :root{--hdr-h:68px}
   header.top{gap:.5rem}
@@ -952,7 +1107,7 @@ body.in-session .top-actions button{width:38px;height:38px}
 @media(max-width:900px){
   #bottomNav{left:.7rem;right:.7rem;bottom:calc(.6rem + var(--bn-safe));height:var(--bn-h);padding:.35rem;gap:.2rem;border:1px solid var(--line);border-radius:22px;background:var(--surface);box-shadow:0 10px 30px #17372d1f}
   #bottomNav button{border-radius:16px;color:var(--bn-ink);font-weight:500}
-  #bottomNav button[aria-current="true"]{background:var(--bn-on);color:#17372d;font-weight:650}
+  #bottomNav button[aria-current="true"]{background:var(--bn-on);color:var(--on-lime);font-weight:650}
   body.has-bottomnav main{padding-bottom:calc(var(--bn-h) + var(--fab) * .6 + 2rem + var(--bn-safe))}
   #fab{bottom:calc(var(--bn-h) + 1.5rem + var(--bn-safe))}
   #navMenu[data-anchor="fab"]{bottom:calc(var(--bn-h) + var(--fab) + 2.3rem + var(--bn-safe))}
@@ -988,7 +1143,7 @@ dialog{border-radius:20px}
 dialog .dlg-body>h2:first-child{font-size:1.35rem;font-weight:700;letter-spacing:-.02em}
 .toast{border-radius:12px}
 /* Sign-in and lock screen: the header's mark and type. */
-.lock-brand .logo{background:var(--lime);color:#17372d;font-family:var(--font-ui);font-weight:600;letter-spacing:0;border-radius:16px;box-shadow:none}
+.lock-brand .logo{background:var(--lime);color:var(--on-lime);font-family:var(--font-ui);font-weight:600;letter-spacing:0;border-radius:16px;box-shadow:none}
 #lockScreen .lock-brand h1{font-family:var(--font-ui);font-weight:650;letter-spacing:-.02em}
 .lock-card{border-radius:24px}
 .lk-btn{border-radius:12px}
@@ -1016,7 +1171,7 @@ dialog .dlg-body>h2:first-child{font-size:1.35rem;font-weight:700;letter-spacing
 .bar-rest-icon{flex:none;fill:currentColor;opacity:.7}
 .bar-rest .i-pause,.bar-rest.running .i-play{display:none}
 .bar-rest.running .i-pause{display:inline}
-.timer-bar .bar-rest.running #barRest,.timer-bar .bar-rest.running .bar-rest-icon{color:#17372d}
+.timer-bar .bar-rest.running #barRest,.timer-bar .bar-rest.running .bar-rest-icon{color:var(--on-lime)}
 @media(min-width:761px){.timer-bar{left:calc(248px + (100vw - 248px) / 2)}}
 body.has-timer-bar main{padding-bottom:calc(5.5rem + env(safe-area-inset-bottom,0px))}
 body.has-timer-bar .toast{bottom:calc(4.6rem + env(safe-area-inset-bottom,0px))}
@@ -1065,7 +1220,7 @@ body.in-session nav.tabs{display:none!important}
 .set-swipe-wrap{background:var(--surface)}
 .set-swipe-action{width:50%;padding:0 1.1rem;opacity:0;transition:opacity .12s;font-size:0;letter-spacing:0}
 .set-swipe-action svg{flex:none}
-.set-swipe-action.copy{background:color-mix(in srgb,var(--lime) 38%,var(--surface));color:#17372d}
+.set-swipe-action.copy{background:color-mix(in srgb,var(--lime) 38%,var(--surface));color:var(--on-lime)}
 .set-swipe-action.delete{background:var(--bad-bg);color:var(--bad-text)}
 .set-swipe-wrap.swipe-copying .set-swipe-action.copy,.set-swipe-wrap.swipe-deleting .set-swipe-action.delete{opacity:1}
 .setrow{background:var(--surface)}
@@ -1090,7 +1245,32 @@ body.in-session nav.tabs{display:none!important}
 .session-notes-preview{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:450;color:var(--text-muted)}
 .session-notes-fold[open] .session-notes-preview{display:none}
 .session-notes-fold .session-notes-input{display:block;width:calc(100% - 1.6rem);min-height:110px;margin:0 .8rem .8rem;padding:.75rem .85rem;border:1px solid var(--line-strong);border-radius:12px;background:var(--surface);font:inherit;font-size:.92rem;line-height:1.5;resize:vertical}
-</style>
+
+/* ---- Dark mode, black (2026-10-24): parts that sat on green now sit on black/grey; "good" states and text on lime follow the lime accent. */
+:root[data-theme="dark"] .setrow.done .tick{color:var(--on-lime)}
+:root[data-theme="dark"] .timer-bar .bar-rest.running{background:color-mix(in srgb,var(--lime) 90%,var(--surface))}
+:root[data-theme="dark"] .set-swipe-action.copy{background:color-mix(in srgb,var(--lime) 80%,var(--surface))}
+:root[data-theme="dark"] nav.tabs button:not([aria-current="true"]){color:#b5b5b5}
+:root[data-theme="dark"] .top-actions button:not(#hdrProfile){background:var(--surface);color:var(--text)}
+:root[data-theme="dark"] .top-actions button:not(#hdrProfile):is([aria-current="true"],[aria-expanded="true"]){background:var(--tint-2);box-shadow:inset 0 0 0 2px var(--text-muted)}
+:root[data-theme="dark"] .setrow.done{background:var(--tint)}
+:root[data-theme="dark"] .setrow .last{background:var(--tint)}
+:root[data-theme="dark"] .timer-kicker,:root[data-theme="dark"] .overview-field>span{color:#a3a3a3}
+:root[data-theme="dark"] .timer-caption{color:#b5b5b5}
+:root[data-theme="dark"] .session-overview p,:root[data-theme="dark"] .conditioning-timer-display>span{color:#c4c4c4}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .top-actions button:not(#hdrProfile){background:var(--surface);color:var(--text)}
+  :root:not([data-theme="light"]) .top-actions button:not(#hdrProfile):is([aria-current="true"],[aria-expanded="true"]){background:var(--tint-2);box-shadow:inset 0 0 0 2px var(--text-muted)}
+  :root:not([data-theme="light"]) .setrow.done{background:var(--tint)}
+  :root:not([data-theme="light"]) .setrow .last{background:var(--tint)}
+  :root:not([data-theme="light"]) .timer-kicker,:root:not([data-theme="light"]) .overview-field>span{color:#a3a3a3}
+  :root:not([data-theme="light"]) .timer-caption{color:#b5b5b5}
+  :root:not([data-theme="light"]) .session-overview p,:root:not([data-theme="light"]) .conditioning-timer-display>span{color:#c4c4c4}
+  :root:not([data-theme="light"]) .setrow.done .tick{color:var(--on-lime)}
+  :root:not([data-theme="light"]) .timer-bar .bar-rest.running{background:color-mix(in srgb,var(--lime) 90%,var(--surface))}
+  :root:not([data-theme="light"]) .set-swipe-action.copy{background:color-mix(in srgb,var(--lime) 80%,var(--surface))}
+  :root:not([data-theme="light"]) nav.tabs button:not([aria-current="true"]){color:#b5b5b5}
+}</style>
 </head>
 <body>
 <div class="shell">
@@ -1549,6 +1729,7 @@ const dowOf = iso => new Date(iso + 'T12:00:00').getDay();
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const byName = (a,b) => (a.name||'').localeCompare(b.name||'');
 
+const seedSlug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const SEED_EXERCISES = [
  ['Back squat','Legs','Barbell'],['Front squat','Legs','Barbell'],['Goblet squat','Legs','Dumbbell'],
  ['Split squat','Legs','Dumbbell'],['Walking lunge','Legs','Dumbbell'],['Leg press','Legs','Machine'],
@@ -1564,7 +1745,19 @@ const SEED_EXERCISES = [
  ['Lateral raise','Shoulders','Dumbbell'],['Rear delt fly','Shoulders','Dumbbell'],
  ['Assault bike','Conditioning','Machine'],['Rower','Conditioning','Machine'],['Sled push','Conditioning','Sled'],
  ['Box jump','Power','Bodyweight'],['Medicine ball slam','Power','Med ball'],['Jump rope','Conditioning','Rope']
-].map(([name,category,equipment]) => ({ id: 'seed-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''), name, category, equipment }));   // same id on every device
+].map(([name,category,equipment]) => ({ id: 'seed-' + seedSlug(name), name, category, equipment }))   // same id on every device
+/* Equipment variants of the starter exercises (schema v3 adds them to existing libraries). Their ids include the
+   equipment, so they too are the same on every device. */
+.concat([
+ ['Goblet squat','Legs','Kettlebell'],['Split squat','Legs','Barbell'],['Walking lunge','Legs','Barbell'],
+ ['Romanian deadlift','Hinge','Dumbbell'],['Romanian deadlift','Hinge','Kettlebell'],['Hip thrust','Hinge','Dumbbell'],
+ ['Bench press','Push','Dumbbell'],['Overhead press','Push','Dumbbell'],['Overhead press','Push','Kettlebell'],
+ ['Single-arm row','Pull','Cable'],['Single-arm row','Pull','Kettlebell'],
+ ['Pallof press','Core','Band'],['Farmer carry','Core','Kettlebell'],
+ ['Bicep curl','Arms','Barbell'],['Bicep curl','Arms','Cable'],['Hammer curl','Arms','Cable'],
+ ['Lateral raise','Shoulders','Cable'],['Rear delt fly','Shoulders','Cable']
+].map(([name,category,equipment]) => ({ id: 'seed-' + seedSlug(name + ' ' + equipment), name, category, equipment })));
+const isSeedVariant = s => s.id !== 'seed-' + seedSlug(s.name);
 
 /* --------------------------- helpers --------------------------- */
 /* Polite screen-reader announcement that doesn't depend on a toast being on screen. */
@@ -1597,7 +1790,49 @@ function undoToast(message, undoFn){
   b.onclick = async () => { clearTimeout(timer); t.remove(); try { await undoFn(); } catch(e){ console.warn('Undo failed', e); toast('Could not undo'); } };
   return t;
 }
-function exName(id){ const e = S.exercises.find(x => x.id === id); return e ? e.name : 'Exercise'; }
+/* Exercise variants: one name may exist once per equipment (Romanian deadlift with a barbell, with dumbbells…). Each is
+   its own library entry with its own records. Where a name has more than one variant it is shown with its equipment. */
+const exNorm = v => String(v || '').trim().toLocaleLowerCase().replace(/\s+/g, ' ');
+/* A coach's own name for a variant ("DB RDL", "Romanian deadlift (dumbbell)", "Cable lateral raises") read as the movement
+   and its equipment, so it can be matched to the starter variant: { base:'romanian deadlift', equipment:'dumbbell' }. */
+const EQUIP_WORDS = [['Dumbbell', ['dumbbell', 'dumbbells', 'db', 'dbs']], ['Kettlebell', ['kettlebell', 'kettlebells', 'kb', 'kbs']], ['Barbell', ['barbell', 'bb']], ['Cable', ['cable', 'cables']], ['Band', ['band', 'bands', 'banded']]];
+const MOVE_PLURALS = { raises:'raise', curls:'curl', thrusts:'thrust', lunges:'lunge', rows:'row', squats:'squat', flys:'fly', flies:'fly', flyes:'fly', flye:'fly', swings:'swing', carries:'carry', presses:'press', deadlifts:'deadlift' };
+const MOVE_ALIASES = { 'rdl':'romanian deadlift', 'ohp':'overhead press', 'shoulder press':'overhead press', 'military press':'overhead press', 'one arm row':'single arm row', '1 arm row':'single arm row', 'biceps curl':'bicep curl', 'curl':'bicep curl','farmers carry':'farmer carry', 'farmers walk':'farmer carry', 'farmer walk':'farmer carry', 'pallof':'pallof press', 'lat raise':'lateral raise', 'reverse fly':'rear delt fly' };
+function variantKeyOf(name, equipment){
+  let eq = '';
+  const words = exNorm(name).replace(/['’]/g, '').replace(/[()\[\],.\/&+-]/g, ' ').split(/\s+/).filter(Boolean).filter(w => {
+    const hit = EQUIP_WORDS.find(([, ws]) => ws.includes(w)); if (!hit) return true; if (!eq) eq = hit[0]; return false;
+  }).map(w => MOVE_PLURALS[w] || w);
+  const base = words.join(' ');
+  return { base:MOVE_ALIASES[base] || base, equipment:exNorm(eq || equipment) };
+}
+function exVariants(name){ const n = exNorm(name); return n ? S.exercises.filter(x => exNorm(x.name) === n) : []; }
+function exLabelOf(e){ return e.equipment && exVariants(e.name).length > 1 ? e.name + ' · ' + e.equipment : e.name; }
+function exName(id){ const e = S.exercises.find(x => x.id === id); return e ? exLabelOf(e) : 'Exercise'; }
+/* The library entry for a name + equipment in `list`: the same equipment, or the only exercise with that name when either
+   side has no equipment written (older backups and libraries didn't always have one). */
+function findExerciseVariant(list, name, equipment){
+  const n = exNorm(name), q = exNorm(equipment), same = list.filter(x => exNorm(x.name) === n);
+  return same.find(x => exNorm(x.equipment) === q) || (same.length === 1 && (!q || !exNorm(same[0].equipment)) ? same[0] : null);
+}
+/* Which exercise a logged entry belongs to, as a key ("id:…" or, for an unknown name, "n:…"). Entries carry the exercise
+   id; one without a known id is matched by name, a plain name only while it isn't shared by several variants. */
+function entryExerciseKey(entry){
+  const id = loggedExerciseId(entry), sid = id == null ? '' : String(id);
+  if (sid && S.exercises.some(x => String(x.id) === sid)) return 'id:' + sid;
+  const n = exNorm(loggedExerciseName(entry));
+  if (n){
+    const byLabel = S.exercises.filter(x => exNorm(exLabelOf(x)) === n);
+    if (byLabel.length === 1) return 'id:' + byLabel[0].id;
+  }
+  return sid ? 'id:' + sid : n ? 'n:' + n : '';
+}
+/* The name to show for a logged entry: as logged, with the equipment added if it was logged before a variant existed. */
+function entryDisplayName(entry){
+  const name = loggedExerciseName(entry), key = entryExerciseKey(entry), ex = key.startsWith('id:') && S.exercises.find(x => 'id:' + x.id === key);
+  if (!name) return ex ? exLabelOf(ex) : exName(loggedExerciseId(entry));
+  return ex && exNorm(name) === exNorm(ex.name) ? exLabelOf(ex) : name;
+}
 /* Exercises are archived, never deleted, so programs and history that use them keep working. */
 function activeExercises(){ return S.exercises.filter(e => !e.archived); }
 function exerciseUsage(exId){
@@ -1677,8 +1912,14 @@ function loggedEntryName(entry){return loggedExerciseName(entry)||exName(loggedE
 function setWeight(set){return set?.weight??set?.kg??set?.load??set?.actualWeight??null;}
 function setReps(set){return set?.reps??set?.rep??set?.actualReps??null;}
 function setRPE(set){return set?.actualRPE??set?.rpe??null;}
+/* Warm-up sets (set type "warmup") are logged and shown, but "previous", suggestions, PRs and progress use the
+   working sets only, numbered 1, 2, 3 among themselves. */
+const SET_TYPE_LABELS={warmup:'Warm-up',rampup:'Ramp-up',working:'Working',backoff:'Back-off',amrap:'AMRAP / top set'};
+function isWarmupSet(set){return !!set&&(set.setType==='warmup'||set.isWarmup===true);}
+/** A set's position among the working sets of its exercise (0, 1, 2…), or -1 for a warm-up. */
+function workingIndexOf(sets,si){if(isWarmupSet(sets[si]))return -1;let n=0;for(let i=0;i<si;i++)if(!isWarmupSet(sets[i]))n++;return n;}
 function avatarHTML(name){
-  const colors = ['var(--plate-blue)','var(--plate-red)','var(--plate-green)','var(--plate-yellow)'];
+  const colors = ['var(--plate-blue)','var(--plate-red)','var(--series-2)','var(--plate-yellow)'];
   let sum = 0; for (const ch of String(name||'')) sum += ch.charCodeAt(0);
   const initial = (String(name||'?').trim()[0] || '?').toUpperCase();
   return `<span class="avatar" style="background:${colors[sum % colors.length]}">${esc(initial)}</span>`;
@@ -1705,14 +1946,18 @@ function computeExerciseHistory(cid, exId){
   let lastDate = null, lastSets = [], best = null;
   history.forEach(l => {
     const entries=workoutLogEntries(l);
-    const e = entries.find(x=>String(loggedExerciseId(x)??'')===String(exId)) ||
-      entries.find(x=>targetName&&normalizeName(loggedExerciseName(x))===targetName);
+    // (by the exact library entry, so a dumbbell variant never picks up the barbell numbers)
+    const e = entries.find(x=>entryExerciseKey(x)==='id:'+String(exId)) ||
+      (!target&&targetName?entries.find(x=>normalizeName(loggedExerciseName(x))===targetName):null);
     if (!e) return;
-    const normalized=loggedExerciseSets(e).map(s=>({...s,weight:s.weight??s.kg??s.load??s.actualWeight??null,reps:s.reps??s.rep??s.actualReps??null}));
+    // Working sets only (warm-ups are left out), each in its place among the working sets.
+    const all=loggedExerciseSets(e),numberOf=(s,i)=>Number(s.setNumber)||i+1;
+    const normalized=all.map((s,i)=>({...s,weight:s.weight??s.kg??s.load??s.actualWeight??null,reps:s.reps??s.rep??s.actualReps??null,
+      workSlot:numberOf(s,i)-1-all.filter((w,j)=>isWarmupSet(w)&&numberOf(w,j)<numberOf(s,i)).length})).filter(s=>!isWarmupSet(s));
     if(normalized.some(s=>s.weight!=null||s.reps!=null)){
       if(!lastDate)lastDate=l.date;
-      normalized.forEach((s,index)=>{
-        const slot=Math.max(0,(Number(s.setNumber)||index+1)-1);
+      normalized.forEach(s=>{
+        const slot=Math.max(0,s.workSlot);
         if(!lastSets[slot])lastSets[slot]={weight:null,reps:null};
         if(lastSets[slot].weight==null&&s.weight!=null)lastSets[slot].weight=s.weight;
         if(lastSets[slot].reps==null&&s.reps!=null)lastSets[slot].reps=s.reps;
@@ -2030,6 +2275,10 @@ window.addEventListener('unhandledrejection', event => { if (isStorageError(even
    Enter runs the action marked kind:'primary' — never a danger action. */
 function dialog(title, bodyHTML, actions, opts = {}){
   const dlg = document.getElementById('dlg');
+  dlg.classList.remove('as-sheet');   // (a bottom sheet adds it back after this call)
+  // An extra class for this dialog only (opts.className), cleared again by the next one.
+  if (dlg._extraClass) dlg.classList.remove(dlg._extraClass);
+  dlg._extraClass = opts.className || ''; if (dlg._extraClass) dlg.classList.add(dlg._extraClass);
   document.getElementById('dlgBody').innerHTML = '<h2>' + esc(title) + '</h2>' + bodyHTML;
   const foot = document.getElementById('dlgFoot'); foot.innerHTML = '';
   let primaryButton = null;
@@ -2082,7 +2331,7 @@ function exercisePicker(title,onChoose){
   nameInput.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();saveNew();}};
   const draw=()=>{
     const query=(search.value||'').trim().toLocaleLowerCase();
-    const matches=activeExercises().slice().sort(byName).filter(ex=>`${ex.name} ${ex.category||''} ${ex.equipment||''}`.toLocaleLowerCase().includes(query));
+    const matches=activeExercises().slice().sort((a,b)=>byName(a,b)||String(a.equipment||'').localeCompare(String(b.equipment||''))).filter(ex=>`${ex.name} ${ex.category||''} ${ex.equipment||''}`.toLocaleLowerCase().includes(query));
     list.innerHTML=`<button type="button" class="exercise-picker-option exercise-picker-create" data-exercise-pick="__new__"><span>＋ Create new exercise</span><small>Add to library</small></button>`+
       (matches.map(ex=>`<button type="button" class="exercise-picker-option" data-exercise-pick="${esc(ex.id)}"><span>${esc(ex.name)}</span><small>${esc([ex.category,ex.equipment].filter(Boolean).join(' · '))}</small></button>`).join('')||'<p class="small muted">No matching exercises.</p>');
     list.querySelectorAll('[data-exercise-pick]').forEach(button=>button.onclick=async()=>{if(button.dataset.exercisePick==='__new__'){showCreate();return;}const result=await onChoose(button.dataset.exercisePick);if(result===false)return;if(dlg.open)dlg.close();});
@@ -2192,8 +2441,12 @@ const numVal = id => { const v = val(id); return v === '' ? null : Number(v); };
    Schema versions. meta/schemaVersion = { version, at }. migrate() runs on boot, import and file-open.
    v1: ids and createdAt/updatedAt inside every document; logs in one shape (entries[].sets[] with
    weight / reps / actualRPE); hint fields (lastWeight / lastReps) stripped from saved sets.
+   v2: starter exercises get the same id on every device (migrateSeedIds).
+   v3: the starter equipment variants are added to existing libraries (addStarterVariants).
+   v4: bar movements saved before the bar was recorded (plates only) get the bar added and recorded
+       (backfillBarWeights; also run after a sync pull and an import).
 ----------------------------------------------------------------*/
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 4;
 const LEGACY_LOG_LISTS = ['exercises', 'workoutEntries', 'movements', 'lifts'];
 const SET_ALIASES = ['kg', 'load', 'rep', 'actualWeight', 'actualReps', 'rpe'];
 function normalizeSetV1(s, i){
@@ -2279,6 +2532,9 @@ async function migrate(fromVersion, opts = {}){
     invalidateLogIndex(); invalidateAttIndex();
   }
   if (fromVersion < 2){ try { n += await migrateSeedIds(); } catch(e){ console.warn('Starter-exercise ids were not unified', e); } }
+  if (fromVersion < 3){ try { n += await addStarterVariants(); } catch(e){ console.warn('Starter equipment variants were not added', e); } }
+  // (every time, not only from v3: an imported backup can bring plates-only sessions; entries with a bar are skipped)
+  try { n += await backfillBarWeights(); } catch(e){ console.warn('The bar was not added to older sessions', e); }
   await Store.putMeta('schemaVersion', { version:SCHEMA_VERSION, at:new Date().toISOString() });
   return n;
 }
@@ -2642,6 +2898,10 @@ const Sync = {
       }
     }
     await Store.putMeta('syncCursor', cursors);
+    // The same exercise arriving under two ids (e.g. a starter variant here, the coach's own from the phone) becomes one.
+    if (changed && this.role !== 'assistant'){ try { await mergeDuplicateExercises(); } catch(e){ console.warn('Duplicate exercises were not merged', e); } }
+    // Sessions from a device still on an older version (plates only, no bar) get the bar, like the ones here.
+    if (changed && this.role !== 'assistant'){ try { await backfillBarWeights(); } catch(e){ console.warn('The bar was not added to synced sessions', e); } }
     if (changed){ invalidateLogIndex(); invalidateAttIndex(); if (!sessionOpen()) render({ keepScroll:true }); }
     if (this.notes.length){ const n = this.notes.splice(0).filter((x, i, a) => a.indexOf(x) === i); n.forEach(x => toast(x)); }
   },
@@ -3828,10 +4088,10 @@ Object.assign(Sync, {
   /* An older build stored the whole library as one row (id "library"): add what is missing here by name, then retire it. */
   async mergeLegacyLibrary(row){
     if (!row.deleted_at && row.data && Array.isArray(row.data.list)){
-      const names = new Set(S.exercises.map(e => normExName(e.name))), add = [];
-      for (const e of row.data.list){
-        if (!e || typeof e.name !== 'string' || !SAFE_ID.test(String(e.id)) || names.has(normExName(e.name)) || S.exercises.some(x => x.id === e.id)) continue;
-        add.push(e); names.add(normExName(e.name));
+      const add = [];
+      for (const e of row.data.list){   // (a variant with other equipment is a different exercise, not a duplicate)
+        if (!e || typeof e.name !== 'string' || !SAFE_ID.test(String(e.id)) || S.exercises.some(x => x.id === e.id) || findExerciseVariant([...S.exercises, ...add], e.name, e.equipment)) continue;
+        add.push(e);
       }
       if (add.length) await saveExerciseList([...S.exercises, ...add]);
     }
@@ -3849,19 +4109,30 @@ Object.assign(Sync, {
 /* Schema v2: starter exercises get the same id on every device. Old random starter ids are remapped by name in the
    library, programs, logs and any open sessions. */
 async function migrateSeedIds(){
-  const seeds = new Map(SEED_EXERCISES.map(e => [normExName(e.name), e]));
+  const seeds = new Map(SEED_EXERCISES.filter(e => !isSeedVariant(e)).map(e => [normExName(e.name), e]));   // (the original of each name)
   const have = new Set(S.exercises.map(e => e.id)), map = {}, claimed = new Set();
   const next = S.exercises.map(e => {
     const s = seeds.get(normExName(e.name));
     if (!s || e.id === s.id || have.has(s.id) || claimed.has(s.id)) return e;
+    if (e.equipment && normExName(e.equipment) !== normExName(s.equipment)) return e;   // a variant, not the starter exercise
     claimed.add(s.id); map[e.id] = s.id; return { ...e, id:s.id };
   });
   if (!Object.keys(map).length) return 0;
   if (!(await saveExerciseList(next))) throw new Error('Could not save the exercise library');
-  const progPairs = [], logPairs = [];
+  await relinkExerciseIds(map);
+  return Object.keys(map).length;
+}
+/* Points programs, conditioning stations, saved sessions and open workouts from one exercise id to another
+   ({ oldId:newId }). Only the link changes: what was logged (names, sets, notes) is left exactly as it was. */
+async function relinkExerciseIds(map){
+  const progPairs = [], condPairs = [], logPairs = [];
   for (const [id, p] of Object.entries(S.programs)){
     let ch = false; (p.days || []).forEach(d => (d.items || []).forEach(it => { if (map[it.exId]){ it.exId = map[it.exId]; ch = true; } }));
     if (ch) progPairs.push([id, p]);
+  }
+  for (const [id, w] of Object.entries(S.conditioning)){
+    let ch = false; (w.blocks || []).forEach(b => (b.steps || []).forEach(s => { if (map[s.exId]){ s.exId = map[s.exId]; ch = true; } }));
+    if (ch) condPairs.push([id, w]);
   }
   for (const [id, l] of Object.entries(S.logs)){
     let ch = false; workoutLogEntries(l).forEach(e => { for (const k of ['exId', 'exerciseId', 'movementId']) if (map[e[k]]){ e[k] = map[e[k]]; ch = true; } });
@@ -3869,11 +4140,55 @@ async function migrateSeedIds(){
   }
   await Store.batch(async () => {
     if (progPairs.length) await Store.bulkPut('programs', progPairs, S.programs);
+    if (condPairs.length) await Store.bulkPut('conditioning', condPairs, S.conditioning);
     if (logPairs.length) await Store.bulkPut('logs', logPairs, S.logs);
   });
   const fix = dr => ((dr && dr.entries) || []).forEach(e => { if (map[e.exId]) e.exId = map[e.exId]; });
   fix(S.sel && S.sel.draft); fix(S.parkedWorkout && S.parkedWorkout.draft); S.sessions.forEach(r => fix(r.draft)); (S.recoveryArchive || []).forEach(r => fix(r.draft));
   invalidateLogIndex();
+  return logPairs.length;
+}
+/* Schema v3: the starter equipment variants come to an existing library.
+   - The coach already has it (same name and equipment): nothing to do.
+   - The coach has it under their own name ("DB RDL", "Romanian deadlift (dumbbell)", "Cable lateral raises"): that
+     exercise is edited to the starter name and equipment and keeps its id, so its sessions, PRs and programs stay
+     with it (its category is kept). The starter copy isn't added.
+   - Otherwise the starter variant is added. Every other exercise is left as it is.
+   Assistants get the library from their coach instead. */
+async function addStarterVariants(){
+  try { if (localStorage.getItem(LAST_ROLE_KEY) === 'assistant') return 0; } catch {}
+  let list = S.exercises.slice(), n = 0;
+  const used = new Set();
+  for (const s of SEED_EXERCISES.filter(isSeedVariant)){
+    if (list.some(e => e.id === s.id || (normExName(e.name) === normExName(s.name) && normExName(e.equipment) === normExName(s.equipment)))) continue;
+    const want = variantKeyOf(s.name, s.equipment);
+    const mine = list.find(e => !e.archived && !String(e.id).startsWith('seed-') && !used.has(e.id) && (k => k.base === want.base && k.equipment === want.equipment)(variantKeyOf(e.name, e.equipment)));
+    if (mine){
+      used.add(mine.id);
+      list = list.map(e => e === mine ? { ...e, name:s.name, equipment:s.equipment, category:(e.category && e.category !== 'Other') ? e.category : s.category } : e);
+    } else list.push({ ...s });
+    n++;
+  }
+  if (n && !(await saveExerciseList(list))) throw new Error('Could not save the exercise library');
+  return n;
+}
+/* After a sync two devices can each have the same exercise (same name and equipment) under different ids — for
+   example a starter variant added on one and the coach's own edited on the other. They're merged into one: the
+   coach's own is kept (or, between two of the same kind, the one with the smaller id, so every device picks the same),
+   everything that used the other is relinked to it, and the other leaves the library (on every device, via sync). */
+async function mergeDuplicateExercises(){
+  const groups = new Map();
+  S.exercises.forEach(e => { if (e.archived) return; const k = normExName(e.name) + '|' + normExName(e.equipment); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(e); });
+  const map = {};
+  for (const list of groups.values()){
+    if (list.length < 2) continue;
+    const rank = e => (String(e.id).startsWith('seed-') ? '1' : '0') + String(e.id);
+    const keep = list.slice().sort((a, b) => rank(a).localeCompare(rank(b)))[0];
+    list.forEach(e => { if (e !== keep) map[e.id] = keep.id; });
+  }
+  if (!Object.keys(map).length) return 0;
+  if (!(await saveExerciseList(S.exercises.filter(e => !map[e.id])))) return 0;
+  await relinkExerciseIds(map);
   return Object.keys(map).length;
 }
 
@@ -4402,7 +4717,8 @@ async function syncWakeLock(){
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')syncWakeLock();});
 
 /* ---- sticky bottom timer bar (session clock + rest clock) shown while a workout is on screen ---- */
-function timerBarActive(){return !!((S.sel?.draft&&!S.sel.draft.editing)||(S.sel?.conditioningClient&&S.sel?.conditioningSession));}
+// Strength workouts only: on a conditioning screen the block timer is the only timer, and the bar would cover its buttons.
+function timerBarActive(){return !!(S.sel?.draft&&!S.sel.draft.editing);}
 function renderTimerBar(){
   let bar=document.getElementById('timerBar');
   if(!bar){bar=document.createElement('div');bar.id='timerBar';bar.className='timer-bar';bar.hidden=true;document.body.appendChild(bar);}
@@ -4751,22 +5067,26 @@ function exBlock(en, ei){
   const previous=exerciseHistory(S.sel.draft.clientId,en.exId).last;
   const groupLabel=groupPositionLabel(en,ei);
   const suggestion=entrySuggestion(en),best=en.best;
-  const draft=S.sel.draft,finished=!draft.editing&&entryFinished(en)&&(!en.groupId||draft.entries.filter(x=>x.groupId===en.groupId).every(entryFinished)),folded=exerciseFolded(draft,ei);
+  const draft=S.sel.draft,finished=!draft.editing&&entryFinished(en)&&(!en.groupId||draft.entries.filter(x=>x.groupId===en.groupId).every(entryFinished)),folded=exerciseFolded(draft,ei),wu=warmupFoldState(draft,en);
+  const firstWork=en.sets.find(x=>!isWarmupSet(x)),baseHint0=suggestion?.sets?.[0]?.weight??en.targetKg??(previous?previous.sets?.[0]?.weight??null:firstWork?.lastWeight??null);   // set 1's usual hint
   return `<div class="exblock${folded?' folded':''}${finished?' finished':''}" data-ei="${ei}" id="logger-ex-${ei}">
     <header${finished?` data-fold="${ei}" role="button" tabindex="0" aria-expanded="${!folded}" aria-label="${esc(en.name)}: ${folded?'show':'hide'} sets"`:''}><div><div class="exercise-title-line"><strong class="cond" style="font-size:1.15rem">${esc(en.name)}</strong>${groupLabel?`<span class="exercise-group-chip">${esc(groupLabel)}</span>`:''}</div>${finished?`<div class="exercise-done-summary"><span aria-hidden="true">✓</span> ${exerciseDoneSummary(en)}</div>`:''}</div>
       <div class="exhead-right">${best&&best.weight!=null?`<span class="exercise-best" title="Heaviest set logged for this client">Best ${esc(best.weight)} kg${best.reps!=null?' × '+esc(best.reps):''}${best.date?' · '+esc(shortDate(best.date)):''}</span>`:''}<details class="exercise-actions-menu"><summary aria-label="Exercise actions" title="Exercise actions">⋯</summary><div class="exercise-actions-pop">
-        <button type="button" data-move-ex="${ei}.-1" ${ei===0?'disabled':''}>Move up</button><button type="button" data-move-ex="${ei}.1" ${ei===S.sel.draft.entries.length-1?'disabled':''}>Move down</button><button type="button" data-session-group="superset" data-ei="${ei}">Create superset</button><button type="button" data-session-group="triset" data-ei="${ei}">Create triset</button><button type="button" data-set-type="${ei}">Set type</button><button type="button" data-set-notes="${ei}">Set notes</button><button type="button" data-replace-session="${ei}">Replace exercise</button><button type="button" data-rmex="${ei}" data-remove-action>Remove exercise</button>
+        ${S.sel.draft.entries.length>1?'<p class="exercise-actions-hint">Hold the name to move it</p>':''}<button type="button" data-warmups="${ei}">Add warm-up sets</button>${entryBar(en)?`<button type="button" data-plates="${ei}">Plates</button>`:''}<button type="button" data-session-group="superset" data-ei="${ei}">Create superset</button><button type="button" data-session-group="triset" data-ei="${ei}">Create triset</button><button type="button" data-set-type="${ei}">Set type</button><button type="button" data-set-notes="${ei}">Set notes</button><button type="button" data-replace-session="${ei}">Replace exercise</button><button type="button" data-rmex="${ei}" data-remove-action>Remove exercise</button>
       </div></details></div>
     </header>
     ${exerciseTargetHTML(en,suggestion)}
-    <div class="setheads"><span>Set</span><span>Previous</span><span>Kg</span><span>Reps</span><span></span></div>
-    ${en.sets.map((rawSet,si)=>{const s=ensureSetDefaults(rawSet),prev=previous?.sets?.[si],lastWeight=previous?(prev?.weight??null):s.lastWeight,lastReps=previous?(prev?.reps??null):s.lastReps,sug=suggestion?.sets?.[si],hintWeight=sug?.weight??en.targetKg??lastWeight,hintReps=sug?.reps??lastReps;return `
-      <div class="set-swipe-wrap"><span class="set-swipe-action copy" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></span><span class="set-swipe-action delete" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></span><div class="setrow ${s.done?'done':''}" data-si="${si}"><span class="idx num">${si+1}</span><span class="last num">${lastWeight!=null||lastReps!=null?esc((lastWeight??'—')+'kg × '+(lastReps??'—')):'—'}</span>
-        <input type="number" inputmode="decimal" step="0.5" class="num" data-set-input="weight" value="${esc(s.weight??'')}" placeholder="${esc(hintWeight??'')}" aria-label="Kilograms for set ${si+1}">
-        <input type="number" inputmode="numeric" class="num" data-set-input="reps" value="${esc(s.reps??'')}" placeholder="${esc(hintReps??'')}" aria-label="Reps for set ${si+1}">
-      <button class="tick" data-done="1" aria-pressed="${s.done?'true':'false'}" aria-label="${s.done?'Reopen':'Mark'} set ${si+1} ${s.done?'':'complete'}">${s.done?'✓':''}</button>
+    <div class="setheads"><span>Set</span><span>Previous</span>${kgHeadHTML(en,ei)}<span>Reps</span><span></span></div>
+    ${en.sets.map((rawSet,si)=>{const s=ensureSetDefaults(rawSet),wi=workingIndexOf(en.sets,si),warm=wi<0;   // (warm-ups: W badge, no previous / hints)
+      if(warm&&wu.done)return '';   // warm-ups all ticked: off the screen (still in the session, so saved and in History)
+      const prev=warm?null:previous?.sets?.[wi],lastWeight=warm?null:previous?(prev?.weight??null):s.lastWeight,lastReps=warm?null:previous?(prev?.reps??null):s.lastReps,sug=warm?null:suggestion?.sets?.[wi],hintWeight=warm?null:warmupShiftedHint(en,wi,sug?.weight??en.targetKg??lastWeight,baseHint0),hintReps=warm?null:sug?.reps??lastReps;return `
+      <div class="set-swipe-wrap"><span class="set-swipe-action copy" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></span><span class="set-swipe-action delete" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></span><div class="setrow ${s.done?'done':''}${wu.done&&si===wu.next?' is-next':''}" data-si="${si}">${warm?'<span class="idx set-w" title="Warm-up set">W</span>':`<span class="idx num">${wi+1}</span>`}<span class="last num">${lastWeight!=null||lastReps!=null?esc((lastWeight??'—')+'kg × '+(lastReps??'—')):'—'}</span>
+        ${entryBar(en)?`<label class="kg-cell"><input type="number" inputmode="decimal" step="0.25" class="num" data-set-input="weight" value="${esc(kgBoxValue(en,s.weight))}" placeholder="${esc(kgBoxValue(en,hintWeight))}" aria-label="Kilograms per side for ${warm?'warm-up set':'set '+(wi+1)}" aria-describedby="kgt-${ei}-${si}"><small class="kg-total" id="kgt-${ei}-${si}">${esc(kgTotalLabel(en,s.weight))}</small></label>`
+          :`<input type="number" inputmode="decimal" step="0.5" class="num" data-set-input="weight" value="${esc(s.weight??'')}" placeholder="${esc(hintWeight??'')}" aria-label="Kilograms for ${warm?'warm-up set':'set '+(wi+1)}">`}
+        <input type="number" inputmode="numeric" class="num" data-set-input="reps" value="${esc(s.reps??'')}" placeholder="${esc(hintReps??'')}" aria-label="Reps for ${warm?'warm-up set':'set '+(wi+1)}">
+      <button class="tick" data-done="1" aria-pressed="${s.done?'true':'false'}" aria-label="${s.done?'Reopen':'Mark'} ${warm?'warm-up set':'set '+(wi+1)} ${s.done?'':'complete'}">${s.done?'✓':''}</button>
       </div></div>`}).join('')}
-    <div style="padding:.4rem .7rem"><button class="btn sm ghost" data-addset="${ei}">Add set</button></div>
+    <div class="exblock-foot"><button class="btn sm ghost" data-addset="${ei}">Add set</button></div>
   </div>`;
 }
 
@@ -4812,9 +5132,13 @@ function buildRepeatWorkoutDraft(cid,log){
   const entries=source.map(item=>{
     const exId=loggedExerciseId(item)??item.exId, name=loggedExerciseName(item)||item.name||exName(exId),{last,best}=exerciseHistory(cid,exId);
     const sets=loggedExerciseSets(item),lastLoggedSet=Math.max(0,...sets.map((set,index)=>Number(set?.setNumber)||index+1)),count=Math.max(1,sets.length,lastLoggedSet,Number(item.targetSets??item.sets)||0);
-    return {exId,name,groupId:item.groupId||null,groupType:item.groupType||null,target:item.target||'',targetSets:item.targetSets||item.sets||'',targetReps:item.targetReps||item.reps||'',targetLoad:item.targetLoad||item.load||'',targetRPE:item.targetRPE||item.rpe||'',targetRIR:item.targetRIR||item.rir||'',targetTempo:item.targetTempo||item.tempo||'',targetNotes:item.targetNotes||item.notes||'',targetRest:item.targetRest||item.rest||'90s',lastDate:last?.date||null,best,sets:Array.from({length:count},(_,i)=>({weight:null,reps:null,done:false,actualRPE:null,actualRIR:null,setType:'working',note:'',lastWeight:last?.sets?.[i]?.weight??null,lastReps:last?.sets?.[i]?.reps??null}))};
+    return {exId,name,groupId:item.groupId||null,groupType:item.groupType||null,target:item.target||'',targetSets:item.targetSets||item.sets||'',targetReps:item.targetReps||item.reps||'',targetLoad:item.targetLoad||item.load||'',targetRPE:item.targetRPE||item.rpe||'',targetRIR:item.targetRIR||item.rir||'',targetTempo:item.targetTempo||item.tempo||'',targetNotes:item.targetNotes||item.notes||'',targetRest:item.targetRest||item.rest||'90s',lastDate:last?.date||null,best,sets:(warmFlags=>Array.from({length:count},(_,i)=>{const wi=warmFlags[i]?-1:warmFlags.slice(0,i).filter(w=>!w).length;   // warm-ups stay warm-ups; hints follow the working sets
+      const w0=warmFlags[i]?Number(setWeight(sets[i])):NaN,r0=warmFlags[i]?Number(setReps(sets[i])):NaN;   // warm-ups come back filled in (they're planned, not a result)
+      return {weight:w0>0?w0:null,reps:r0>0?r0:null,done:false,actualRPE:null,actualRIR:null,setType:warmFlags[i]?'warmup':'working',note:'',lastWeight:wi<0?null:last?.sets?.[wi]?.weight??null,lastReps:wi<0?null:last?.sets?.[wi]?.reps??null};}))(Array.from({length:count},(_,i)=>isWarmupSet(sets[i])))};
   });
-  const draft={id:uid(),clientId:cid,date:todayISO(),dayLabel:day?.name||log.dayLabel||'Open session',programId,week:client.currentWeek||log.week||1,entries,notes:'',usePack:true,startedAt:Date.now(),restRemainingMs:90000,restDurationSeconds:90,restRunning:false,restEndAt:null,autoRestAfterSet:true};
+  // The session being repeated: each set's weight in it (set 2 → set 2) for the Plates button, and its bar.
+  if(loggedEntries.length)entries.forEach((en,k)=>{const from=loggedEntries[k]||{},fs=loggedExerciseSets(from);en.sets.forEach((st,n)=>{const w=Number(setWeight(fs[n]));if(w>0)st.repeatWeight=w;});if(from.bar)en.bar=from.bar;});
+  const draft={id:uid(),clientId:cid,date:todayISO(),dayLabel:day?.name||log.dayLabel||'Open session',programId,week:client.currentWeek||log.week||1,entries,notes:'',usePack:true,startedAt:Date.now(),restRemainingMs:90000,restDurationSeconds:90,restRunning:false,restEndAt:null,autoRestAfterSet:true,...(loggedEntries.length?{repeatOf:log.id}:{})};
   return {draft,dayIndex:dayIndex>=0?dayIndex:0};
 }
 /* ---- editing a saved session: reopen it in the logger, save overwrites the same log ---- */
@@ -4826,7 +5150,7 @@ function beginEditSession(logId){
   const entries=workoutLogEntries(log).map(item=>{
     const exId=loggedExerciseId(item)??item.exId,name=loggedExerciseName(item)||exName(exId);
     const sets=loggedExerciseSets(item).map(s=>ensureSetDefaults({...s,weight:setWeight(s),reps:setReps(s),actualRPE:setRPE(s)}));
-    return {exId,name,...(item.groupId?{groupId:item.groupId,groupType:item.groupType}:{groupId:null,groupType:null}),target:item.target||'',targetSets:item.targetSets||'',targetReps:item.targetReps||'',targetLoad:item.targetLoad||'',targetRPE:item.targetRPE||'',targetRIR:item.targetRIR||'',targetTempo:item.targetTempo||'',targetNotes:item.targetNotes||'',targetRest:item.targetRest||'90s',sets:sets.length?sets:[ensureSetDefaults({weight:null,reps:null})]};
+    return {exId,name,...(item.groupId?{groupId:item.groupId,groupType:item.groupType}:{groupId:null,groupType:null}),...(item.bar?{bar:item.bar}:{}),target:item.target||'',targetSets:item.targetSets||'',targetReps:item.targetReps||'',targetLoad:item.targetLoad||'',targetRPE:item.targetRPE||'',targetRIR:item.targetRIR||'',targetTempo:item.targetTempo||'',targetNotes:item.targetNotes||'',targetRest:item.targetRest||'90s',sets:sets.length?sets:[ensureSetDefaults({weight:null,reps:null})]};
   });
   const draft={...copy,id:logId,clientId:cid,entries,editing:true,
     editOriginal:{date:log.date,completedAt:log.completedAt??null,durationSeconds:Object.prototype.hasOwnProperty.call(log,'durationSeconds')?log.durationSeconds:undefined},
@@ -4955,24 +5279,27 @@ function deleteSetAt(ei,si){
 function copyPreviousSet(ei,si){
   const entry=S.sel.draft?.entries?.[ei],set=entry?.sets?.[si];
   // This set from the client's last session; if there is none, the set just above it in this workout.
-  const last=entry&&exerciseHistory(S.sel.draft.clientId,entry.exId).last?.sets?.[si],above=si>0?entry?.sets?.[si-1]:null;
+  const wi=entry?workingIndexOf(entry.sets,si):-1;   // (a warm-up copies the set above it)
+  const last=entry&&wi>=0?exerciseHistory(S.sel.draft.clientId,entry.exId).last?.sets?.[wi]:null,above=si>0?entry?.sets?.[si-1]:null;
   const previous=last&&(last.weight!=null||last.reps!=null)?last:(above&&(above.weight!=null||above.reps!=null)?above:null);
   if(!previous||!set){toast('No previous set to copy');return;}
   set.weight=previous.weight??null;set.reps=previous.reps??null;set.done=false;
   // Ticking a set updates its row in place, so put the copied numbers in the boxes first.
   const row=document.querySelector(`.exblock[data-ei="${ei}"] .setrow[data-si="${si}"]`);
-  if(row){const kg=row.querySelector('[data-set-input="weight"]'),reps=row.querySelector('[data-set-input="reps"]');if(kg)kg.value=set.weight??'';if(reps)reps.value=set.reps??'';}
+  if(row){const kg=row.querySelector('[data-set-input="weight"]'),reps=row.querySelector('[data-set-input="reps"]');if(kg)kg.value=kgBoxValue(entry,set.weight);if(reps)reps.value=set.reps??'';const t=row.querySelector('.kg-total');if(t)t.textContent=kgTotalLabel(entry,set.weight);}
   if(set.weight!=null&&set.reps!=null)completeWorkoutSet(ei,si);else{markStrengthActivity();render();}
 }
 /* The kg × reps shown as grey hints in this set's boxes: the progression suggestion when
    there is one, otherwise the "Previous" numbers (same sources as exBlock). ✓ on an empty set uses these. */
 function previousSetValues(ei,si){
   const draft=S.sel?.draft,entry=draft?.entries?.[ei],set=entry?.sets?.[si];if(!entry)return {weight:null,reps:null};
-  const previous=exerciseHistory(draft.clientId,entry.exId).last,prev=previous?.sets?.[si];
   const num=v=>v==null||v===''||!Number.isFinite(Number(v))?null:Number(v);   // older logs may hold "60" as text
+  const wi=workingIndexOf(entry.sets,si);if(wi<0)return {weight:num(set?.weight),reps:num(set?.reps)};   // a warm-up has its own numbers
+  const previous=exerciseHistory(draft.clientId,entry.exId).last,prev=previous?.sets?.[wi];
   const last=previous?{weight:num(prev?.weight),reps:num(prev?.reps)}:{weight:num(set?.lastWeight),reps:num(set?.lastReps)};
-  const sug=entrySuggestion(entry)?.sets?.[si];
-  return {weight:num(sug?.weight)??last.weight,reps:num(sug?.reps)??last.reps};
+  const sugs=entrySuggestion(entry)?.sets,sug=sugs?.[wi],first=entry.sets.find(x=>!isWarmupSet(x));
+  const base0=num(sugs?.[0]?.weight)??(previous?num(previous.sets?.[0]?.weight):num(first?.lastWeight));
+  return {weight:warmupShiftedHint(entry,wi,num(sug?.weight)??last.weight,base0),reps:num(sug?.reps)??last.reps};
 }
 /* opts.advance: after a superset set, move the cursor to the same set of the next exercise
    (used for Enter and the ✓ tap; not when the set completes because a box lost focus). */
@@ -4985,6 +5312,7 @@ function completeWorkoutSet(ei,si,opts={}){
     const seconds=Number(draft.restDurationSeconds)||90;draft.restRemainingMs=seconds*1000;draft.restEndAt=Date.now()+draft.restRemainingMs;draft.restRunning=true;
   }
   const row=document.querySelector(`.exblock[data-ei="${ei}"] .setrow[data-si="${si}"]`),tick=row?.querySelector('[data-done]');
+  row?.classList.remove('is-next');   // the recommended first set is done
   if(row)row.classList.add('done');if(tick){tick.textContent='✓';tick.setAttribute('aria-label',`Reopen set ${si+1}`);tick.setAttribute('aria-pressed','true');}
   updateWorkoutTimerUI();markStrengthActivity();
   if(nextMember!=null&&opts.advance){   // superset / tri-set: slide to the next exercise's same set
@@ -4996,6 +5324,7 @@ function completeWorkoutSet(ei,si,opts={}){
       const row=document.querySelector(`.exblock[data-ei="${first}"] .setrow[data-si="${si+1}"]`);if(row)row.scrollIntoView({block:'center',behavior:'smooth'});
     }
   }
+  if(isWarmupSet(set))foldDoneWarmups(ei);
   foldFinishedExercises(ei);
   return true;
 }
@@ -5028,6 +5357,96 @@ function foldFinishedExercises(ei){
     scheduleWorkoutAutosave();
   },650);
 }
+/* ---- Done warm-ups leave the screen: once every warm-up of an exercise is ticked they're hidden from the logger (they
+   stay in the session, so they're saved and shown in History), the first working set gets its kg and reps filled in
+   (still editable) and is marked as next. Its numbers: the work set chosen in the warm-up pop-up (entry.warmupWork;
+   the other sets' hints shift with it), else the usual suggestion / previous. Not while a saved session is edited. ---- */
+function warmupFoldState(draft,en){
+  const idx=[];(en.sets||[]).forEach((s,i)=>{if(isWarmupSet(s))idx.push(i);});
+  const done=!draft.editing&&idx.length>0&&idx.every(i=>en.sets[i].done),first=en.sets.findIndex(s=>!isWarmupSet(s));
+  return {idx,done,next:first>=0&&!en.sets[first].done?first:-1};
+}
+/* The work set chosen in the warm-up pop-up moves the working sets' hints with it: set 1 gets it, the others shift by
+   the same amount (planned 100 / 90 / 80, 105 chosen → 105 / 95 / 85). base: this set's usual hint; base0: set 1's. */
+function warmupShiftedHint(en,wi,base,base0){
+  const w=Number(en.warmupWork);if(!(w>0))return base;
+  if(wi===0)return w;
+  return base==null||base===''||!(Number(base0)>0)?base:round2(Number(base)+w-Number(base0));
+}
+function foldDoneWarmups(ei){
+  const draft=S.sel?.draft,en=draft?.entries?.[ei];if(!en||draft.editing||!warmupFoldState(draft,en).done||entryFinished(en))return;
+  setTimeout(()=>{   // a moment to see the last ✓
+    const st=S.sel?.draft===draft&&warmupFoldState(draft,en);if(!st||!st.done)return;   // gone, or a warm-up was reopened meanwhile
+    if(st.next>=0){   // fill in the next set (only boxes still empty: anything typed stays)
+      const s=en.sets[st.next],pv=previousSetValues(ei,st.next),empty=v=>v==null||v==='';
+      if(empty(s.weight)&&pv.weight!=null)s.weight=pv.weight;
+      if(empty(s.reps)&&pv.reps!=null)s.reps=pv.reps;
+    }
+    render({keepScroll:true});
+    const row=document.querySelector(`.exblock[data-ei="${ei}"] .setrow.is-next`);
+    if(row)row.scrollIntoView({block:'center',behavior:'smooth'});
+    markStrengthActivity();
+  },650);
+}
+/* Press and hold an exercise's title, then drag it up or down to reorder the workout (a superset moves as one
+   block). A quick swipe still scrolls: the hold only starts if the finger stays put for HOLD_MS. */
+const HOLD_MS=450,HOLD_SLOP=8;
+function wireExerciseDrag(m){
+  const draft=S.sel&&S.sel.draft;if(!draft||draft.entries.length<2)return;
+  const unitsOf=()=>{const units=[];draft.entries.forEach((en,i)=>{const last=units[units.length-1];if(en.groupId&&last&&draft.entries[last[0]].groupId===en.groupId)last.push(i);else units.push([i]);});return units;};
+  m.querySelectorAll('.exblock[data-ei]>header').forEach(head=>{
+    const block=head.parentElement,ei=Number(block.dataset.ei);
+    let timer=null,start=null,drag=null,suppressClick=false;
+    head.addEventListener('contextmenu',e=>{if(timer||drag)e.preventDefault();});
+    const cancelHold=()=>{clearTimeout(timer);timer=null;};
+    const begin=(x,y)=>{
+      timer=null;
+      const units=unitsOf(),u=units.findIndex(un=>un.includes(ei));if(u<0)return;
+      const mine=units[u].map(i=>m.querySelector(`.exblock[data-ei="${i}"]`)).filter(Boolean);
+      drag={u,units,mine,startY:y,lastY:y,target:u,raf:0};
+      document.querySelectorAll('.exercise-actions-menu[open]').forEach(d=>d.removeAttribute('open'));
+      mine.forEach(b=>b.classList.add('ex-dragging'));document.body.classList.add('ex-reordering');
+      try{navigator.vibrate&&navigator.vibrate(15);}catch{}
+      const loop=()=>{if(!drag)return;const edge=70,y2=drag.lastY;if(y2<edge)window.scrollBy(0,-10);else if(y2>innerHeight-edge)window.scrollBy(0,10);move(drag.lastY);drag.raf=requestAnimationFrame(loop);};
+      drag.raf=requestAnimationFrame(loop);
+    };
+    const move=y=>{
+      if(!drag)return;drag.lastY=y;
+      const dy=y-drag.startY;drag.mine.forEach(b=>b.style.transform=`translateY(${dy}px)`);
+      // where it would land: among the other blocks, before the first whose middle is below the finger
+      const others=drag.units.filter((_,k)=>k!==drag.u).map(un=>un.map(i=>m.querySelector(`.exblock[data-ei="${i}"]`)).filter(Boolean));
+      let idx=others.findIndex(bs=>{const a=bs[0].getBoundingClientRect(),z=bs[bs.length-1].getBoundingClientRect();return y<(a.top+z.bottom)/2;});
+      if(idx<0)idx=others.length;drag.target=idx;
+      m.querySelectorAll('.drop-before,.drop-after').forEach(b=>b.classList.remove('drop-before','drop-after'));
+      if(idx!==drag.u){if(idx<others.length)others[idx][0].classList.add('drop-before');else{const l=others[others.length-1];l[l.length-1].classList.add('drop-after');}}
+    };
+    const end=commit=>{
+      cancelHold();if(!drag)return;
+      const {u,target,mine,raf}=drag;drag=null;cancelAnimationFrame(raf);
+      mine.forEach(b=>{b.classList.remove('ex-dragging');b.style.transform='';});document.body.classList.remove('ex-reordering');
+      m.querySelectorAll('.drop-before,.drop-after').forEach(b=>b.classList.remove('drop-before','drop-after'));
+      suppressClick=true;setTimeout(()=>{suppressClick=false;},400);
+      if(!commit||target===u)return;
+      // step the unit there with the same move as the old Move up / Move down, so supersets stay together
+      const en=draft.entries[ei],dir=target>u?1:-1;let steps=Math.abs(target-u);
+      while(steps-->0&&moveExerciseUnit(draft.entries,draft.entries.indexOf(en),dir)){}
+      markStrengthActivity();render({keepScroll:true});
+      const moved=document.querySelector(`.exblock[data-ei="${draft.entries.indexOf(en)}"]`);if(moved){moved.classList.add('ex-dropped');setTimeout(()=>moved.classList.remove('ex-dropped'),600);}
+    };
+    const skip=t=>t.closest('details,summary,button,input,select,textarea,a');
+    // touch: scrolling stays normal until the hold starts; then the page is held still while dragging
+    head.addEventListener('touchstart',e=>{if(e.touches.length!==1||skip(e.target))return;const t=e.touches[0];start={x:t.clientX,y:t.clientY};cancelHold();timer=setTimeout(()=>begin(start.x,start.y),HOLD_MS);},{passive:true});
+    head.addEventListener('touchmove',e=>{const t=e.touches[0];if(drag){e.preventDefault();move(t.clientY);return;}if(timer&&start&&(Math.abs(t.clientX-start.x)>HOLD_SLOP||Math.abs(t.clientY-start.y)>HOLD_SLOP))cancelHold();},{passive:false});
+    head.addEventListener('touchend',()=>end(true));head.addEventListener('touchcancel',()=>end(false));
+    // mouse (computers): the same press and hold
+    head.addEventListener('mousedown',e=>{if(e.button!==0||skip(e.target))return;start={x:e.clientX,y:e.clientY};cancelHold();timer=setTimeout(()=>begin(start.x,start.y),HOLD_MS);
+      const mm=ev=>{if(drag){ev.preventDefault();move(ev.clientY);}else if(timer&&(Math.abs(ev.clientX-start.x)>HOLD_SLOP||Math.abs(ev.clientY-start.y)>HOLD_SLOP))cancelHold();};
+      const mu=()=>{document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);end(true);};
+      document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu);});
+    // a hold that ends without moving is not a tap (it doesn't fold or open the exercise)
+    head.addEventListener('click',e=>{if(suppressClick){e.stopImmediatePropagation();e.preventDefault();suppressClick=false;}},true);
+  });
+}
 function exerciseDoneSummary(e){
   const done=e.sets.filter(s=>s.done),top=done.filter(s=>s.weight!=null).sort((a,b)=>Number(b.weight)-Number(a.weight))[0];
   return `${done.length} set${done.length===1?'':'s'}${top?` · ${esc(top.weight)} kg × ${esc(top.reps??'—')}`:''}`;
@@ -5041,7 +5460,7 @@ function conditioningWorkoutSheet(){
   const options=blocks.map((b,i)=>`<option value="${i}" ${i===selected?'selected':''}>Block ${i+1} · ${esc(b.name||conditioningModeName(b.mode))}</option>`).join('');
   const combined=S.sel.conditioningMode==='both';
   return `<div class="panel spread"><div><span class="eyebrow">${combined?'COMBINED SESSION':sessionClientIds(ss)?'GROUP CONDITIONING':'CONDITIONING SESSION'}</span><h2>${esc(clientNamesOf(cid,ss))} · ${esc(w.name||'Conditioning')}</h2></div><button class="btn ghost" id="leaveConditioningWorkout">${combined?'Return to strength':'Back to profile (keep session)'}</button></div>
-    <section class="session-timer panel" aria-label="Workout session and rest timers"><div class="session-clock-block"><span class="timer-kicker">SESSION</span><strong id="sessionClock" class="session-clock num">00:00:00</strong><span id="exerciseProgress" class="timer-caption"></span></div><div class="rest-clock-block"><div class="rest-clock-title"><span class="timer-kicker">REST</span></div><button type="button" id="restClock" class="rest-clock rest-clock-edit num" role="timer" aria-label="Edit rest timer duration">01:30</button><div class="rest-controls"><button type="button" class="btn btn-light" id="restToggle">Start 90s</button><button type="button" class="btn btn-light" id="restReset" aria-label="Reset rest timer to 90 seconds">Reset</button></div></div></section>
+    <section class="session-timer session-only panel" aria-label="Session timer"><div class="session-clock-block"><span class="timer-kicker">SESSION</span><strong id="sessionClock" class="session-clock num">00:00:00</strong><span id="exerciseProgress" class="timer-caption"></span></div></section>
     ${w.warmup?`<section class="conditioning-bookend"><span class="conditioning-section-mark">WUP</span><div><h3>Warm-up</h3><p>${esc(w.warmup).replace(/\n/g,'<br>')}</p></div></section>`:''}
      <section class="conditioning-timer panel"><div class="conditioning-timer-config"><div><span class="timer-kicker">${esc(conditioningModeName(blocks[selected]?.mode||''))}</span><h3>${esc(blocks[selected]?.name||'Conditioning timer')}</h3></div><label class="field"><span>Block</span><select id="conditioningTimerBlock" ${ss.completed?'disabled data-locked="1"':(conditioningTimerBusy()?'disabled':'')}>${options||'<option value="">No blocks</option>'}</select></label></div>
        ${ss.completed?'<p class="conditioning-session-complete-note">Conditioning complete. Review the block summary, then save this session.</p>':''}
@@ -5050,7 +5469,7 @@ function conditioningWorkoutSheet(){
        </section>
     ${conditioningResultsPanelHTML(ss,blocks)}
     ${w.finisher?`<section class="conditioning-bookend conditioning-finisher"><span class="conditioning-section-mark">FIN</span><div><h3>Finisher</h3><p>${esc(w.finisher).replace(/\n/g,'<br>')}</p></div></section>`:''}
-     <div class="panel spread"><span></span><div class="row tight">${!combined?`<button class="btn ghost" id="addNormalProgram">${ss.completed?'Go to normal program':'Add normal program'}</button>`:''}<button class="btn primary" id="completeConditioningWorkout">${ss.completed?'Save session':combined?'Finish conditioning':'Complete conditioning session'}</button></div></div>`;
+     <div class="panel spread"><span></span><div class="row tight">${!combined?`<button class="btn ghost" id="addNormalProgram">${ss.completed?'Go to normal program':'Add normal program'}</button>`:''}<button class="btn primary" id="completeConditioningWorkout">${ss.completed?'Save session':combined?'Finish conditioning':'Complete conditioning session'}</button><button type="button" class="btn danger" id="cancelConditioningWorkout">${combined?'Remove conditioning':'Cancel session'}</button></div></div>`;
 }
 
 /* ============================ CALENDAR ============================ */
@@ -5105,7 +5524,7 @@ function viewCalendar(){
     <div class="cal-grid">${cells.join('')}</div>
     <div class="row tight small muted" style="margin-top:.6rem">
       <span class="key"><i class="k-slot"></i> scheduled pairing</span>
-      <span class="key"><i class="k-slot" style="background:var(--plate-green)"></i> solo client</span>
+      <span class="key"><i class="k-slot" style="background:var(--series-2)"></i> solo client</span>
       <span class="key"><i class="k-slot" style="background:var(--ink-2)"></i> one-off / moved</span>
       <span class="key"><i class="k-att"></i> attended</span>
       <span class="key"><i class="k-miss"></i> no-show</span>
@@ -5584,7 +6003,7 @@ function createConditioningTimer(){
     timeline={segs,total:t,steps,rounds};
   }
   const snapshot=()=>state?{...state,leadLabel:config.getReadyLabel||'Get ready',mode:config.mode,rounds:config.mode==='forTime'?(Number(config.targetRounds)||null):(timeline?timeline.rounds:(config.rounds||null)),intervalSeconds:Math.max(5,Number(config.intervalSeconds)||60),capSeconds:(Number(config.capMinutes)||0)*60}:null;
-  const elapsedNow=()=>Math.max(0,Math.floor((Date.now()-state.startedAt-state.pausedMs)/1000));
+  const elapsedNow=()=>Math.max(0,Math.floor(((state.paused&&state.pauseAt?state.pauseAt:Date.now())-state.startedAt-state.pausedMs)/1000));
   const emit=event=>{const snap=snapshot();listener(event,snap);(listeners.get(event)||[]).forEach(fn=>fn(snap));};
   function stop(){if(tickHandle){clearInterval(tickHandle);tickHandle=null;}}
   function finish(){if(!state||state.complete)return;state.complete=true;state.running=false;state.paused=false;state.phase='complete';stop();emit('complete');}
@@ -5605,7 +6024,8 @@ function createConditioningTimer(){
     if(timeline){
       if(elapsed>=timeline.total){
         for(let n=state.roundsCompleted+1;n<=timeline.rounds;n++){state.roundsCompleted=n;state.round=n;emit('roundComplete');}
-        state.remaining=0;finish();return;
+        // (if the phone slept through the end, the block still lasted exactly its planned time)
+        state.elapsed=timeline.total;state.remaining=0;finish();return;
       }
       const idx=timeline.segs.findIndex(s=>elapsed<s.end),seg=timeline.segs[idx];
       phase=seg.phase;remaining=seg.end-elapsed;round=seg.round;
@@ -5617,21 +6037,25 @@ function createConditioningTimer(){
       const work=Math.max(1,Number(config.workSeconds)||30),rest=Math.max(0,Number(config.restSeconds)||0),rounds=Math.max(1,Number(config.rounds)||1),cycle=work+rest,total=rounds*work+Math.max(0,rounds-1)*rest;
       if(elapsed>=total){
         for(let n=state.roundsCompleted+1;n<=rounds;n++){state.roundsCompleted=n;state.round=n;emit('roundComplete');}
-        state.remaining=0;finish();return;
+        state.elapsed=total;state.remaining=0;finish();return;
       }
       round=Math.min(rounds,Math.floor(elapsed/cycle)+1);const within=elapsed%cycle;phase=within<work?'work':'rest';remaining=phase==='work'?work-within:cycle-within;
       if(round>state.round)for(let n=state.round;n<round;n++)completedRounds.push(n);
     }else if(config.mode==='emom'){
       // Every interval (60 s by default; 90 s, 2 min… for E1.5MOM, E2MOM) starts the next movement.
-      const interval=Math.max(5,Number(config.intervalSeconds)||60),total=Math.max(1,Number(config.durationMinutes)||10)*60;if(elapsed>=total){state.remaining=0;finish();return;}
+      const interval=Math.max(5,Number(config.intervalSeconds)||60),total=Math.max(1,Number(config.durationMinutes)||10)*60;
+      if(elapsed>=total){   // the last interval counts too: a full 10-minute EMOM is 10 intervals
+        const all=Math.ceil(total/interval);for(let n=state.roundsCompleted+1;n<=all;n++){state.roundsCompleted=n;state.round=n;emit('roundComplete');}
+        state.elapsed=total;state.remaining=0;finish();return;
+      }
       round=Math.floor(elapsed/interval)+1;remaining=Math.min(interval-(elapsed%interval),total-elapsed);phase='work';
       if(round>state.round)for(let n=state.round;n<round;n++)completedRounds.push(n);
     }else if(config.mode==='amrap'){
-      const total=Math.max(1,Number(config.durationMinutes)||12)*60;if(elapsed>=total){state.remaining=0;finish();return;}remaining=total-elapsed;phase='work';round=state.roundsCompleted+1;
+      const total=Math.max(1,Number(config.durationMinutes)||12)*60;if(elapsed>=total){state.elapsed=total;state.remaining=0;finish();return;}remaining=total-elapsed;phase='work';round=state.roundsCompleted+1;
     }else if(config.mode==='forTime'){
       // Counts up. Stops at the target rounds (if set) or the time cap (if set).
       const cap=(Number(config.capMinutes)||0)*60;
-      if(cap>0&&elapsed>=cap){state.capped=true;state.remaining=cap;finish();return;}
+      if(cap>0&&elapsed>=cap){state.capped=true;state.elapsed=cap;state.remaining=cap;finish();return;}
       phase='work';remaining=elapsed;round=state.roundsCompleted+1;
     }
     const previousPhase=state.phase;state.phase=phase;state.round=round;state.remaining=remaining;
@@ -5646,9 +6070,11 @@ function createConditioningTimer(){
     start(cfg){stop();config={...cfg};buildTimeline();state={running:true,paused:false,complete:false,phase:'ready',round:1,roundsCompleted:0,elapsed:0,remaining:0,startedAt:Date.now(),pausedMs:0,exercise:''};emit('start');tick();tickHandle=setInterval(tick,250);},
     pause(){if(!state||state.complete)return;if(!state.paused){state.paused=true;state.pauseAt=Date.now();state.running=false;}else{state.pausedMs+=Date.now()-state.pauseAt;state.paused=false;state.running=true;}emit('tick');},
     markRound(){
-      if(!state||state.complete)return;state.roundsCompleted++;emit('roundComplete');
+      if(!state||state.complete||state.leadIn)return;   // (no rounds during the get-ready countdown)
+      state.roundsCompleted++;emit('roundComplete');
       const target=Number(config.targetRounds)||0;
-      if(config.mode==='forTime'&&target>0&&state.roundsCompleted>=target){state.elapsed=elapsedNow();state.remaining=state.elapsed;finish();return;}   // last round done: the clock stops
+      // Last round done: the clock stops. The get-ready / between-blocks countdown is not part of the time.
+      if(config.mode==='forTime'&&target>0&&state.roundsCompleted>=target){state.elapsed=Math.max(0,elapsedNow()-Math.max(0,Number(config.getReadySeconds)||0));state.remaining=state.elapsed;finish();return;}
       emit('tick');
     },
     finish(){finish();},state(){return snapshot();},
@@ -5692,8 +6118,8 @@ function updateConditioningTimerUI(event,state){
   const isForTime=state.mode==='forTime';if(clockEl)clockEl.textContent=formatClock(state.remaining);
   if(roundEl)roundEl.textContent=state.phase==='getReady'&&!state.complete?'The block starts when this reaches zero'
     :state.stepped?(state.phase==='rest'?`Round ${state.round} of ${state.rounds} · Rest`:`Round ${state.round} of ${state.rounds} · Station ${state.stepIndex+1}: ${state.stepName||'Work'}${state.stepReps?' · '+state.stepReps:''}`)
-    :state.mode==='amrap'?`${state.roundsCompleted} rounds completed`
-    :state.mode==='forTime'?`${state.roundsCompleted}${state.rounds?' of '+state.rounds:''} rounds · elapsed${state.capSeconds?' · cap '+formatClock(state.capSeconds):''}${state.capped?' · time cap reached':''}`
+    :state.mode==='amrap'?`${state.roundsCompleted} round${state.roundsCompleted===1?'':'s'} completed`
+    :state.mode==='forTime'?`${state.roundsCompleted}${state.rounds?' of '+state.rounds:''} round${!state.rounds&&state.roundsCompleted===1?'':'s'} · elapsed${state.capSeconds?' · cap '+formatClock(state.capSeconds):''}${state.capped?' · time cap reached':''}`
     :state.mode==='emom'?(state.intervalSeconds===60?`Minute ${state.round}`:`Interval ${state.round}`)
     :`Round ${state.round} of ${state.rounds||'—'}`;
   if(exerciseEl)exerciseEl.textContent=state.stepped?(state.complete?'':state.nextName?'Next: '+state.nextName:'Last station'):(state.exercise||'');
@@ -5736,10 +6162,12 @@ ConditioningTimer.setListener((event,state)=>{
   if(event==='complete'&&Number.isInteger(ss.currentBlockIndex)){
     ss.blocksCompleted=ss.blocksCompleted||[];
     if(!ss.blocksCompleted.includes(ss.currentBlockIndex))ss.blocksCompleted.push(ss.currentBlockIndex);
-    // Automatic next block: keep the timer's numbers now (details can be added from the Results list) and carry straight on.
+    // Keep the timer's numbers without stopping to ask: the whole workout runs, and results can be adjusted
+    // from the Results list (or later in History). Then the next block is lined up, or starts by itself.
     const next=ss.currentBlockIndex+1,flow=ss.flow||{},advance=!!flow.autoAdvance&&!ss.completed&&next<(ss.blocks||[]).length;
-    // On screen: record the result and ask for details. Finished while away: keep the timer's numbers; details can be added later.
-    captureConditioningResult(ss,state,{ask:!advance&&S.sel?.conditioningSession===ss});
+    captureConditioningResult(ss,state,{ask:false});
+    if(!advance&&!ss.completed&&next<(ss.blocks||[]).length){ss.blockIndex=next;if(S.sel?.conditioningSession===ss)setTimeout(()=>{if(S.sel?.conditioningSession===ss&&!conditioningTimerBusy())render();},0);}
+    else if(!advance&&S.sel?.conditioningSession===ss)setTimeout(()=>{if(S.sel?.conditioningSession===ss)render();},0);   // (shows the last result in the list)
     if(advance)setTimeout(()=>{
       if(ConditioningTimer.owner!==ss||ss.completed||ss.currentBlockIndex+1!==next)return;
       ss.blockIndex=next;ss.currentBlockIndex=next;
@@ -6005,11 +6433,18 @@ function wireConditioningWorkout(){
   };
   const complete=document.getElementById('completeConditioningWorkout');if(complete)complete.onclick=async()=>{
      const cid=S.sel.conditioningClient,template=S.conditioning[S.sel.conditioningId];
+     // One tap completes and saves. Only when blocks are still to run does it check first.
      if(!ss.completed){
-       ConditioningTimer.finish();
+       const total=blocks.length,running=ConditioningTimer.owner===ss&&conditioningTimerBusy();
+       const done=new Set([...(ss.blocksCompleted||[]),...(running&&Number.isInteger(ss.currentBlockIndex)?[ss.currentBlockIndex]:[])]).size;
+       if(done<total){
+         const go=await askChoice(combined?'Finish conditioning now?':'Save the session now?',`<p>${done} of ${total} block${total===1?'':'s'} done${running?' (the running block stops now)':''}. Blocks not run are saved as not done.</p>`,
+           [{label:'Keep going',value:'no'},{label:combined?'Finish conditioning':'Save session',value:'yes',kind:'primary'}]);
+         if(go!=='yes')return;
+       }
+       ss.completed=true;   // (set first, so stopping the running block doesn't start the next one)
+       if(ConditioningTimer.owner===ss)ConditioningTimer.finish();
        ss.completedResult=snapshotConditioningSession(template,S.sel.conditioningId,ss);
-       ss.completed=true;
-       render();toast('Conditioning complete — save the session when ready');return;
      }
      const result=ss.completedResult||snapshotConditioningSession(template,S.sel.conditioningId,ss);
     if(combined&&S.parkedWorkout){
@@ -6034,6 +6469,24 @@ function wireConditioningWorkout(){
     }
   };
   if(complete)complete.onclick=guardedClick(complete,complete.onclick,'Saving…');
+  // Cancel: nothing is saved to history. In a combined session only the conditioning part goes; the strength workout stays.
+  const cancel=document.getElementById('cancelConditioningWorkout');if(cancel)cancel.onclick=()=>{
+    const cid=S.sel.conditioningClient,group=!!sessionClientIds(ss);
+    dialog(combined?'Remove the conditioning part?':'Cancel this conditioning session?',
+      combined?'<p>The timer and any block results are discarded. The strength workout stays open.</p>'
+        :`<p>Nothing is saved to history${group?' for either client':''}: the timer and any block results are discarded.</p>`,[
+      {label:combined?'Keep conditioning':'Keep session'},
+      {label:combined?'Remove conditioning':'Discard session',kind:'danger',onClick:async()=>{
+        if(ConditioningTimer.owner===ss)ConditioningTimer.reset();
+        if(combined&&S.parkedWorkout){
+          const p=S.parkedWorkout;delete p.draft.conditioningTemplateId;delete p.draft.conditioningInProgress;delete p.draft.conditioningSession;
+          S.sel={logClient:p.logClient,dayIndex:p.dayIndex,draft:p.draft,backTo:p.backTo};S.parkedWorkout=null;scheduleWorkoutAutosave();render();toast('Conditioning removed');return;
+        }
+        await clearWorkoutAutosave();
+        S.view='dashboard';S.sub='clients';S.sel={client:cid};render();toast('Conditioning session discarded');
+      }}
+    ]);
+  };
    const addNormal=document.getElementById('addNormalProgram');if(addNormal)addNormal.onclick=()=>{
      const cid=S.sel.conditioningClient,template=S.conditioning[S.sel.conditioningId];
      let result=ss.completedResult;
@@ -6069,14 +6522,16 @@ function wireExerciseFields(root, p){
 function readExerciseFields(root, p, selfId){
   const nameEl = root.querySelector('#' + p + 'Name'), name = nameEl.value.trim().replace(/\s+/g, ' ');
   if (!name){ toast('Give the exercise a name'); nameEl.focus(); return null; }
-  const dup = S.exercises.find(e => e.id !== selfId && normExName(e.name) === normExName(name));
-  if (dup){ toast(dup.archived ? '"' + dup.name + '" is in your archived exercises. Restore it instead.' : 'That exercise is already in the library'); nameEl.focus(); return null; }
+  // The same name may be added once per equipment (each variant keeps its own records).
+  const equipment = root.querySelector('#' + p + 'Eq').value.trim();
+  const dup = S.exercises.find(e => e.id !== selfId && normExName(e.name) === normExName(name) && normExName(e.equipment) === normExName(equipment));
+  if (dup){ const what = '"' + dup.name + (dup.equipment ? ' · ' + dup.equipment : '') + '"'; toast(dup.archived ? what + ' is in your archived exercises. Restore it instead.' : what + ' is already in the library. Use different equipment for a variant.'); nameEl.focus(); return null; }
   let category = root.querySelector('#' + p + 'Cat').value;
   if (category === EX_NEW_CAT){
     const c = root.querySelector('#' + p + 'CatNew'); category = c.value.trim().replace(/\s+/g, ' ');
     if (!category){ toast('Type the name of the new category'); c.focus(); return null; }
   }
-  return { name, category: category || 'Other', equipment: root.querySelector('#' + p + 'Eq').value.trim() };
+  return { name, category: category || 'Other', equipment };
 }
 /* Past sessions keep the name they were logged with unless the coach asks to update them. */
 async function renameExerciseInLogs(exId, name){
@@ -6132,7 +6587,7 @@ function viewExercises(){
   ${cats.map(cat => `<div class="panel">
     <h3>${esc(cat)}</h3>
     <div class="tablewrap"><table class="exercise-library-table"><tbody>
-    ${active.filter(e => (e.category || 'Other') === cat).sort(byName).map(e => `<tr>
+    ${active.filter(e => (e.category || 'Other') === cat).sort((a, b) => byName(a, b) || String(a.equipment || '').localeCompare(String(b.equipment || ''))).map(e => `<tr>
       <td>${esc(e.name)}</td><td class="muted small">${esc(e.equipment || '')}</td>
       <td class="ex-actions"><button class="btn sm ghost" data-editex="${esc(e.id)}">Edit</button> <button class="btn sm ghost" data-archiveex="${esc(e.id)}">Archive</button></td></tr>`).join('')}
     </tbody></table></div></div>`).join('')}
@@ -6179,7 +6634,7 @@ function sessionSummary(l){
     if (!sets.length) return;
     totalSets += sets.length;
     const best = sets.slice().sort((a,b) => Number(b.weight??b.kg??b.load??0) - Number(a.weight??a.kg??a.load??0))[0];
-    movements.push({ name: e.name||e.exerciseName||exName(e.exId??e.exerciseId), weight: best.weight??best.kg??best.load, reps: best.reps??best.rep });
+    movements.push({ name: entryDisplayName(e), weight: best.weight??best.kg??best.load, reps: best.reps??best.rep });
   });
   return { totalSets, movements };
 }
@@ -6191,8 +6646,7 @@ function prIndex(cid){
   if (!Idx.prs) Idx.prs = new Map();
   if (Idx.prs.has(cid)) return Idx.prs.get(cid);
   const logs = (logIndex().byClient[cid] || []).slice().reverse();
-  const norm = v => String(v||'').trim().toLocaleLowerCase().replace(/\s+/g,' ');
-  const map = {}, byId = new Map(), byName = new Map();
+  const map = {}, best = new Map();   // best weight so far, per exercise (each equipment variant on its own)
   let i = 0;
   while (i < logs.length){
     let j = i + 1; while (j < logs.length && compareLogsNewestFirst(logs[i], logs[j]) === 0) j++;
@@ -6200,19 +6654,16 @@ function prIndex(cid){
     for (let k = i; k < j; k++){
       const l = logs[k], prs = [];
       workoutLogEntries(l).forEach(e => {
-        const current = loggedExerciseSets(e).map(setWeight).filter(v => v !== null && v !== undefined && v !== '').map(Number).filter(n => Number.isFinite(n) && n >= 0);
+        const current = loggedExerciseSets(e).filter(s => !isWarmupSet(s)).map(setWeight).filter(v => v !== null && v !== undefined && v !== '').map(Number).filter(n => Number.isFinite(n) && n >= 0);
         if (!current.length) return;
-        const max = Math.max(...current), key = String(loggedExerciseId(e) ?? ''), name = norm(loggedExerciseName(e));
-        const before = [key ? byId.get(key) : undefined, name ? byName.get(name) : undefined].filter(v => v !== undefined);
-        if (before.length && max > Math.max(...before)) prs.push({ name: loggedExerciseName(e) || 'Exercise', weight: max });
-        pending.push({ key, name, max });
+        const max = Math.max(...current), key = entryExerciseKey(e);
+        if (!key) return;
+        if (best.has(key) && max > best.get(key)) prs.push({ name: entryDisplayName(e) || 'Exercise', weight: max });
+        pending.push({ key, max });
       });
       map[l.id] = prs;
     }
-    pending.forEach(p => {
-      if (p.key) byId.set(p.key, Math.max(byId.has(p.key) ? byId.get(p.key) : -Infinity, p.max));
-      if (p.name) byName.set(p.name, Math.max(byName.has(p.name) ? byName.get(p.name) : -Infinity, p.max));
-    });
+    pending.forEach(p => best.set(p.key, Math.max(best.has(p.key) ? best.get(p.key) : -Infinity, p.max)));
     i = j;
   }
   Idx.prs.set(cid, map);
@@ -6232,16 +6683,15 @@ function sessionMetrics(l,cid){
   const durationSeconds=Number.isFinite(duration)&&duration>=0?duration:(started&&completed>=started?Math.floor((completed-started)/1000):null);
   const indexedPrs=prIndex(cid)[l.id];
   const prior=indexedPrs?[]:clientLogs(cid).filter(other=>other.id!==l.id&&isLogBefore(other,l));
-  const normalize=value=>String(value||'').trim().toLocaleLowerCase().replace(/\s+/g,' ');
   const prs=indexedPrs?indexedPrs.slice():[];
   if(!indexedPrs)entries.forEach(e=>{
-    const current=loggedExerciseSets(e).map(weightValue).filter(value=>value!==null&&value!==undefined&&value!=='').map(Number).filter(n=>Number.isFinite(n)&&n>=0);
+    const current=loggedExerciseSets(e).filter(s=>!isWarmupSet(s)).map(weightValue).filter(value=>value!==null&&value!==undefined&&value!=='').map(Number).filter(n=>Number.isFinite(n)&&n>=0);
     if(!current.length)return;
-    const max=Math.max(...current),key=String(loggedExerciseId(e)??''),name=normalize(loggedExerciseName(e));
-    const earlier=prior.flatMap(old=>workoutLogEntries(old)).filter(x=>(key&&String(loggedExerciseId(x)??'')===key)||(name&&normalize(loggedExerciseName(x))===name));
-    const bestBefore=earlier.flatMap(x=>loggedExerciseSets(x)).map(weightValue).filter(value=>value!==null&&value!==undefined&&value!=='').map(Number).filter(n=>Number.isFinite(n)&&n>=0);
+    const max=Math.max(...current),key=entryExerciseKey(e);
+    const earlier=key?prior.flatMap(old=>workoutLogEntries(old)).filter(x=>entryExerciseKey(x)===key):[];
+    const bestBefore=earlier.flatMap(x=>loggedExerciseSets(x).filter(s=>!isWarmupSet(s))).map(weightValue).filter(value=>value!==null&&value!==undefined&&value!=='').map(Number).filter(n=>Number.isFinite(n)&&n>=0);
     // A PR needs something to beat: the first time a lift is logged is a baseline, not a PR.
-    if(bestBefore.length&&max>Math.max(...bestBefore))prs.push({name:loggedExerciseName(e)||'Exercise',weight:max});
+    if(bestBefore.length&&max>Math.max(...bestBefore))prs.push({name:entryDisplayName(e)||'Exercise',weight:max});
   });
   const extra=prExtras(cid)[l.id]||{rep:[],e1rm:[]};
   return {durationSeconds,totalVolume:hasVolume?totalVolume:null,prs,repPrs:extra.rep,e1rmPrs:extra.e1rm};
@@ -6282,8 +6732,7 @@ function prExtras(cid){
   if (!Idx.prx) Idx.prx = new Map();
   if (Idx.prx.has(cid)) return Idx.prx.get(cid);
   const logs = (logIndex().byClient[cid] || []).slice().reverse();
-  const norm = v => String(v||'').trim().toLocaleLowerCase().replace(/\s+/g,' ');
-  const exKey = e => { const id = String(loggedExerciseId(e) ?? ''); return id ? 'id:' + id : 'n:' + norm(loggedExerciseName(e)); };
+  const exKey = e => entryExerciseKey(e) || 'n:';   // (each equipment variant has its own records)
   const repBest = new Map(), e1Best = new Map(), map = {};
   let i = 0;
   while (i < logs.length){
@@ -6293,7 +6742,7 @@ function prExtras(cid){
       const l = logs[k], rep = [], e1 = [];
       workoutLogEntries(l).forEach(e => {
         const key = exKey(e); if (key === 'n:') return;
-        const sets = loggedExerciseSets(e).map(s => ({ w:Number(setWeight(s)), r:Number(setReps(s)) }))
+        const sets = loggedExerciseSets(e).filter(s => !isWarmupSet(s)).map(s => ({ w:Number(setWeight(s)), r:Number(setReps(s)) }))
           .filter(s => Number.isFinite(s.w) && s.w > 0 && Number.isFinite(s.r) && s.r > 0);
         if (!sets.length) return;
         const priorReps = repBest.get(key), priorE1 = e1Best.get(key);
@@ -6305,7 +6754,7 @@ function prExtras(cid){
           }
           if (priorE1 != null && s.r <= 12){ const v = s.w * (1 + s.r / 30); if (v > priorE1 && (bestE1 == null || v > bestE1)) bestE1 = v; }
         });
-        const name = loggedExerciseName(e) || 'Exercise';
+        const name = entryDisplayName(e) || 'Exercise';
         if (bestRep) rep.push({ name, ...bestRep });
         if (bestE1 != null) e1.push({ name, e1rm:Math.round(bestE1) });
         pending.push({ key, sets });
@@ -6348,7 +6797,7 @@ function lineChartSVG(series, o){
   const vals = series.flatMap(s => s.points.map(p => p.y));
   if (!vals.length) return '';
   let lo = Math.min(...vals), hi = Math.max(...vals); if (lo === hi){ lo -= 1; hi += 1; }
-  const padY = (hi - lo) * 0.1; lo -= padY; hi += padY;
+  const padY = (hi - lo) * 0.1, floor = Math.min(...vals) >= 0 ? 0 : -Infinity; lo = Math.max(floor, lo - padY); hi += padY;   // (counts and times never go below 0)
   const n = o.count, xAt = i => pl + (n <= 1 ? (W - pl - pr) / 2 : i * (W - pl - pr) / (n - 1)), yAt = v => pt + (1 - (v - lo) / (hi - lo)) * (H - pt - pb);
   const grid = [0, 1, 2, 3].map(k => { const v = lo + (hi - lo) * k / 3, y = yAt(v); return `<line class="grid" x1="${pl}" x2="${W-pr}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}"/><text x="${pl-4}" y="${(y+3).toFixed(1)}" text-anchor="end">${esc(fmt(v))}</text>`; }).join('');
   const lines = series.map(s => `<polyline fill="none" style="stroke:${s.color}" stroke-width="2" points="${s.points.map(p => xAt(p.i).toFixed(1) + ',' + yAt(p.y).toFixed(1)).join(' ')}"/>` +
@@ -6363,30 +6812,27 @@ function barChartSVG(values, labels, o){
   const ticks = values.map((v, i) => (i % 4 === 0 || i === values.length - 1) ? `<text x="${(pl+i*slot+slot/2).toFixed(1)}" y="${H-6}" text-anchor="middle">${esc(labels[i])}</text>` : '').join('');
   return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.aria)}"><line class="grid" x1="${pl}" x2="${W-pr}" y1="${H-pb}" y2="${H-pb}"/>${bars}${ticks}</svg>`;
 }
-/* Exercises this client has logged, most-logged first; one option per exercise whether it was recorded by id or by name. */
+/* Exercises this client has logged, most-logged first; one option per exercise (each equipment variant on its own),
+   whether it was recorded by id or by name. `id` is the exercise's key. */
 function progressExercises(cid){
-  const norm = v => String(v||'').trim().toLocaleLowerCase().replace(/\s+/g,' ');
-  const opts = [];
+  const opts = new Map();
   clientLogs(cid).forEach(l => {
     const seen = new Set();
     workoutLogEntries(l).forEach(e => {
-      const id = String(loggedExerciseId(e) ?? ''), name = norm(loggedExerciseName(e) || (id ? exName(id) : ''));
-      if (!id && !name) return;
-      let o = opts.find(x => (id && x.id === id) || (name && x.name === name));
-      if (!o){ o = { id, name, label:loggedEntryName(e), sessions:0 }; opts.push(o); }
-      if (!o.id && id) o.id = id;
-      if (!seen.has(o)){ seen.add(o); o.sessions++; }
+      const key = entryExerciseKey(e); if (!key) return;
+      let o = opts.get(key);
+      if (!o){ const ex = S.exercises.find(x => 'id:' + x.id === key); o = { id:key, name:'', label:ex ? exLabelOf(ex) : entryDisplayName(e), sessions:0 }; opts.set(key, o); }
+      if (!seen.has(key)){ seen.add(key); o.sessions++; }
     });
   });
-  return opts.filter(o => o.sessions > 0).sort((a,b) => b.sessions - a.sessions || a.label.localeCompare(b.label));
+  return [...opts.values()].sort((a,b) => b.sessions - a.sessions || a.label.localeCompare(b.label));
 }
 function exerciseSeries(cid, opt){
-  const norm = v => String(v||'').trim().toLocaleLowerCase().replace(/\s+/g,' ');
   const out = [];
   clientLogs(cid).slice().reverse().forEach(l => {
     let top = null, e1 = null;
-    workoutLogEntries(l).filter(e => (opt.id && String(loggedExerciseId(e) ?? '') === opt.id) || (opt.name && norm(loggedExerciseName(e)) === opt.name)).forEach(e => {
-      loggedExerciseSets(e).forEach(s => {
+    workoutLogEntries(l).filter(e => entryExerciseKey(e) === opt.id).forEach(e => {
+      loggedExerciseSets(e).filter(s => !isWarmupSet(s)).forEach(s => {
         const w = Number(setWeight(s)), r = Number(setReps(s));
         if (!Number.isFinite(w) || w <= 0) return;
         if (!top || w > top.w || (w === top.w && r > top.r)) top = { w, r: Number.isFinite(r) ? r : 0 };
@@ -6401,7 +6847,7 @@ function exerciseSeries(cid, opt){
 function conditioningScore(r, mode){
   if (!r) return null;
   const m = mode || r.mode;
-  if (m === 'forTime') return r.timeSeconds != null ? { v:Number(r.timeSeconds), kind:'time' } : null;
+  if (m === 'forTime') return Number(r.timeSeconds) > 0 ? { v:Number(r.timeSeconds), kind:'time' } : null;   // (a block stopped at 0:00 has no time to compare)
   if (m === 'amrap') return r.roundsCompleted != null ? { v:Number(r.roundsCompleted) + (Number(r.extraReps) || 0) / 100, kind:'rounds' } : null;
   if (r.calories != null) return { v:Number(r.calories), kind:'cal' };
   if (r.roundsCompleted) return { v:Number(r.roundsCompleted), kind:'rounds' };
@@ -6411,11 +6857,16 @@ function conditioningTrends(cid){
   const groups = new Map();
   clientLogs(cid).slice().reverse().forEach(l => {
     const cs = l.conditioningSession; if (!cs || !Array.isArray(cs.blocks) || !cs.results) return;
+    // A block is matched to the same block in other sessions by program, name, timer mode and what's measured,
+    // so two blocks that share a name (every new block starts as "Main Block") never end up on one line.
+    const seen = new Map();
     cs.blocks.forEach((b, i) => {
       const sc = conditioningScore(cs.results[i], b.mode); if (!sc || !Number.isFinite(sc.v)) return;
-      const key = (cs.templateName || 'Conditioning') + ' · ' + (b.name || 'Block ' + (i + 1));
-      if (!groups.has(key)) groups.set(key, { key, kind:sc.kind, mode:b.mode, points:[] });
-      groups.get(key).points.push({ date:l.date, v:sc.v });
+      const name = b.name || 'Block ' + (i + 1), base = [cs.templateName || 'Conditioning', name, b.mode, sc.kind].join('|');
+      const nth = (seen.get(base) || 0) + 1; seen.set(base, nth);
+      const id = base + '|' + nth, key = (cs.templateName || 'Conditioning') + ' · ' + name + (nth > 1 ? ' (' + nth + ')' : '') + ' · ' + conditioningModeName(b.mode);
+      if (!groups.has(id)) groups.set(id, { key, kind:sc.kind, mode:b.mode, points:[] });
+      groups.get(id).points.push({ date:l.date, v:sc.v });
     });
   });
   return [...groups.values()].sort((a,b) => b.points.length - a.points.length).slice(0, 4);
@@ -6435,9 +6886,9 @@ function progressHTML(cid){
     if (!pts.length) lift = '<p class="small muted">No weighted sets logged for this exercise yet.</p>';
     else {
       const top = { name:'Top set (kg)', color:'var(--plate-blue)', points:pts.map((p, i) => ({ i, y:p.top, label:p.date })) };
-      const e1 = { name:'Est. 1RM (kg)', color:'var(--plate-green)', points:pts.map((p, i) => p.e1rm != null ? { i, y:p.e1rm, label:p.date } : null).filter(Boolean) };
+      const e1 = { name:'Est. 1RM (kg)', color:'var(--series-2)', points:pts.map((p, i) => p.e1rm != null ? { i, y:p.e1rm, label:p.date } : null).filter(Boolean) };
       lift = `${lineChartSVG([top, ...(e1.points.length ? [e1] : [])], { count:pts.length, labels, aria:`${opt.label}: top set went from ${pts[0].top} kg to ${pts[pts.length-1].top} kg over ${pts.length} session${pts.length===1?'':'s'}` })}
-        <div class="row tight small muted"><span class="key"><i class="k-slot" style="background:var(--plate-blue)"></i> Top set</span><span class="key"><i class="k-slot" style="background:var(--plate-green)"></i> Est. 1RM</span><span class="num">${pts.length} session${pts.length===1?'':'s'}</span></div>`;
+        <div class="row tight small muted"><span class="key"><i class="k-slot" style="background:var(--plate-blue)"></i> Top set</span><span class="key"><i class="k-slot" style="background:var(--series-2)"></i> Est. 1RM</span><span class="num">${pts.length} session${pts.length===1?'':'s'}</span></div>`;
     }
   }
   const trends = conditioningTrends(cid);
@@ -6473,40 +6924,80 @@ function historyDetail(cid){
       const dateNice = new Date(l.date + 'T12:00:00').toLocaleDateString(undefined,{ weekday:'short', day:'numeric', month:'short' });
       return `<div class="card historycard" data-historyday="${esc(l.id)}">
         <div class="spread"><span class="name">${esc(l.dayLabel || 'Session')}</span><span class="pill">${esc(dateNice)}</span></div>
-        <div class="small muted num" style="margin-bottom:.3rem">${totalSets} set${totalSets===1?'':'s'} logged${l.conditioningSession?` · ${esc(l.conditioningSession.templateName||'Conditioning')} · ${l.conditioningSession.blocksCompleted?.length||0}/${l.conditioningSession.blocks?.length||'—'} blocks`:''}</div>
-        ${movements.length
-          ? movements.map(m => `<div class="small">${esc(m.name)} <span class="num muted">${esc(m.weight??'—')}×${esc(m.reps??'—')}</span></div>`).join('')
-          : '<div class="small muted">No sets recorded</div>'}
-        <div class="history-session-metrics">
-          <div class="history-session-metric"><span>Session time</span><strong class="num">${formatSessionDuration(metrics.durationSeconds)}</strong></div>
-          <div class="history-session-metric"><span>Total lifted</span><strong class="num">${metrics.totalVolume==null?'—':`${metrics.totalVolume.toLocaleString(undefined,{maximumFractionDigits:1})} kg`}</strong></div>
-          <div class="history-session-metric"><span>PRs</span><strong>${prLinesOf(metrics).length?`${prLinesOf(metrics).length} achieved`:'—'}</strong>${prLinesOf(metrics).length?`<div class="history-pr-list">${prLinesOf(metrics).map(x=>esc(x)).join('<br>')}</div>`:''}</div>
-        </div>
+        ${(() => {
+          // Conditioning-only sessions have no sets, so they show just their blocks.
+          const cs = l.conditioningSession, condOnly = l.type === 'conditioning';
+          const blocksLine = cs ? `${esc(cs.templateName||'Conditioning')} · ${cs.blocksCompleted?.length||0}/${cs.blocks?.length||'—'} blocks` : '';
+          return `<div class="small muted num" style="margin-bottom:.3rem">${condOnly ? blocksLine : `${totalSets} set${totalSets===1?'':'s'} logged${blocksLine ? ' · ' + blocksLine : ''}`}</div>`
+            + (movements.length
+              ? movements.map(m => `<div class="small">${esc(m.name)} <span class="num muted">${esc(m.weight??'—')}×${esc(m.reps??'—')}</span></div>`).join('')
+              : condOnly ? '' : '<div class="small muted">No sets recorded</div>');
+        })()}
+        ${historyStatsHTML(metrics, l.type === 'conditioning')}
       </div>`;
     }).join('')}</div>
     ${!S.sel.historyAll && logs.length > 60 ? `<div class="row" style="margin-top:.8rem;justify-content:center"><button type="button" class="btn ghost" id="historyShowAll">Show all ${logs.length} sessions</button></div>` : ''}`}`;
 }
 
+/* Session time, total lifted and PR count as icon + number; the PRs themselves are listed on the session page. */
+const HIST_ICON = {
+  time:   '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/>',
+  weight: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>',
+  pr:     '<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M10 17h4"/>'
+};
+const histSvg = p => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+function historyStatsHTML(metrics, timeOnly){
+  const prCount = prLinesOf(metrics).length;
+  const vol = metrics.totalVolume == null ? '—' : `${metrics.totalVolume.toLocaleString(undefined,{maximumFractionDigits:1})} kg`;
+  const time = metrics.durationSeconds == null ? '—' : formatSessionDuration(metrics.durationSeconds);
+  // (conditioning-only sessions lift nothing and can't set a PR, so they show the time alone)
+  return `<div class="history-stats">
+    <span class="history-stat" title="Session time"><span class="sr-only">Session time </span>${histSvg(HIST_ICON.time)}<span class="num">${time}</span></span>
+    ${timeOnly ? '' : `<span class="history-stat" title="Total lifted"><span class="sr-only">Total lifted </span>${histSvg(HIST_ICON.weight)}<span class="num">${vol}</span></span>
+    <span class="history-stat${prCount?' has-pr':''}" title="PRs"><span class="sr-only">PRs </span>${histSvg(HIST_ICON.pr)}<span class="num">${prCount}</span></span>`}
+  </div>`;
+}
+
 function historyDayDetail(cid, logId){
   const c = S.clients[cid], l = S.logs[logId];
   if (!c || !l) return '<p>Session not found.</p>';
+  const metrics = sessionMetrics(l, cid);
+  const norm = v => String(v||'').trim().toLocaleLowerCase().replace(/\s+/g,' ');
   const groups = workoutLogEntries(l).map(e => ({
-    name: e.name||e.exerciseName||exName(e.exId??e.exerciseId),
-    targetRPE:e.targetRPE||'',
+    name: entryDisplayName(e),
+    bar: e.bar && Number(e.bar.kg) >= 0 ? e.bar : null,   // recorded when the session was saved (bar exercises)
     sets: loggedExerciseSets(e).filter(s => s.weight != null || s.kg!=null || s.load!=null || s.reps != null || s.rep!=null || s.actualRPE!=null || s.actualRIR!=null || s.note || s.done)
   })).filter(g => g.sets.length);
+  // PRs for one exercise, plus which set rows to mark (the first set that made the heaviest-weight or rep PR).
+  const prsFor = g => {
+    const n = norm(g.name), same = p => norm(p.name) === n;
+    const tags = [], rows = new Set();
+    const w = s => Number(s.weight??s.kg??s.load??s.actualWeight), r = s => Number(s.reps??s.rep??s.actualReps);
+    metrics.prs.filter(same).forEach(p => { tags.push(`Heaviest ${p.weight} kg`); const i = g.sets.findIndex(s => w(s) === Number(p.weight)); if (i >= 0) rows.add(i); });
+    (metrics.repPrs||[]).filter(same).forEach(p => { tags.push(`${p.reps} reps at ${p.weight} kg`); const i = g.sets.findIndex(s => w(s) === p.weight && r(s) === p.reps); if (i >= 0) rows.add(i); });
+    (metrics.e1rmPrs||[]).filter(same).forEach(p => tags.push(`Est. 1RM ${p.e1rm} kg`));
+    return { tags, rows };
+  };
   const { totalSets } = sessionSummary(l);
+  // Warm-ups: one line ("W Warm-ups · 4 sets · 20–87.5 kg"); tap it to show their rows.
+  const histWarmupSummaryRow = g => {
+    const wu = g.sets.filter(isWarmupSet), ws = wu.map(s => Number(s.weight ?? s.kg ?? s.load ?? s.actualWeight)).filter(n => n > 0);
+    const lo = ws.length ? Math.min(...ws) : null, hi = ws.length ? Math.max(...ws) : null;
+    return `<tr class="hist-wu-sum"><td colspan="${g.bar ? 5 : 4}"><button type="button" class="hist-wu-toggle" data-hist-wu aria-expanded="false"><span class="set-w" aria-hidden="true">W</span><span><strong>Warm-ups</strong> <span class="muted">${wu.length} set${wu.length === 1 ? '' : 's'}${lo != null ? ' · ' + esc(pcFmt(lo)) + (hi !== lo ? '–' + esc(pcFmt(hi)) : '') + ' kg' : ''}</span></span><svg class="hist-wu-caret" viewBox="0 0 10 10" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg></button></td></tr>`;
+  };
   const conditioningHTML=l.conditioningSession?historyConditioningHTML(l.conditioningSession):'';
   const strengthHTML=l.type==='conditioning'?'':`<div class="panel">
     <p class="small muted num">${totalSets} set${totalSets===1?'':'s'} logged</p>
-    ${groups.length ? groups.map(g => `
-      <div class="exgroup">
-        <h3>${esc(g.name)}${g.targetRPE?` <span class="small muted">· Target RPE ${esc(g.targetRPE)}</span>`:''}</h3>
+    ${groups.length ? groups.map(g => { const pr = prsFor(g); return `
+      <div class="exgroup${pr.tags.length?' has-pr':''}">
+        <h3>${esc(g.name)}</h3>
+        ${g.bar?`<div class="history-bar">${esc(g.bar.name||'Bar')} · ${esc(pcFmt(Number(g.bar.kg)))} kg</div>`:''}
+        ${pr.tags.length?`<div class="history-pr-tags">${pr.tags.map(t => `<span class="history-pr-tag">${histSvg(HIST_ICON.pr)}${esc(t)}</span>`).join('')}</div>`:''}
         <div class="tablewrap"><table>
-          <thead><tr><th style="width:50px">Set</th><th style="width:76px">Weight</th><th style="width:60px">Reps</th><th>RPE</th><th>RIR</th><th>Type / note</th></tr></thead>
-          <tbody>${g.sets.map((s,i) => `<tr><td class="num">${esc(s.setNumber||i+1)}</td><td class="num">${esc(s.weight??s.kg??s.load??s.actualWeight??'—')}</td><td class="num">${esc(s.reps??s.rep??s.actualReps??'—')}</td><td class="num">${esc(s.actualRPE??s.rpe??'—')}</td><td class="num">${esc(s.actualRIR??'—')}</td><td>${esc(String(s.setType||'working').replace(/^./,c=>c.toUpperCase()))}${s.note?` · ${esc(s.note)}`:''}</td></tr>`).join('')}</tbody>
+          <thead><tr><th style="width:50px">Set</th><th style="width:70px">Weight</th>${g.bar?'<th style="width:70px">Plate/side</th>':''}<th style="width:56px">Reps</th><th>Type / note</th></tr></thead>
+          <tbody>${g.sets.map((s,i) => `${i===g.sets.findIndex(isWarmupSet)?histWarmupSummaryRow(g):''}<tr${pr.rows.has(i)?' class="pr-set"':isWarmupSet(s)?' class="hist-wu-set"':''}><td class="num">${isWarmupSet(s)?'<span class="set-w" title="Warm-up">W</span>':esc(workingIndexOf(g.sets,i)+1)}${pr.rows.has(i)?`<span class="pr-mark" title="PR">${histSvg(HIST_ICON.pr)}</span>`:''}</td><td class="num">${esc(s.weight??s.kg??s.load??s.actualWeight??'—')}</td>${g.bar?`<td class="num">${esc(platesPerSideText(s.weight??s.kg??s.load??s.actualWeight, g.bar))}</td>`:''}<td class="num">${esc(s.reps??s.rep??s.actualReps??'—')}</td><td>${esc(SET_TYPE_LABELS[s.setType||'working']||String(s.setType).replace(/^./,c=>c.toUpperCase()))}${s.note?` · ${esc(s.note)}`:''}</td></tr>`).join('')}</tbody>
         </table></div>
-      </div>`).join('') : '<p class="muted small">No sets recorded for this session.</p>'}
+      </div>`; }).join('') : '<p class="muted small">No sets recorded for this session.</p>'}
     ${l.notes ? `<p class="small muted" style="margin-top:.7rem">Notes: ${esc(l.notes)}</p>` : ''}
   </div>`;
   const hasRepeatEntries=hasRepeatWorkoutSource(cid,l);
@@ -6524,6 +7015,7 @@ function historyDayDetail(cid, logId){
     <button class="btn ghost" data-back="day">Back</button>
   </div>
   ${activityHTML}
+  <div class="panel history-day-stats">${historyStatsHTML(metrics, l.type === 'conditioning')}</div>
   ${deleteHTML}`;
 }
 
@@ -6640,7 +7132,7 @@ function activityLinkHTML(){
 }
 function viewData(){
   const cur = dataSectionNow();
-  if (cur === 'activity') return `<div class="page-head spread"><button type="button" class="btn ghost sm" data-dsec="online">← Back to Online account</button></div>${activityPanelHTML()}`;
+  if (cur === 'activity') return `<div class="page-head spread"><button type="button" class="btn ghost sm nav-back" data-dsec="online">← Back to Online account</button></div>${activityPanelHTML()}`;
   const body = cur === 'backup' ? dataBackupSection()
     : cur === 'online' ? `${syncPanelHTML()}${devicesPanelHTML()}${activityLinkHTML()}`
     : cur === 'team' ? `${teamPanelHTML()}${privacyPanelHTML()}`
@@ -6920,17 +7412,18 @@ function planImport(data){
   if (data.exercises != null){
     if (!Array.isArray(data.exercises)) skip('the exercise library isn\'t in the expected format');
     else {
-      const normName = n => String(n || '').trim().toLocaleLowerCase().replace(/\s+/g,' ');
       const have = new Set(S.exercises.map(e => String(e.id))), adding = new Set();
-      const byName = new Map(activeExercises().map(e => [normName(e.name), String(e.id)]));
+      const known = activeExercises().slice();   // matched by name and equipment, so a variant is added, not merged
       for (const ex of data.exercises){
         if (!isPlainObject(ex) || typeof ex.id !== 'string' || !SAFE_ID.test(ex.id) || typeof ex.name !== 'string' || !ex.name.trim()){ skip('an exercise with a missing name or invalid id'); continue; }
         if (have.has(ex.id) || adding.has(ex.id)){ plan.exercisesKept++; continue; }
-        const sameName = !ex.archived && byName.get(normName(ex.name));
-        if (sameName){ remap[ex.id] = sameName; plan.exercisesMatched++; continue; }
+        const equipment = typeof ex.equipment === 'string' ? ex.equipment : '';
+        const same = !ex.archived && findExerciseVariant(known, ex.name, equipment);
+        if (same){ remap[ex.id] = String(same.id); plan.exercisesMatched++; continue; }
         adding.add(ex.id);
-        if (!ex.archived) byName.set(normName(ex.name), ex.id);
-        plan.exercisesToAdd.push({ id: ex.id, name: ex.name.trim(), category: typeof ex.category === 'string' ? ex.category : 'Other', equipment: typeof ex.equipment === 'string' ? ex.equipment : '', ...(ex.archived === true ? { archived: true } : {}) });
+        const added = { id: ex.id, name: ex.name.trim(), category: typeof ex.category === 'string' ? ex.category : 'Other', equipment, ...(ex.archived === true ? { archived: true } : {}) };
+        if (!ex.archived) known.push(added);
+        plan.exercisesToAdd.push(added);
       }
     }
   }
@@ -7166,9 +7659,11 @@ function wire(){
         const field=inp.dataset.setInput;
         // Typing only records the value; the set completes when the coach finishes entering (change / Enter).
         const read=()=>{const value=inp.value;let parsed=value;
-          if(['weight','reps','actualRPE'].includes(field))parsed=value===''?null:Number(value);
+          if(field==='weight')parsed=kgFromBox(S.sel.draft.entries[ei],value);   // (a bar exercise's box is per side; the set keeps the total)
+          else if(['reps','actualRPE'].includes(field))parsed=value===''?null:Number(value);
           else if(field==='actualRIR')parsed=value===''?null:(value==='5+'?'5+':Number(value));
           S.sel.draft.entries[ei].sets[si][field]=parsed;markStrengthActivity();
+          if(field==='weight'){const t=row.querySelector('.kg-total');if(t)t.textContent=kgTotalLabel(S.sel.draft.entries[ei],parsed);}
         };
         const finish=()=>{read();const set=S.sel.draft.entries[ei].sets[si];
           if((field==='weight'||field==='reps')&&set.weight!=null&&set.reps!=null&&!set.done)completeWorkoutSet(ei,si);
@@ -7188,6 +7683,7 @@ function wire(){
       });
       const tick = row.querySelector('[data-done]');
       if (tick) tick.onclick = () => {
+        if (row.dataset.swiped){ delete row.dataset.swiped; return; }   // the end of a swipe that started on ✓ is not a tap
         const s = S.sel.draft.entries[ei].sets[si];
         if(s.done){s.done=false;row.classList.remove('done');tick.textContent='';tick.setAttribute('aria-label',`Mark set ${si+1} complete`);tick.setAttribute('aria-pressed','false');updateWorkoutTimerUI();markStrengthActivity();return;}
         // ✓ on an empty set = "same as last time": fill from the numbers shown in Previous.
@@ -7196,20 +7692,33 @@ function wire(){
         if(s.reps==null&&prev.reps!=null)s.reps=prev.reps;
         if(s.reps==null){toast('Enter kg and reps');setBox(s.weight==null?'weight':'reps')?.focus();return;}
         // reps but no weight and no previous weight: a bodyweight set, so complete it as is.
-        const kg=setBox('weight'),reps=setBox('reps');if(kg)kg.value=s.weight??'';if(reps)reps.value=s.reps??'';
+        const kg=setBox('weight'),reps=setBox('reps');if(kg)kg.value=kgBoxValue(S.sel.draft.entries[ei],s.weight);if(reps)reps.value=s.reps??'';
+        const kgt=row.querySelector('.kg-total');if(kgt)kgt.textContent=kgTotalLabel(S.sel.draft.entries[ei],s.weight);
         completeWorkoutSet(ei,si,{advance:true});
       };
       let swipe=null;
-      // A swipe can start anywhere on the row, the kg and reps boxes included (they fill most of it); only the tick button is left out.
-      row.onpointerdown=event=>{if(event.pointerType==='mouse'&&event.button!==0)return;if(event.target.closest('button,select,textarea,summary'))return;swipe={id:event.pointerId,x:event.clientX,y:event.clientY,dx:0,active:false};};
+      // A swipe can start anywhere on the row, the kg and reps boxes and the ✓ button included (a left swipe naturally starts
+      // on the right, where ✓ is). A tap on ✓ still ticks; a sideways drag from it swipes instead.
+      row.onpointerdown=event=>{if(event.pointerType==='mouse'&&event.button!==0)return;if(document.documentElement.classList.contains('edge-back')&&event.clientX<=EDGE_BACK_PX)return;   // (the screen edge is the back swipe)
+if(event.target.closest('select,textarea,summary')||event.target.closest('button:not([data-done])'))return;swipe={id:event.pointerId,x:event.clientX,y:event.clientY,dx:0,active:false};};
       row.onpointermove=event=>{if(!swipe||swipe.id!==event.pointerId)return;const dx=event.clientX-swipe.x,dy=event.clientY-swipe.y;if(!swipe.active&&Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)*1.2){swipe.active=true;row.classList.add('swiping');if(row.contains(document.activeElement))document.activeElement.blur();try{row.setPointerCapture(event.pointerId);}catch{}}
         if(!swipe.active)return;event.preventDefault();swipe.dx=Math.max(-row.clientWidth*.78,Math.min(row.clientWidth*.78,dx));row.style.transform=`translateX(${swipe.dx}px)`;row.closest('.set-swipe-wrap')?.classList.toggle('swipe-copying',swipe.dx>0);row.closest('.set-swipe-wrap')?.classList.toggle('swipe-deleting',swipe.dx<0);};
-      const finishSwipe=event=>{if(!swipe||swipe.id!==event.pointerId)return;const state=swipe;swipe=null;row.classList.remove('swiping');row.style.transform='';const wrap=row.closest('.set-swipe-wrap');wrap?.classList.remove('swipe-copying','swipe-deleting');if(!state.active)return;const threshold=Math.max(80,row.clientWidth*.35),entry=S.sel.draft.entries[ei];   // about a third of the row
+      const finishSwipe=event=>{if(!swipe||swipe.id!==event.pointerId)return;const state=swipe;swipe=null;row.classList.remove('swiping');row.style.transform='';const wrap=row.closest('.set-swipe-wrap');wrap?.classList.remove('swipe-copying','swipe-deleting');if(!state.active)return;row.dataset.swiped='1';setTimeout(()=>{delete row.dataset.swiped;},400);const threshold=Math.max(80,row.clientWidth*.35),entry=S.sel.draft.entries[ei];   // about a third of the row
         if(state.dx<=-threshold)deleteSetAt(ei,si);
         else if(state.dx>=threshold)copyPreviousSet(ei,si);
       };
       row.onpointerup=finishSwipe;row.onpointercancel=finishSwipe;row.onlostpointercapture=()=>{if(swipe){swipe=null;row.classList.remove('swiping');row.style.transform='';row.closest('.set-swipe-wrap')?.classList.remove('swipe-copying','swipe-deleting');}};
     });
+  });
+  // Plates: the calculator for this exercise's bar and set; a bar chosen there is the one recorded with the exercise.
+  m.querySelectorAll('[data-plates]').forEach(b => b.onclick = () => {
+    const en = S.sel.draft && S.sel.draft.entries[Number(b.dataset.plates)]; if (!en) return;
+    b.closest('details')?.removeAttribute('open');   // (it's in the exercise's ⋯ menu)
+    openPlateCalculator({ weight:platesWeightFor(en), barId:entryBar(en)?.id, onBar:id => {
+      setEntryBar(en, id);   // same plates on another bar: each logged total moves by the difference in bar weight
+      scheduleWorkoutAutosave();
+      document.getElementById('dlg').addEventListener('close', () => render({ keepScroll:true }), { once:true });   // redraw the boxes once the calculator closes
+    } });
   });
   m.querySelectorAll('[data-addset]').forEach(b => b.onclick = () => {
     const entry = S.sel.draft.entries[Number(b.dataset.addset)];
@@ -7249,7 +7758,7 @@ function wire(){
       {label:'Replace',kind:'primary',onClick:()=>{
         const replacement=val('replacementExercise');if(!replacement)return false;
         const {last,best}=exerciseHistory(S.sel.draft.clientId,replacement);
-        entry.exId=replacement;entry.name=exName(replacement);entry.lastDate=last?.date||null;entry.best=best;entry.target='';entry.targetSets='';entry.targetReps='';entry.targetLoad='';entry.targetRPE='';entry.targetRest='90s';
+        entry.exId=replacement;entry.name=exName(replacement);delete entry.barId;delete entry.bar;delete entry.warmupWork;entry.lastDate=last?.date||null;entry.best=best;entry.target='';entry.targetSets='';entry.targetReps='';entry.targetLoad='';entry.targetRPE='';entry.targetRest='90s';
         entry.sets=entry.sets.map((set,setIndex)=>({weight:null,reps:null,done:false,actualRPE:null,actualRIR:null,setType:'working',note:'',lastWeight:last?.sets?.[setIndex]?.weight??null,lastReps:last?.sets?.[setIndex]?.reps??null}));
         markStrengthActivity();render();
       }}
@@ -7300,8 +7809,9 @@ function wire(){
   if (saveSess) saveSess.onclick = async () => {
     const d = S.sel.draft;
     if(d.conditioningTemplateId&&!d.conditioningSession){toast('Finish the conditioning part before saving this combined session');return;}
-    const clean = { ...d, entries: d.entries.map(e => ({ exId:e.exId, name:e.name, ...(e.groupId?{groupId:e.groupId,groupType:e.groupType}:{}),target:e.target||'',targetSets:e.targetSets||'',targetReps:e.targetReps||'',targetLoad:e.targetLoad||'',targetRPE:e.targetRPE||'',targetRIR:e.targetRIR||'',targetTempo:e.targetTempo||'',targetNotes:e.targetNotes||'',targetRest:e.targetRest||'',
-      sets: e.sets.map((s,index)=>{const n={...ensureSetDefaults({...s}),setNumber:index+1};delete n.lastWeight;delete n.lastReps;return n;}).filter(s => s.weight != null || s.reps != null || s.actualRPE!=null || s.actualRIR!=null || s.note || s.done) })).filter(e => e.sets.length) };
+    // Bar exercises record their bar ({ id, name, kg }), so History can show bar weight + plate weight.
+    const clean = { ...d, entries: d.entries.map(e => ({ exId:e.exId, name:e.name, ...(e.groupId?{groupId:e.groupId,groupType:e.groupType}:{}),...(entryBar(e)?{bar:entryBar(e)}:{}),target:e.target||'',targetSets:e.targetSets||'',targetReps:e.targetReps||'',targetLoad:e.targetLoad||'',targetRPE:e.targetRPE||'',targetRIR:e.targetRIR||'',targetTempo:e.targetTempo||'',targetNotes:e.targetNotes||'',targetRest:e.targetRest||'',
+      sets: e.sets.map((s,index)=>{const n={...ensureSetDefaults({...s}),setNumber:index+1};delete n.lastWeight;delete n.lastReps;delete n.repeatWeight;return n;}).filter(s => s.weight != null || s.reps != null || s.actualRPE!=null || s.actualRIR!=null || s.note || s.done) })).filter(e => e.sets.length) };
     if (!clean.entries.length && !clean.notes && !clean.conditioningSession){ toast('Nothing to save yet'); return; }
     // Same id every time this workout is saved: a repeat save overwrites instead of duplicating.
     // (Workouts started before this change get their id here; it's kept on the draft.)
@@ -7331,6 +7841,7 @@ function wire(){
     delete clean.editing; delete clean.editOriginal;
     delete clean.usePack; delete clean.backTo;
     delete clean.conditioningTemplateId; delete clean.conditioningInProgress; delete clean.dayConditioningId;
+    delete clean.repeatOf;
     delete clean.startedAt; delete clean.restRemainingMs; delete clean.restRunning; delete clean.restEndAt;
     delete clean.restDurationSeconds;delete clean.restDurationManuallySet;delete clean.autoRestAfterSet;delete clean.focusedExerciseIndex;
     // Store first. If it fails, the workout stays open and its recovery copy is kept.
@@ -7502,6 +8013,8 @@ function wire(){
         toast(c.name + ' deleted from this device, its backups and your account queue'); render();
       }}]);
   });
+  // History: the warm-ups line opens or closes its exercise's warm-up rows.
+  m.querySelectorAll('[data-hist-wu]').forEach(b => b.onclick = () => { const open = b.closest('table').classList.toggle('wu-open'); b.setAttribute('aria-expanded', String(open)); });
   m.querySelectorAll('[data-dellogday]').forEach(b => b.onclick = () => dialog('Delete this session',
     '<p>This removes the logged workout permanently. There is no undo.</p>',
     [{label:'Cancel'},{label:'Delete', kind:'danger', onClick: async () => {
@@ -7643,10 +8156,9 @@ function wire(){
     if (!moveExerciseUnit(p.days[di].items, ii, dir)) return;
     await persistProgram(pid); render();
   });
-  m.querySelectorAll('[data-move-ex]').forEach(b => b.onclick = () => {
-    const [ei,dir] = b.dataset.moveEx.split('.').map(Number), entries = S.sel.draft.entries;
-    if (moveExerciseUnit(entries, ei, dir)) { markStrengthActivity(); render(); }
-  });
+  if (S.sel && S.sel.draft) wireExerciseDrag(m);
+  m.querySelectorAll('[data-bar-pick]').forEach(b => b.onclick = () => openBarSheet(Number(b.dataset.barPick)));   // the bar chip by "Kg"
+  m.querySelectorAll('[data-warmups]').forEach(b => b.onclick = () => { b.closest('details')?.removeAttribute('open'); openWarmupDialog(Number(b.dataset.warmups)); });   // press and hold an exercise's title to drag it up or down
   m.querySelectorAll('[data-dupday]').forEach(b => b.onclick = async () => {
     const pid = S.sel.program, p = S.programs[pid], di = Number(b.dataset.dupday); if (!p?.days[di]) return;
     readProgramEditor(pid, m);
@@ -7882,6 +8394,21 @@ function groupDialog(gid){
 
 // Light is the default; "Dark" and "Match system" (stored as '') in Settings and data > Appearance still apply.
 try { const t = localStorage.getItem('nyaega:theme'); if (t !== '') document.documentElement.setAttribute('data-theme', t || 'light'); } catch { document.documentElement.setAttribute('data-theme', 'light'); }
+
+// The browser-tab icon follows the theme: green in light, black in dark. Only the published site has a tab icon.
+(() => {
+  const link = document.querySelector('link[rel="icon"]'); if (!link) return;
+  const sys = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+  const sync = () => {
+    const t = document.documentElement.getAttribute('data-theme');
+    const dark = t === 'dark' || (t !== 'light' && !!(sys && sys.matches));
+    const href = dark ? 'icon-dark-192.png' : 'icon-192.png';
+    if (link.getAttribute('href') !== href) link.setAttribute('href', href);
+  };
+  sync();
+  new MutationObserver(sync).observe(document.documentElement, { attributes:true, attributeFilter:['data-theme'] });
+  if (sys && sys.addEventListener) sys.addEventListener('change', sync);
+})();
 /* ---------------------------------------------------------------
    Navigation.
    - Header (every screen size): the Nyaega mark returns Home (Today); on the right, Calendar opens the Schedule, Search finds
@@ -7897,6 +8424,7 @@ const NAV_ICON = {
   clients:  '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14c2.5 0 4.5 2 4.5 4.5"/>',
   programs: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM8.5 12h7M8.5 16h5"/>',
   more:     '<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',
+  plates:   '<rect x="2" y="10.5" width="20" height="3" rx="1"/><rect x="5" y="6" width="3" height="12" rx="1"/><rect x="16" y="6" width="3" height="12" rx="1"/>',
   start:    '<path d="M8 5v14l11-7z"/>',
   addClient:'<circle cx="9" cy="8" r="3.4"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M19 8v6M16 11h6"/>',
   attend:   '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12.5l2.8 2.8L16 9.5"/>',
@@ -8048,6 +8576,7 @@ function quickActionItems(){
   const items = [{ label:'Start a session', icon:'start', go:openQuickStart }];
   if (Sync.role !== 'assistant') items.push({ label:'Add a client', icon:'addClient', go:() => { navigateTo('dashboard', 'clients'); const b = document.getElementById('newClient'); if (b) b.click(); } });
   items.push({ label:'Log attendance', icon:'attend', go:openQuickAttendance });
+  items.push({ label:'Plate calculator', icon:'plates', go:() => openPlateCalculator() });
   return items;
 }
 /* Active clients, those expected today first (a pairing day, their own recurring day, or a one-off session). */
@@ -8149,6 +8678,12 @@ function navApplyRoute(route, scrollY){
   let r = route || NAV_HOME;
   Nav.restoring = true;
   try {
+    // Back from the conditioning part of a strength workout: the strength workout comes back (as "Return to strength" does).
+    if (r.view === 'session' && S.sel?.conditioningMode === 'both' && S.parkedWorkout && r.sel.logClient && r.sel.logClient === S.parkedWorkout.logClient){
+      const p = S.parkedWorkout; p.draft.conditioningInProgress = S.sel.conditioningSession;
+      if (ConditioningTimer.state()?.running) ConditioningTimer.pause();
+      S.sel = { logClient:p.logClient, dayIndex:p.dayIndex, draft:p.draft, backTo:p.backTo }; S.parkedWorkout = null; render(); return;
+    }
     if (r.view === 'session'){
       const cid = r.sel.logClient || r.sel.conditioningClient, parked = cid && sessionFor(cid);
       if (parked){ flushProgramEditor(); resumeParkedWorkout(sessionKey(parked)); return; }
@@ -8182,6 +8717,561 @@ window.addEventListener('popstate', e => {
   Nav.idx = st ? st.idx : 0;
   navApplyRoute(st ? st.route : NAV_HOME, st ? st.scrollY : 0);
 });
+
+/* Phones go back with their own gesture, so the in-app Back buttons are hidden there (styles: .has-system-back):
+   Android has its back button / gesture, Safari on iPhone has its edge swipe, and the iPhone home-screen app, which has
+   neither, gets the edge swipe below. Computers keep the buttons. */
+const EDGE_BACK_PX = 24;
+const IS_IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const IS_ANDROID = /Android/i.test(navigator.userAgent);
+const IS_STANDALONE = navigator.standalone === true || !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+if (IS_ANDROID || IS_IOS) document.documentElement.classList.add('has-system-back');
+if (IS_IOS && IS_STANDALONE) installEdgeSwipeBack();
+
+/* Swipe in from the left edge to go back, with an arrow that follows the thumb (lime once far enough to count). */
+function installEdgeSwipeBack(){
+  document.documentElement.classList.add('edge-back');
+  const GO = 72;
+  const arrow = document.createElement('div'); arrow.id = 'edgeBack'; arrow.setAttribute('aria-hidden', 'true');
+  arrow.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
+  document.body.appendChild(arrow);
+  let g = null;
+  const reset = () => { g = null; arrow.classList.remove('show', 'ready'); arrow.style.transform = ''; };
+  document.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0], lock = document.getElementById('lockScreen');
+    if (t.clientX > EDGE_BACK_PX || Nav.idx < 1 || (lock && !lock.hidden)) return;   // (nothing to go back to on Home; never past the lock)
+    g = { x:t.clientX, y:t.clientY, active:false, ready:false };
+  }, { passive:true });
+  document.addEventListener('touchmove', e => {
+    if (!g) return;
+    const t = e.touches[0], dx = t.clientX - g.x, dy = t.clientY - g.y;
+    if (!g.active){
+      if (Math.abs(dy) > 12 && Math.abs(dy) > Math.abs(dx)){ reset(); return; }   // a scroll, not a swipe
+      if (dx < 10) return;
+      g.active = true; arrow.classList.add('show');
+    }
+    g.ready = dx >= GO;
+    arrow.classList.toggle('ready', g.ready);
+    arrow.style.transform = `translate(${Math.round(Math.min(dx, GO * 1.3) * 0.7 - 30)}px, ${Math.round(t.clientY - 22)}px)`;
+  }, { passive:true });
+  document.addEventListener('touchend', () => { const go = g && g.active && g.ready; reset(); if (go) history.back(); }, { passive:true });
+  document.addEventListener('touchcancel', reset, { passive:true });
+}
+/* ---------------------------------------------------------------
+   Barbell & plate calculator.
+   Data:  BAR_PROFILES (bar weights in kg and lb), PLATE_SETS (standard plates per unit).
+   Logic: calcPlates(target, bar, plates) — pure, no screen; the greedy breakdown per side and the error states.
+   UI:    openPlateCalculator({ weight, barId, onBar }) — a pop-up with bar, unit, target and plates; redraws as you type.
+   Workouts: bar exercises get a "Plates" button (platesWeightFor picks the starting weight), and when a session is saved
+   each bar exercise records its bar ({ id, name, kg }), so History shows bar weight + plate weight for every set.
+   Per-device settings (unit, bar, gym's own bar weights, plates you don't have) are remembered in localStorage.
+----------------------------------------------------------------*/
+
+/** @typedef {'kg'|'lb'} Unit */
+/** @typedef {{ id:string, name:string, group:string, weight:{ kg:number, lb:number } | null, match?:RegExp }} BarProfile
+    (null weight = custom; `match` finds the bar from an exercise name in a workout) */
+/** @typedef {number | { weight:number, count?:number }} PlateSpec   (count = how many per side; unlimited if left out) */
+/** @typedef {{ weight:number, count:number }} PlateLoad */
+/** @typedef {{ id:string, name:string, kg:number }} LoggedBar   (saved with a logged exercise) */
+/**
+ * @typedef {Object} PlateResult
+ * @property {boolean} ok
+ * @property {'below-bar'|'not-exact'|'invalid'} [error]
+ * @property {number} perSide       weight to load on each side: (target − bar) / 2
+ * @property {PlateLoad[]} plates   per side, heaviest first
+ * @property {number} remainder     per side, what the plates couldn't make up (0 when ok)
+ * @property {number} loaded        the total the bar actually holds with these plates
+ * @property {number} [nearestBelow] closest loadable totals around an inexact target
+ * @property {number} [nearestAbove]
+ */
+
+/* Standard weights; real bars vary by brand, so each can be set to the gym's own (remembered per device). */
+/** @type {BarProfile[]} */
+const BAR_PROFILES = [
+  { id:'olympic',   group:'Olympic',        name:"Olympic bar (men's)",        weight:{ kg:20, lb:45 } },
+  { id:'womens',    group:'Olympic',        name:"Women's Olympic bar",        weight:{ kg:15, lb:33 }, match:/\bwomen'?s\b/i },
+  { id:'power',     group:'Olympic',        name:'Powerlifting / deadlift bar', weight:{ kg:20, lb:45 } },
+  { id:'junior',    group:'Olympic',        name:'Junior bar',                 weight:{ kg:10, lb:22 }, match:/\bjunior\b|\byouth\b/i },
+  { id:'technique', group:'Olympic',        name:'Technique bar',              weight:{ kg:5,  lb:15 }, match:/\btechnique\b/i },
+  { id:'trap',      group:'Specialty',      name:'Trap / hex bar',             weight:{ kg:25, lb:55 }, match:/\btrap ?bar\b|\bhex ?bar\b/i },
+  { id:'ssb',       group:'Specialty',      name:'Safety squat bar',           weight:{ kg:30, lb:65 }, match:/\bsafety ?(squat )?bar\b|\bssb\b/i },
+  { id:'swiss',     group:'Specialty',      name:'Swiss / multi-grip bar',     weight:{ kg:15, lb:35 }, match:/\bswiss\b|\bfootball bar\b|\bmulti-?grip\b/i },
+  { id:'cambered',  group:'Specialty',      name:'Cambered squat bar',         weight:{ kg:32, lb:70 }, match:/\bcambered\b/i },
+  { id:'axle',      group:'Specialty',      name:'Axle / fat bar',             weight:{ kg:15, lb:35 }, match:/\baxle\b|\bfat ?bar\b/i },
+  { id:'log',       group:'Specialty',      name:'Log',                        weight:{ kg:30, lb:65 }, match:/\blog\b/i },
+  { id:'ez',        group:'Curl and small', name:'EZ-curl bar',                weight:{ kg:10, lb:25 }, match:/\bez\b|\bez-?curl\b/i },
+  { id:'standard',  group:'Curl and small', name:'Standard 1" bar',            weight:{ kg:7,  lb:15 } },
+  { id:'smith',     group:'Machine',        name:'Smith machine bar',          weight:{ kg:10, lb:25 }, match:/\bsmith\b/i },
+  { id:'custom',    group:'Custom',         name:'Custom bar',                 weight:null }
+];
+/** The bar an exercise is done with, from its name or equipment (e.g. "Trap bar deadlift" → trap); null if no bar. */
+function barIdForExercise(ex){
+  if (!ex) return null;
+  const text = (ex.name || '') + ' ' + (ex.equipment || ''), hit = BAR_PROFILES.find(b => b.match && b.match.test(text));
+  return hit ? hit.id : (exNorm(ex.equipment) === 'barbell' ? 'olympic' : null);
+}
+/** @type {Record<Unit, number[]>} */
+const PLATE_SETS = { kg:[25, 20, 15, 10, 5, 2.5, 1.25], lb:[45, 35, 25, 10, 5, 2.5] };
+/* Competition colours (kg), and the usual bumper colours for lb. Anything else is steel grey. */
+const PLATE_COLORS = { kg:{ 25:'#d8463b', 20:'#3d7bd9', 15:'#f2c94c', 10:'#4caf6e', 5:'#f4f4f4', 2.5:'#d8463b', 1.25:'#c9cdd2' },
+                       lb:{ 45:'#3d7bd9', 35:'#f2c94c', 25:'#4caf6e', 10:'#f4f4f4', 5:'#d8463b', 2.5:'#c9cdd2' } };
+const LB_PER_KG = 2.20462;
+
+/**
+ * Plates per side for a target total, heaviest first (greedy). Works in hundredths so 1.25 kg and 2.5 lb stay exact.
+ * @param {number} targetWeight  total weight wanted on the bar
+ * @param {number} barWeight     the empty bar
+ * @param {PlateSpec[]} availablePlates
+ * @returns {PlateResult}
+ */
+function calcPlates(targetWeight, barWeight, availablePlates){
+  const h = v => Math.round(Number(v) * 100), t = h(targetWeight), b = h(barWeight);
+  const plates = (availablePlates || [])
+    .map(p => typeof p === 'number' ? { weight:p, count:Infinity } : { weight:Number(p.weight), count:p.count == null ? Infinity : Number(p.count) })
+    .filter(p => p.weight > 0 && p.count > 0).sort((a, c) => c.weight - a.weight);
+  if (!Number.isFinite(t) || !Number.isFinite(b) || t <= 0 || b < 0) return { ok:false, error:'invalid', perSide:0, plates:[], remainder:0, loaded:0 };
+  if (t < b) return { ok:false, error:'below-bar', perSide:0, plates:[], remainder:0, loaded:b / 100 };
+  const greedy = per => {
+    let left = per; const out = [];
+    for (const p of plates){ const w = h(p.weight), n = Math.min(p.count, Math.floor(left / w + 1e-9)); if (n > 0){ out.push({ weight:p.weight, count:n }); left -= n * w; } }
+    return { out, left };
+  };
+  const per = (t - b) / 2, { out, left } = greedy(per);
+  const result = { ok:left < 1e-6, perSide:per / 100, plates:out, remainder:Math.round(left) / 100, loaded:(b + 2 * (per - left)) / 100 };
+  if (result.ok) return result;
+  // Not exact: offer the nearest totals that are (below: what the greedy plates make; above: the next exact one).
+  const step = plates.length ? h(plates[plates.length - 1].weight) : 0;
+  let above;
+  for (let k = 1; step && k <= 400 && above == null; k++){ const p2 = Math.ceil(per / step) * step + (k - 1) * step; if (greedy(p2).left < 1e-6) above = (b + 2 * p2) / 100; }
+  return { ...result, error:'not-exact', nearestBelow:result.loaded, nearestAbove:above };
+}
+
+/* ---- settings (per device) ---- */
+const PC_KEY = 'nyaega:plateCalc';
+function pcLoad(){
+  let s = {}; try { s = JSON.parse(localStorage.getItem(PC_KEY) || '{}') || {}; } catch {}
+  return { unit:s.unit === 'lb' ? 'lb' : 'kg', bar:BAR_PROFILES.some(b => b.id === s.bar) ? s.bar : 'olympic',
+    custom:{ kg:Number(s.custom?.kg) || 20, lb:Number(s.custom?.lb) || 45 }, off:{ kg:s.off?.kg || [], lb:s.off?.lb || [] },
+    own:(s.own && typeof s.own === 'object') ? s.own : {} };   // own: the gym's weight for a bar, { barId:{ kg, lb } }
+}
+function pcSave(st){ try { localStorage.setItem(PC_KEY, JSON.stringify({ unit:st.unit, bar:st.bar, custom:st.custom, off:st.off, own:st.own })); } catch {} }
+const pcStandard = st => { const p = BAR_PROFILES.find(b => b.id === st.bar); return p && p.weight ? p.weight[st.unit] : null; };
+const pcBarWeight = st => { if (st.bar === 'custom') return st.custom[st.unit]; const own = st.own[st.bar] && Number(st.own[st.bar][st.unit]); return own >= 0 && st.own[st.bar][st.unit] != null ? own : pcStandard(st); };
+const pcPlates = st => PLATE_SETS[st.unit].filter(w => !st.off[st.unit].includes(w));
+const pcFmt = v => (Math.round(v * 100) / 100).toLocaleString(undefined, { maximumFractionDigits:2 });
+
+/* The bar drawing and the plate list for one result. */
+function plateBarHTML(res, unit){
+  const all = PLATE_SETS[unit], max = Math.max(...all);
+  const one = (w, k) => { const hgt = Math.round(42 + 58 * (w / max)), wid = w >= max * 0.4 ? 15 : 10; return `<span class="pc-plate" style="height:${hgt}px;width:${wid}px;background:${(PLATE_COLORS[unit] || {})[w] || '#9aa0a6'}" data-k="${k}">${pcFmt(w)}</span>`; };
+  const stack = res.plates.flatMap(p => Array.from({ length:p.count }, () => p.weight)).map(one).join('');
+  const said = res.plates.length ? res.plates.map(p => `${p.count} × ${pcFmt(p.weight)} ${unit}`).join(', ') : 'nothing, just the bar';
+  return `<div class="pc-bar" role="img" aria-label="Each side: ${esc(said)}"><span class="pc-stub"></span><span class="pc-sleeve l">${stack}</span><span class="pc-collar"></span><span class="pc-shaft"></span><span class="pc-collar"></span><span class="pc-sleeve">${stack}</span><span class="pc-stub"></span></div>
+    ${res.plates.length ? `<ul class="pc-list" aria-label="Plates on each side">${res.plates.map(p => `<li>${p.count} × ${pcFmt(p.weight)} ${unit}</li>`).join('')}</ul>` : ''}`;
+}
+function plateResultHTML(st, target){
+  const bar = pcBarWeight(st), u = st.unit, res = calcPlates(target, bar, pcPlates(st));
+  if (res.error === 'invalid') return `<p class="pc-msg">Type the total weight you want on the bar.</p>`;
+  if (res.error === 'below-bar') return `<p class="pc-msg err">That's less than the bar itself (${pcFmt(bar)} ${u}).</p>`;
+  const head = `<div class="pc-head"><strong>${res.plates.length ? pcFmt(res.ok ? res.perSide : (res.loaded - bar) / 2) + ' ' + u + ' each side' : 'Just the bar'}</strong><span>Bar ${pcFmt(bar)} ${u}</span></div>`;
+  if (res.ok) return head + plateBarHTML(res, u);
+  const opts = [res.nearestBelow, res.nearestAbove].filter((v, i, a) => v != null && v >= bar && a.indexOf(v) === i);
+  return head + plateBarHTML(res, u) + `<p class="pc-msg err">${pcFmt(target)} ${u} can't be loaded exactly with these plates: ${pcFmt(res.remainder)} ${u} short on each side, so this loads ${pcFmt(res.loaded)} ${u}.</p>`
+    + (opts.length ? `<p class="pc-msg">Nearest: ${opts.map(v => `<button type="button" class="btn sm ghost" data-pc-use="${v}">${pcFmt(v)} ${u}</button>`).join('')}</p>` : '');
+}
+
+/** Opens the calculator. opts.weight is a total in kg (as the app logs it), shown in the unit last used.
+    opts.onBar(barId) is told which bar is chosen (a workout records it with the exercise). */
+function openPlateCalculator(opts = {}){
+  const st = pcLoad(); if (opts.barId && BAR_PROFILES.some(b => b.id === opts.barId)) st.bar = opts.barId;
+  let target = opts.weight != null && Number(opts.weight) > 0 ? Number(opts.weight) * (st.unit === 'lb' ? LB_PER_KG : 1) : pcBarWeight(st) + 2 * PLATE_SETS[st.unit][1];
+  if (st.unit === 'lb' && opts.weight != null) target = Math.round(target / 5) * 5;
+  const stepOf = () => 2 * Math.min(...(pcPlates(st).length ? pcPlates(st) : PLATE_SETS[st.unit]));
+  const body = `<div class="pc">
+      <div class="pc-row"><label class="field" style="margin:0"><span>Bar</span><select id="pcBar">${[...new Set(BAR_PROFILES.map(b => b.group))].map(g => `<optgroup label="${esc(g)}">${BAR_PROFILES.filter(b => b.group === g).map(b => `<option value="${b.id}">${esc(b.name)}</option>`).join('')}</optgroup>`).join('')}</select></label>
+        <div class="pc-unit" role="radiogroup" aria-label="Unit">${['kg', 'lb'].map(u => `<button type="button" role="radio" data-pc-unit="${u}">${u === 'lb' ? 'lbs' : 'kg'}</button>`).join('')}</div></div>
+      <div id="pcCustomWrap"><label class="field" style="margin:0"><span id="pcCustomLabel">Bar weight</span><input type="number" id="pcCustom" inputmode="decimal" min="0" step="0.5"></label>
+        <p class="pc-msg" id="pcBarNote" style="margin-top:.3rem;color:var(--text-muted)"></p></div>
+      <div><label for="pcTarget" class="field" style="margin:0 0 .35rem"><span id="pcTargetLabel">Total on the bar</span></label>
+        <div class="pc-target"><button type="button" id="pcMinus" aria-label="Less weight">−</button><input type="number" id="pcTarget" inputmode="decimal" min="0" step="0.5"><button type="button" id="pcPlus" aria-label="More weight">+</button></div></div>
+      <div class="pc-result" id="pcResult" aria-live="polite"></div>
+      <fieldset class="pc-plates" id="pcPlates"><legend>Plates you have (tap to leave one out)</legend></fieldset>
+    </div>`;
+  const dlg = dialog('Plate calculator', body, [{ label:'Close' }]);
+  const $ = id => dlg.querySelector('#' + id);
+  const tellBar = () => { if (typeof opts.onBar === 'function') opts.onBar(st.bar); };
+  const draw = () => {
+    const u = st.unit, custom = st.bar === 'custom';
+    $('pcBar').value = st.bar;
+    dlg.querySelectorAll('[data-pc-unit]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.pcUnit === u)));
+    // Every bar's weight can be set to the gym's own; the standard is shown with a reset when it differs.
+    $('pcCustomLabel').textContent = `Bar weight (${u})`;
+    if (document.activeElement !== $('pcCustom')) $('pcCustom').value = pcFmt(pcBarWeight(st)).replace(/,/g, '');
+    const std = pcStandard(st), own = !custom && std != null && pcBarWeight(st) !== std;
+    $('pcBarNote').innerHTML = custom ? 'Your own bar.' : own ? `Standard ${pcFmt(std)} ${u} · <button type="button" class="btn sm ghost" id="pcBarReset">Use standard</button>` : 'Standard weight. Change it if your gym\'s bar differs.';
+    if (own) $('pcBarReset').onclick = () => { if (st.own[st.bar]) delete st.own[st.bar][u]; pcSave(st); tellBar(); draw(); };
+    $('pcTargetLabel').textContent = `Total on the bar (${u})`; if (document.activeElement !== $('pcTarget')) $('pcTarget').value = pcFmt(target).replace(/,/g, '');
+    $('pcPlates').innerHTML = `<legend>Plates you have (tap to leave one out)</legend>` + PLATE_SETS[u].map(w => `<label class="pc-chip"><input type="checkbox" data-pc-plate="${w}" ${st.off[u].includes(w) ? '' : 'checked'}>${pcFmt(w)}</label>`).join('');
+    $('pcPlates').querySelectorAll('[data-pc-plate]').forEach(c => c.onchange = () => { const w = Number(c.dataset.pcPlate), off = st.off[u]; st.off[u] = c.checked ? off.filter(x => x !== w) : [...off, w]; pcSave(st); draw(); });
+    $('pcResult').innerHTML = plateResultHTML(st, target);
+    $('pcResult').querySelectorAll('[data-pc-use]').forEach(b => b.onclick = () => { target = Number(b.dataset.pcUse); draw(); });
+  };
+  $('pcBar').onchange = () => { st.bar = $('pcBar').value; pcSave(st); tellBar(); draw(); };
+  dlg.querySelectorAll('[data-pc-unit]').forEach(b => b.onclick = () => {
+    const u = b.dataset.pcUnit; if (u === st.unit) return;
+    // Keep the same load in the other unit, rounded to what that unit's plates can make.
+    const conv = u === 'lb' ? target * LB_PER_KG : target / LB_PER_KG; st.unit = u;
+    const s = stepOf(); target = Math.max(pcBarWeight(st), Math.round((conv - pcBarWeight(st)) / s) * s + pcBarWeight(st));
+    pcSave(st); draw();
+  });
+  $('pcCustom').oninput = () => {
+    const raw = $('pcCustom').value, v = Number(raw); if (raw === '' || !(v >= 0)) return;
+    if (st.bar === 'custom') st.custom[st.unit] = v; else (st.own[st.bar] = st.own[st.bar] || {})[st.unit] = v;
+    pcSave(st); tellBar(); $('pcResult').innerHTML = plateResultHTML(st, target);
+  };
+  $('pcCustom').onchange = () => draw();   // (shows the standard / reset line once typing is done)
+  $('pcTarget').oninput = () => { target = Number($('pcTarget').value); $('pcResult').innerHTML = plateResultHTML(st, target); $('pcResult').querySelectorAll('[data-pc-use]').forEach(b => b.onclick = () => { target = Number(b.dataset.pcUse); draw(); }); };
+  $('pcMinus').onclick = () => { target = Math.max(pcBarWeight(st), Math.round((target - stepOf()) * 100) / 100); draw(); };
+  $('pcPlus').onclick = () => { target = Math.round((target + stepOf()) * 100) / 100; draw(); };
+  draw();
+  return dlg;
+}
+
+/* ---- workouts and history ---- */
+/** A bar's weight in kg on this device: the gym's own if set in the calculator, else the standard. */
+function barKgOf(barId){ const st = pcLoad(); st.bar = barId; st.unit = 'kg'; return pcBarWeight(st); }
+/** The bar this client last used for this exercise (from their saved sessions), or null. Remembered until the
+    sessions change. @returns {LoggedBar|null} */
+function lastLoggedBar(cid, exId){
+  if (!cid || exId == null) return null;
+  const ix = logIndex();   // a rebuilt log index (sessions changed) starts this memo afresh
+  if (Idx.lastBarFor !== ix){ Idx.lastBar = new Map(); Idx.lastBarFor = ix; }
+  const key = cid + '|' + exId;
+  if (!Idx.lastBar.has(key)){
+    let found = null;
+    for (const l of clientLogs(cid)){   // newest first
+      const e = workoutLogEntries(l).find(x => entryExerciseKey(x) === 'id:' + exId);
+      if (e && e.bar && Number(e.bar.kg) >= 0){ found = e.bar; break; }
+    }
+    Idx.lastBar.set(key, found);
+  }
+  return Idx.lastBar.get(key);
+}
+/** The bar a workout exercise is done with: chosen in the calculator, kept from a saved or repeated session, the one
+    this client used for it last time, or found from the exercise. null for exercises without a bar. @returns {LoggedBar|null} */
+function entryBar(en){
+  if (!en) return null;
+  if (en.barId){ const p = BAR_PROFILES.find(b => b.id === en.barId); if (p) return { id:p.id, name:p.name, kg:barKgOf(p.id) }; }
+  if (en.bar && Number(en.bar.kg) >= 0) return en.bar;
+  const d = S.sel && S.sel.draft, last = d && d.entries && d.entries.includes(en) ? lastLoggedBar(d.clientId, en.exId) : null;
+  if (last) return last;
+  const id = barIdForExercise(S.exercises.find(x => x.id === en.exId)), p = id && BAR_PROFILES.find(b => b.id === id);
+  return p ? { id:p.id, name:p.name, kg:barKgOf(p.id) } : null;
+}
+/* Schema v4 (also after a sync pull and an import): sessions saved before the bar was recorded have the plates only
+   in the Kg box (the bar not included). On every bar movement saved without a bar, the bar's weight is added to each
+   set (an empty "0" with reps becomes the bar) and the bar is recorded: the same total and bar a session saved today
+   has. The bar is the one the client last logged on that exercise, else the exercise's own (the gym's weight where
+   set in the calculator). The plates-only numbers stay under barBackfill, to undo. An entry that has a bar is never
+   touched, so it runs once per entry and gives the same result on every device (synced copies agree).
+   Assistants get the coach's corrected sessions by sync instead. */
+async function backfillBarWeights(){
+  try { if (localStorage.getItem(LAST_ROLE_KEY) === 'assistant') return 0; } catch {}
+  const pairs = [];
+  for (const [id, l] of Object.entries(S.logs)){
+    if (!l || l.type === 'conditioning' || !Array.isArray(l.entries)) continue;
+    let next = null;
+    l.entries.forEach((e, k) => {
+      if (!e || typeof e !== 'object' || e.bar) return;
+      // (a movement no longer in the library: judged by its logged name, "Barbell …" counting as a barbell)
+      const nm = loggedExerciseName(e), ex = S.exercises.find(x => String(x.id) === String(e.exId)) || { name:nm, equipment:/\bbarbell\b/i.test(nm) ? 'Barbell' : '' };
+      const p = BAR_PROFILES.find(b => b.id === barIdForExercise(ex)); if (!p) return;
+      const last = e.exId != null ? lastLoggedBar(l.clientId, e.exId) : null;
+      const bar = last ? { id:last.id, name:last.name, kg:Number(last.kg) } : { id:p.id, name:p.name, kg:barKgOf(p.id) };
+      const kg = Number(bar.kg) > 0 ? Number(bar.kg) : 0, sets = loggedExerciseSets(e);
+      const platesKg = sets.map(s => s && s.weight != null && s.weight !== '' ? s.weight : null);
+      const fixed = sets.map(s => {
+        if (!s || s.weight == null || s.weight === '') return s;
+        const w = Number(s.weight); if (!Number.isFinite(w) || (w === 0 && !(Number(s.reps) > 0))) return s;
+        return { ...s, weight:round2(w + kg) };
+      });
+      next = next || { ...l, entries:l.entries.slice() };
+      next.entries[k] = { ...e, sets:fixed, bar, barBackfill:{ addedKg:kg, platesKg } };
+    });
+    if (next) pairs.push([id, next]);
+  }
+  if (!pairs.length) return 0;
+  await Store.batch(async () => { await Store.bulkPut('logs', pairs, S.logs); });
+  invalidateLogIndex();
+  return pairs.length;
+}
+/* The weight the Plates button starts from, for the set being logged (the first one not ticked):
+   1 its typed weight · 2 in a repeated workout, that set's weight in the session being repeated · 3 the last weight
+   used on this exercise in today's log · 4 the hint in the box (suggestion / previous) · 5 the program's load. */
+function platesWeightFor(en){
+  const num = v => { const n = parseFloat(String(v ?? '').replace(',', '.')); return n > 0 ? n : null; };
+  const sets = en.sets || [], open = sets.findIndex(x => !x.done), at = open < 0 ? sets.length - 1 : open, s = sets[at] || {};
+  if (isWarmupSet(s)) return num(s.weight);   // a warm-up has its own weight
+  const wi = workingIndexOf(sets, at);
+  const today = sets.slice(0, at).filter(x => !isWarmupSet(x)).reverse().map(x => num(x.weight)).find(Boolean);   // (not from warm-ups)
+  const sug = entrySuggestion(en)?.sets?.[wi]?.weight;
+  return num(s.weight) ?? num(s.repeatWeight) ?? today ?? num(sug) ?? num(en.targetKg) ?? num(s.lastWeight) ?? num(en.targetLoad) ?? null;
+}
+/* Bar exercises in the logger: the Kg box takes the weight per side, the set keeps the total (per side × 2 + bar),
+   which is what History, PRs, "previous", suggestions and volume use. A muted line under the box shows the total. */
+const round2 = v => Math.round(v * 100) / 100;
+/** What the Kg box shows for a set total (or a hint): per side for a bar exercise, as is otherwise. */
+function kgBoxValue(en, total){
+  if (total == null || total === '') return '';
+  const b = entryBar(en), t = Number(total);
+  if (!b) return total;
+  return Number.isFinite(t) && t >= Number(b.kg) ? round2((t - Number(b.kg)) / 2) : '';
+}
+/** The set total for what was typed in the Kg box (null when empty). */
+function kgFromBox(en, value){
+  if (value === '' || value == null) return null;
+  const v = Number(value), b = entryBar(en);
+  return b && Number.isFinite(v) ? round2(v * 2 + Number(b.kg)) : v;
+}
+/** "Total: 70 kg" under the Kg box of a bar exercise ('' when there's nothing to add up). */
+function kgTotalLabel(en, total){
+  return entryBar(en) && total != null && total !== '' && Number.isFinite(Number(total)) ? `Total: ${pcFmt(Number(total))} kg` : '';
+}
+/** Switch a workout exercise to another bar. The plates per side stay the same, so each logged total moves by the
+    difference in bar weight. `prevKg` is the bar weight before (when it was already changed elsewhere). */
+function setEntryBar(en, barId, prevKg){
+  const before = prevKg != null ? Number(prevKg) : (Number(entryBar(en)?.kg) || 0);
+  en.barId = barId;
+  const after = Number(entryBar(en)?.kg) || 0;
+  if (after !== before) (en.sets || []).forEach(s => { if (s.weight != null && s.weight !== '') s.weight = round2(Number(s.weight) - before + after); });
+}
+/* The bar chip next to the Kg header of a bar exercise: a tiny barbell, the bar's weight and an arrow, with a 44 px
+   touch area. */
+/* A loaded barbell side on (a big and a small plate each side), and a small caret. */
+const BAR_CHIP_ICON = '<svg class="bar-chip-icon" viewBox="0 0 20 12" width="15" height="9" aria-hidden="true"><path d="M.6 6h18.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><g fill="currentColor"><rect x="4" y=".8" width="2.4" height="10.4" rx=".7"/><rect x="13.6" y=".8" width="2.4" height="10.4" rx=".7"/><rect x="1.6" y="2.8" width="1.8" height="6.4" rx=".6"/><rect x="16.6" y="2.8" width="1.8" height="6.4" rx=".6"/></g></svg>';
+const BAR_CHIP_CARET = '<svg class="bar-chip-caret" viewBox="0 0 10 10" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>';
+function kgHeadHTML(en, ei){
+  const b = entryBar(en);
+  if (!b) return '<span>Kg</span>';
+  const kg = esc(pcFmt(Number(b.kg)));
+  return `<span class="kg-head">Kg<button type="button" class="bar-chip" data-bar-pick="${ei}" aria-label="Bar: ${esc(b.name)}, ${kg} kg. Change bar" title="${esc(b.name)} · ${kg} kg">${BAR_CHIP_ICON}<span class="bar-chip-kg num" aria-hidden="true">${kg}<span class="bar-chip-unit">kg</span></span>${BAR_CHIP_CARET}</button></span>`;
+}
+/** A bottom sheet to pick the bar for one workout exercise (weights in kg, the gym's own where set in the calculator). */
+function openBarSheet(ei){
+  const d = S.sel && S.sel.draft, en = d && d.entries[ei]; if (!en) return;
+  const cur = entryBar(en), curKg = cur ? Number(cur.kg) : null, st = pcLoad();
+  const opt = b => `<button type="button" class="bar-opt" role="radio" aria-checked="${!!cur && cur.id === b.id}" data-bar-opt="${b.id}"><span>${esc(b.name)}</span><span class="bar-opt-kg num">${esc(pcFmt(barKgOf(b.id)))} kg</span></button>`;
+  const groups = [...new Set(BAR_PROFILES.filter(b => b.weight).map(b => b.group))];
+  const body = `<div class="bar-sheet-list" role="radiogroup" aria-label="Bar for ${esc(en.name || 'this exercise')}">
+      ${groups.map(g => `<div class="bar-group">${esc(g)}</div>${BAR_PROFILES.filter(b => b.group === g && b.weight).map(opt).join('')}`).join('')}
+      <div class="bar-group">Custom</div>
+      <div class="bar-opt-custom"><button type="button" class="bar-opt" role="radio" aria-checked="${!!cur && cur.id === 'custom'}" data-bar-opt="custom"><span>Custom bar</span></button>
+        <label class="bar-custom-kg"><input type="number" id="barCustomKg" inputmode="decimal" min="0" step="0.5" value="${esc(st.custom.kg)}" aria-label="Custom bar weight in kg"><span>kg</span></label></div>
+    </div>`;
+  const dlg = dialog('Bar', body, [{ label:'Close' }]);
+  // Bottom-sheet look until this sheet really closes (a late "close" from a pop-up closed just before is ignored).
+  dlg.classList.add('as-sheet');
+  const unsheet = () => { if (!dlg.open){ dlg.classList.remove('as-sheet'); dlg.removeEventListener('close', unsheet); } };
+  dlg.addEventListener('close', unsheet);
+  const pick = id => { setEntryBar(en, id, curKg); markStrengthActivity(); if (dlg.open) dlg.close(); render({ keepScroll:true }); };
+  dlg.querySelectorAll('[data-bar-opt]').forEach(b => b.onclick = () => pick(b.dataset.barOpt));
+  const ci = dlg.querySelector('#barCustomKg');
+  ci.oninput = () => { const v = Number(ci.value); if (ci.value === '' || !(v >= 0)) return; const s = pcLoad(); s.custom.kg = v; pcSave(s); };
+  ci.onkeydown = e => { if (e.key === 'Enter'){ e.preventDefault(); pick('custom'); } };
+}
+/** History's "Plate/side" column: the plates on each side of a recorded bar for a logged set ("45", "Bar" for the
+    empty bar, "—" when it doesn't apply). */
+function platesPerSideText(weight, bar){
+  const w = Number(weight), b = bar && Number(bar.kg);
+  if (!bar || !(w > 0) || !(b >= 0) || w < b) return '—';
+  return w === b ? 'Bar' : pcFmt((w - b) / 2);
+}
+/* ---------------------------------------------------------------
+   Warm-up sets: from the exercise's ⋯ menu ("Add warm-up sets") in a workout.
+   Logic (pure, no screen):
+     planWarmups(workingWeight, { barWeight, increment, unit }) — the adaptive default rows: the empty bar first
+       (bar exercises), then more ramp sets the bigger the jump from the bar to the work set (none for a small jump,
+       up to a full 45 / 60 / 75 / 90 % pyramid for a big one).
+     calcWarmupSets(workingWeight, rows, opts) — the weights: rounded to the increment (2.5 kg / 5 lb), never below
+       the bar, and any set within one increment of the work set (the 90 % feeder on a light lift) left out.
+   UI: openWarmupDialog(ei) — a recommendation from the last session, all editable: the work set (its top working
+       set, plus the program's step when every rep was reached) and the rows (the warm-ups done last time, scaled to
+       today's work set, to the nearest 5 %; the adaptive plan when there are none). Rows: W, % × reps or Bar × reps,
+       weight, delete; + Add warm-up set (+ 10 % up to 80, then + 5), Restore (back to the recommendation) / Cancel /
+       Insert. Text kept to the key things: the "Recommended" tag and where the work set came from. Insert puts the warm-ups at the top
+       of the exercise, filled in, tagged as warm-ups (setType "warmup", isWarmup: true).
+----------------------------------------------------------------*/
+
+/** @typedef {{ bar:true, reps:number } | { pct:number, reps:number }} WarmupRow   (bar: the empty bar, no %) */
+/** @typedef {{ bar:boolean, pct:number|null, reps:number, weight:number, skipped:boolean }} WarmupSet */
+
+/* Ramp sets after the empty bar, by how many the jump calls for (0 = none … 4 = full pyramid): even steps in
+   5 % units, fewer reps as the load climbs. */
+const WARMUP_RAMPS = [
+  [],
+  [{ pct:70, reps:5 }],
+  [{ pct:60, reps:5 }, { pct:80, reps:3 }],
+  [{ pct:55, reps:5 }, { pct:70, reps:3 }, { pct:85, reps:2 }],
+  [{ pct:45, reps:5 }, { pct:60, reps:5 }, { pct:75, reps:3 }, { pct:90, reps:1 }]
+];
+const wuRound5 = p => Math.min(100, Math.max(5, Math.round(p / 5) * 5));
+/** Reps for a warm-up at this % of the work set. */
+const wuRepsFor = pct => pct <= 60 ? 5 : pct <= 75 ? 3 : pct <= 85 ? 2 : 1;
+/** The next % for an added warm-up: + 10 up to 80, then + 5 (at most 95). */
+const wuNextPct = last => last == null ? 50 : Math.min(95, wuRound5(last + (last < 80 ? 10 : 5)));
+/* Gap from the bar to the work set (kg) up to which each ramp size is enough; lb uses the same in pounds. */
+const WARMUP_GAPS_KG = [15, 35, 60, 90];
+const WARMUP_BAR_REPS = 10;
+
+/** The default warm-up rows for a work set. @returns {WarmupRow[]} */
+function planWarmups(workingWeight, opts = {}){
+  const unit = opts.unit === 'lb' ? 'lb' : 'kg', w = Number(workingWeight);
+  const bar = Math.max(0, Number(opts.barWeight ?? (unit === 'lb' ? 45 : 20))), inc = Number(opts.increment) > 0 ? Number(opts.increment) : (unit === 'lb' ? 5 : 2.5);
+  if (!(w > 0) || w - bar <= inc + 1e-9) return [];   // the work set is the empty bar (or about): nothing to warm up with
+  const gap = (w - bar) * (unit === 'lb' ? 1 / LB_PER_KG : 1);
+  let n = WARMUP_GAPS_KG.findIndex(g => gap <= g); if (n < 0) n = 4;
+  return [...(bar > 0 ? [{ bar:true, reps:WARMUP_BAR_REPS }] : []), ...WARMUP_RAMPS[n].map(r => ({ ...r }))];
+}
+
+/**
+ * The warm-up weights for a work set.
+ * @param {number} workingWeight
+ * @param {WarmupRow[]} rows
+ * @param {{ barWeight?:number, increment?:number, unit?:'kg'|'lb' }} [opts]  barWeight 0 = no bar (dumbbells…)
+ * @returns {WarmupSet[]}
+ */
+function calcWarmupSets(workingWeight, rows, opts = {}){
+  const unit = opts.unit === 'lb' ? 'lb' : 'kg', w = Number(workingWeight);
+  const bar = Math.max(0, Number(opts.barWeight ?? (unit === 'lb' ? 45 : 20))), inc = Number(opts.increment) > 0 ? Number(opts.increment) : (unit === 'lb' ? 5 : 2.5);
+  const round = v => Math.round(Math.round(v / inc) * inc * 100) / 100;
+  return (rows || []).map(r => {
+    const reps = Math.max(0, Math.round(Number(r.reps) || 0));
+    if (r.bar) return { bar:true, pct:null, reps, weight:bar, skipped:!(w > 0) || w - bar <= inc + 1e-9 };
+    const pct = Math.max(0, Number(r.pct) || 0);
+    if (!(w > 0)) return { bar:false, pct, reps, weight:0, skipped:true };
+    const weight = Math.max(bar, round(w * pct / 100));
+    // Within one increment of the work set (the 90 % feeder on a light lift, say): not worth the fatigue, left out.
+    return { bar:false, pct, reps, weight, skipped:w - weight <= inc + 1e-9 };
+  });
+}
+
+const wuNum = v => { const n = Number(v); return Number.isFinite(n) && n > 0 ? n : null; };
+
+/** The recommended work set, from the client's last session on this exercise: its top working set, plus the
+    program's step when every rep was reached (the same advice as the logger's suggestion). Else what's planned or
+    typed for it today. @returns {{ work:number|null, note:string }} */
+function warmupWorkRecommendation(ei){
+  const d = S.sel?.draft, en = d?.entries?.[ei]; if (!en) return { work:null, note:'' };
+  const last = exerciseHistory(d.clientId, en.exId).last, fromLast = (last?.sets || []).map(s => wuNum(s.weight)).filter(Boolean);   // (working sets only)
+  if (fromLast.length){
+    const top = Math.max(...fromLast), next = Math.max(0, ...((entrySuggestion(en)?.sets || []).map(s => wuNum(s.weight)).filter(Boolean)));
+    const when = shortDate(last.date);
+    return { work:next > top ? next : top, note:`Last session, ${when}: ${pcFmt(top)} kg${next > top ? ` + ${pcFmt(round2(next - top))} kg` : ''}` };
+  }
+  const today = en.sets.map((s, si) => isWarmupSet(s) ? null : wuNum(s.weight) ?? wuNum(previousSetValues(ei, si).weight)).filter(Boolean);
+  return { work:today.length ? Math.max(...today) : (wuNum(en.targetKg) ?? wuNum(en.targetLoad)), note:'' };
+}
+
+/** The client's warm-ups on this exercise in the latest session that had any, as rows relative to that session's
+    top working set (so they scale to today's). @returns {{ date:string, rows:WarmupRow[] }|null} */
+function lastSessionWarmups(cid, exId, barWeight){
+  const editing = S.sel?.draft?.editing && S.sel.draft.clientId === cid ? S.sel.draft.id : null, editedLog = editing && S.logs[editing];
+  for (const l of clientLogs(cid)){   // newest first
+    if (editedLog && (l.id === editing || !isLogBefore(l, editedLog))) continue;
+    const e = workoutLogEntries(l).find(x => entryExerciseKey(x) === 'id:' + String(exId)); if (!e) continue;
+    const sets = loggedExerciseSets(e), weightOf = s => wuNum(s.weight ?? s.kg ?? s.load ?? s.actualWeight);
+    const top = Math.max(0, ...sets.filter(s => !isWarmupSet(s)).map(weightOf).filter(Boolean));
+    const wu = sets.filter(isWarmupSet).map(s => ({ weight:weightOf(s), reps:Math.round(Number(s.reps ?? s.actualReps)) || 0 })).filter(s => s.weight);
+    if (!wu.length || !(top > 0)) continue;
+    let hasBar = false;
+    const rows = wu.sort((a, b) => a.weight - b.weight).map(s => {
+      if (barWeight > 0 && !hasBar && Math.abs(s.weight - barWeight) < 0.01){ hasBar = true; return { bar:true, reps:s.reps || WARMUP_BAR_REPS }; }
+      return { pct:wuRound5(s.weight / top * 100), reps:s.reps || 1 };   // (to the nearest 5 %)
+    });
+    return { date:l.date, rows };
+  }
+  return null;
+}
+
+const WU_TRASH = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
+
+function openWarmupDialog(ei){
+  const d = S.sel && S.sel.draft, en = d && d.entries[ei]; if (!en) return;
+  const bar = entryBar(en), opts = { barWeight:bar ? Number(bar.kg) : 0, increment:2.5, unit:'kg' };
+  // Recommended from the last session (work set, and the warm-ups done then); everything stays editable.
+  const rec = warmupWorkRecommendation(ei), prev = lastSessionWarmups(d.clientId, en.exId, opts.barWeight);
+  const recRows = w => prev ? prev.rows.map(r => ({ ...r })) : planWarmups(w, opts);
+  let work = rec.work, rows = recRows(work), edited = false;   // until rows are edited, an adaptive plan follows the work set
+  const body = `<p class="small muted" style="margin-top:-.3rem">${esc(en.name || exName(en.exId))}${bar ? ` · ${esc(bar.name)} ${esc(pcFmt(Number(bar.kg)))} kg` : ''}</p>
+    <label class="field wu-work"><span>Work set (kg) <span class="wu-rec" id="wuWorkRec" hidden>Recommended</span></span><input type="number" id="wuWork" inputmode="decimal" min="0" step="2.5" placeholder="e.g. 100"></label>
+    <p class="small muted wu-from" id="wuFrom"></p>
+    <div class="wu-head" aria-hidden="true"><span></span><span>% × reps</span><span>Weight</span><span></span></div>
+    <div class="wu-list" id="wuList"></div>
+    <button type="button" class="btn ghost wu-add" id="wuAdd">+ Add warm-up set</button>`;
+  const dlg = dialog('Add warm-up sets', body, [
+    { label:'Restore', onClick:() => { work = rec.work; $('wuWork').value = work ?? ''; edited = false; rows = recRows(work); draw(); return false; } },
+    { label:'Cancel' },
+    { label:'Insert', kind:'primary', onClick:() => {
+      if (!(work > 0)){ toast('Enter the work set weight'); $('wuWork').focus(); return false; }
+      const sets = calcWarmupSets(work, rows, opts).filter(s => !s.skipped && s.weight > 0);
+      if (!sets.length){ toast('No warm-up sets needed for this weight'); return false; }
+      // Replace warm-ups not ticked yet; keep any already done; put the new ones on top.
+      const kept = en.sets.filter(s => !(isWarmupSet(s) && !s.done));
+      en.sets = [...sets.map(s => ({ weight:s.weight, reps:s.reps, done:false, actualRPE:null, actualRIR:null, setType:'warmup', isWarmup:true, note:'' })), ...kept];
+      en.warmupWork = work;   // the working sets are recommended from this work set (see warmupShiftedHint)
+      markStrengthActivity(); render({ keepScroll:true });
+      toast(sets.length + ' warm-up set' + (sets.length === 1 ? '' : 's') + ' added');
+    } }
+  ], { className:'wu-dialog' });   // phone-sized on every screen
+  const $ = id => dlg.querySelector('#' + id);
+  const fromText = () => {
+    const isRec = rec.work > 0 && work === rec.work;
+    $('wuWorkRec').hidden = !isRec;
+    $('wuFrom').textContent = isRec ? rec.note : '';
+  };
+  // Weights update in place as you type (the rows are only rebuilt when the plan changes or one is added / removed).
+  const update = () => {
+    const out = calcWarmupSets(work, rows, opts);
+    dlg.querySelectorAll('.wu-row').forEach((row, i) => {
+      const r = out[i], kg = row.querySelector('.wu-kg');
+      row.classList.toggle('is-skipped', !!r.skipped && work > 0);
+      kg.innerHTML = !(work > 0) ? '<span class="muted">—</span>'
+        : r.skipped ? '<span class="wu-skip">Left out</span>'
+        : `<strong class="num">${esc(pcFmt(r.weight))} kg</strong>${bar && r.weight > Number(bar.kg) ? `<small>${esc(pcFmt((r.weight - Number(bar.kg)) / 2))} a side</small>` : ''}`;
+    });
+    fromText();
+  };
+  const draw = () => {
+    $('wuList').innerHTML = rows.length ? rows.map((r, i) => `<div class="wu-row${r.bar ? ' is-bar' : ''}" data-wu="${i}">
+        <span class="wu-badge" aria-label="Warm-up set ${i + 1}">W</span>
+        <span class="wu-pill">${r.bar ? '<span class="wu-bar-label">Bar</span>' : `<input type="number" inputmode="numeric" min="0" max="100" step="5" data-wu-pct value="${esc(r.pct)}" aria-label="Warm-up ${i + 1}: percent of the work set"><span>%</span>`}<span class="wu-x">×</span><input type="number" inputmode="numeric" min="1" step="1" data-wu-reps value="${esc(r.reps)}" aria-label="Warm-up ${i + 1}: reps"></span>
+        <span class="wu-kg" aria-live="polite"></span>
+        ${r.bar ? '<span class="wu-del-spacer" aria-hidden="true"></span>' : `<button type="button" class="wu-del" data-wu-del="${i}" aria-label="Remove warm-up ${i + 1}">${WU_TRASH}</button>`}</div>`).join('')
+      : work > 0 ? '<p class="small muted wu-empty">No warm-up needed.</p>' : '';
+    $('wuList').querySelectorAll('.wu-row').forEach(row => {
+      const i = Number(row.dataset.wu);
+      const pct = row.querySelector('[data-wu-pct]'); if (pct) pct.oninput = e => { rows[i].pct = Number(e.target.value) || 0; edited = true; update(); };
+      row.querySelector('[data-wu-reps]').oninput = e => { rows[i].reps = Number(e.target.value) || 0; edited = true; };
+      const del = row.querySelector('[data-wu-del]'); if (del) del.onclick = () => { rows.splice(i, 1); edited = true; draw(); };
+    });
+    update();
+  };
+  $('wuWork').value = work ?? '';
+  $('wuWork').oninput = () => {
+    work = Number($('wuWork').value) || 0;
+    if (!edited && !prev){ rows = planWarmups(work, opts); draw(); } else update();   // untouched adaptive plan: the number of sets follows the jump
+  };
+  $('wuAdd').onclick = () => {
+    // A new row goes above the heaviest one (+ 10 % up to 80, then + 5, at most 95), with fewer reps as it climbs.
+    const pcts = rows.filter(r => !r.bar).map(r => Number(r.pct) || 0), top = pcts.length ? Math.max(...pcts) : null;
+    if (top >= 95){ toast('Already at 95 %'); return; }
+    const pct = wuNextPct(top);
+    rows.push({ pct, reps:wuRepsFor(pct) }); edited = true; draw();
+    const inputs = $('wuList').querySelectorAll('[data-wu-pct]'); inputs[inputs.length - 1]?.focus();
+  };
+  draw();
+}
 </script>
 </body>
 </html>
