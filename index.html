@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Nyaega — 1:1 and semi-private coaching</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js" integrity="sha384-fCAW/rDWORTbQXSiB7mOg0QtQ5c+r0f544y6XoKjuVva0nMBlCpNUjiFeG5iMdS3" crossorigin="anonymous"></script>
@@ -618,7 +618,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent-mid);box-shado
 @media(max-width:700px){.conditioning-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.conditioning-toolbar{align-items:flex-start}.conditioning-bookend{grid-template-columns:34px 1fr;padding:.8rem;gap:.6rem}.conditioning-timer-config{align-items:stretch;flex-direction:column}.conditioning-timer-config .field{min-width:0}.conditioning-section-head{align-items:flex-end}}
 /* Responsive layout hardening for phones, tablets, and compact laptops. */
 html,body{max-width:100%}
-html{touch-action:pan-x pan-y}   /* scrolling only: no pinch or double-tap zoom (with the viewport setting and lockIOSZoom) */
+html{touch-action:pan-x pan-y;overflow-x:clip}   /* scrolling only: no pinch or double-tap zoom (with the viewport setting and lockIOSZoom); nothing wider than the screen to zoom out to */
 body{overflow-x:clip;font-size:clamp(15px,1vw + 11px,16px)}
 main,#main,.shell,.panel,.card,.grid,.row,.spread,.exblock,.slot,.conditioning-bookend,.conditioning-block,.conditioning-timer{min-width:0}
 .grid>*,.row>*,.spread>*{min-width:0;max-width:100%}
