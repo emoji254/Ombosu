@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-SVjroVFFaJrjhEAL/YpMii1GjstNHwhh2SqXU7ec60I=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-k9rF16xtMf+RDjxpbv2i1zlfmq07pTBY+EpcCLdU1QQ=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -2821,6 +2821,27 @@ async function restoreSnapshot(key){
   await Audit.log('restore', { kind:key === 'pre-restore' ? 'earlier copy' : 'daily snapshot' });
   location.reload();
 }
+/* Bring back only the movements a safety copy has and the library no longer has (by id; one with the same name and
+   equipment as a movement there now counts as already there). Nothing else changes. They are saved like any added
+   movement, so they sync, and one that was removed online comes back there too. */
+async function missingMovementsIn(key){
+  const snap = await IDB.get('snapshots', key);
+  if (!snap) throw new Error('That copy no longer exists');
+  const list = Array.isArray(snap.exercises) ? snap.exercises : [];
+  const have = new Set(S.exercises.map(e => String(e.id))), add = [];
+  for (const e of list){
+    if (!e || typeof e.name !== 'string' || !SAFE_ID.test(String(e.id)) || have.has(String(e.id))) continue;
+    if (findExerciseVariant([...S.exercises, ...add], e.name, e.equipment)) continue;
+    add.push(e);
+  }
+  return { total:list.length, add };
+}
+async function restoreMovementsFrom(key, add){
+  if (!add.length) return 0;
+  if (!(await saveExerciseList([...S.exercises, ...add]))) return -1;
+  Audit.log('restore', { kind:'movements from a safety copy', copy:key, count:add.length });
+  return add.length;
+}
 async function markExported(){
   S.lastExportAt = Date.now();
   try { await Store.putMeta('lastExport', { at:S.lastExportAt }); } catch(e){ console.warn('Could not record the export time', e); }
@@ -2852,7 +2873,7 @@ function backupsPanelHTML(snaps){
     <p class="small"><strong>${esc(exportStatusText())}.</strong> ${exportReminderDue() ? 'It has been more than a week — export a copy soon.' : ''}</p>
     ${idb ? `${S.persisted ? '' : '<p class="small muted">Your browser may clear this data if the device runs low on space — export regularly.</p>'}
       <p class="small muted">Last ${SNAPSHOT_KEEP} daily copies, kept in this browser.</p>
-      <div class="stack" id="snapshotList">${(snaps || []).map(s => `<div class="spread"><span class="small">${esc(s.key === 'pre-restore' ? 'Before the last restore' : s.key)} <span class="muted num">· ${esc((s.counts && s.counts.clients) || 0)} clients · ${esc((s.counts && s.counts.logs) || 0)} sessions</span></span><button type="button" class="btn sm ghost" data-restore-snapshot="${esc(s.key)}">Restore</button></div>`).join('') || '<p class="small muted">None yet.</p>'}</div>`
+      <div class="stack" id="snapshotList">${(snaps || []).map(s => `<div class="spread"><span class="small">${esc(s.key === 'pre-restore' ? 'Before the last restore' : s.key)} <span class="muted num">· ${esc((s.counts && s.counts.clients) || 0)} clients · ${esc((s.counts && s.counts.logs) || 0)} sessions</span></span><span class="row tight"><button type="button" class="btn sm ghost" data-restore-movements="${esc(s.key)}">Movements</button><button type="button" class="btn sm ghost" data-restore-snapshot="${esc(s.key)}">Restore</button></span></div>`).join('') || '<p class="small muted">None yet.</p>'}</div>`
       : ''}
   </div>`;
 }
@@ -8804,6 +8825,19 @@ if(event.target.closest('select,textarea,summary')||event.target.closest('button
     dialog('Restore ' + (key === 'pre-restore' ? 'the earlier copy' : key) + '?', '<p>This replaces <strong>everything</strong> now stored in this browser with ' + esc(label) + '.</p><p class="small muted">What is stored now is kept as a safety copy first, so you can undo a restore from this same list.</p>', [
       {label:'Cancel'},
       {label:'Restore', kind:'danger', onClick: async () => { try { await restoreSnapshot(key); } catch(e){ S.restoring = false; if (isStorageError(e)) showSaveError(e); else toast('Restore failed — ' + e.message); return false; } }}
+    ]);
+  });
+  // Only the movements a copy has and the library lost; clients, sessions and today's movements stay as they are.
+  m.querySelectorAll('[data-restore-movements]').forEach(b => b.onclick = async () => {
+    if (assistantBlocked()) return;
+    const key = b.dataset.restoreMovements, when = key === 'pre-restore' ? 'The copy from before the last restore' : 'The copy from ' + key;
+    let r; try { r = await missingMovementsIn(key); } catch(e){ toast('Could not read that copy — ' + e.message); return; }
+    if (!r.add.length){ dialog('Nothing to bring back', '<p>' + esc(when) + ' has ' + r.total + ' movements, and all of them are in your library now.</p>', [{label:'OK'}]); return; }
+    const n = r.add.length, word = n === 1 ? 'movement' : 'movements';
+    const names = r.add.map(e => e.name + (e.equipment ? ' · ' + e.equipment : '') + (e.archived ? ' (archived)' : '')).sort((a, z) => a.localeCompare(z));
+    dialog('Bring back ' + n + ' ' + word + '?', '<p>' + esc(when) + ' has ' + r.total + ' movements; <strong>' + n + '</strong> of them are not in your library now:</p><ul class="small">' + names.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul><p class="small muted">Only these are added back, with their links to programs and past sessions. Clients, sessions and the movements you have now are not changed.</p>', [
+      {label:'Cancel'},
+      {label:'Bring back ' + n, kind:'primary', onClick: async () => { const k = await restoreMovementsFrom(key, r.add); if (k < 0) return false; toast(k + ' ' + (k === 1 ? 'movement' : 'movements') + ' brought back'); render({ keepScroll:true }); }}
     ]);
   });
   if (document.getElementById('snapshotList') || document.getElementById('storageBox')){
