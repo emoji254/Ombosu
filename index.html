@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-GgeCTDPaeQaAdx1vv74+6jDFKfCRvzM39O0q3Q+dxh4=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-SVjroVFFaJrjhEAL/YpMii1GjstNHwhh2SqXU7ec60I=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -311,6 +311,7 @@ body.has-timer-bar .undo-toast{bottom:calc(6.4rem + env(safe-area-inset-bottom,0
 .rest-clock-edit{appearance:none;border:0;background:transparent;padding:0;text-align:left;cursor:pointer;font:inherit}
 .rest-clock-edit:focus-visible{outline:2px solid var(--plate-blue);outline-offset:4px;border-radius:4px}
 .set-swipe-wrap{position:relative;overflow:hidden;border-bottom:1px solid var(--line-soft);touch-action:pan-y;background:var(--floor)}
+.set-swipe-wrap .setrow,.set-swipe-wrap .setrow *{touch-action:pan-y}   /* the row and everything in it (the kg / reps boxes, ✓): a sideways drag is the swipe, never a scroll */
 .set-swipe-wrap:last-of-type{border-bottom:0}
 .set-swipe-action{position:absolute;inset:0 auto 0 0;width:42%;display:flex;align-items:center;padding:0 .9rem;color:white;font-size:.74rem;font-weight:800;letter-spacing:.04em}
 .set-swipe-action.copy{background:#3979a6}
@@ -8258,6 +8259,9 @@ if(event.target.closest('select,textarea,summary')||event.target.closest('button
         else if(state.dx>=threshold)copyPreviousSet(ei,si);
       };
       row.onpointerup=finishSwipe;row.onpointercancel=finishSwipe;row.onlostpointercapture=()=>{if(swipe){swipe=null;row.classList.remove('swiping');row.style.transform='';row.closest('.set-swipe-wrap')?.classList.remove('swipe-copying','swipe-deleting');}};
+      // On a phone the browser can take a sideways finger drag as a scroll (the kg and reps boxes scroll their own text) and
+      // cancel the swipe halfway, so the set snaps back. Once the drag is clearly sideways the touch is kept from scrolling.
+      row.ontouchmove=event=>{if(!swipe||event.touches.length!==1)return;const t=event.touches[0],dx=t.clientX-swipe.x,dy=t.clientY-swipe.y;if((swipe.active||(Math.abs(dx)>6&&Math.abs(dx)>Math.abs(dy)*1.2))&&event.cancelable)event.preventDefault();};
     });
   });
   // Plates: the calculator for this exercise's bar and set; a bar chosen there is the one recorded with the exercise.
