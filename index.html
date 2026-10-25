@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-B+wZMZZ1haP4PRYcVFCZWBQ3wpHH5uzX7c68lzKDLWs=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-HGB5DxT3A53UxF7RyQ1cz5BYzkjVMbmDxddIsf4YqxY=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -355,71 +355,60 @@ body.assistant .owner-only,body.assistant #exportJson,body.assistant #exportEnc,
 :root{--lk-bg:#f7f6f1;--lk-card:#fff;--lk-text:#18231f;--lk-muted:#68736d;--lk-line:#e6e5dd;--lk-accent:#17372d;--lk-hover:#24483d;--lk-on-accent:#fff;--lk-soft:#efeee8;--lk-focus:#6a9c83;--lk-error:#bd3b35;--lk-key:#fff;--lk-shadow:0 24px 70px rgba(23,55,45,.10)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--lk-bg:#000000;--lk-card:#161616;--lk-text:#f2f2f2;--lk-muted:#a3a3a3;--lk-line:#2e2e2e;--lk-accent:#c8ef83;--lk-hover:#d1f2a4;--lk-on-accent:#111111;--lk-soft:#232323;--lk-focus:#a8d979;--lk-error:#ff9b8e;--lk-key:#1c1c1c;--lk-shadow:0 28px 80px rgba(0,0,0,.5)}}
 :root[data-theme="dark"]{--lk-bg:#000000;--lk-card:#161616;--lk-text:#f2f2f2;--lk-muted:#a3a3a3;--lk-line:#2e2e2e;--lk-accent:#c8ef83;--lk-hover:#d1f2a4;--lk-on-accent:#111111;--lk-soft:#232323;--lk-focus:#a8d979;--lk-error:#ff9b8e;--lk-key:#1c1c1c;--lk-shadow:0 28px 80px rgba(0,0,0,.5)}
-#lockScreen{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--lk-accent) 9%,transparent),transparent 48%),var(--lk-bg);color:var(--lk-text);overflow:auto;font-family:var(--font-ui)}
+/* Sign-in and unlock screen (10-lock.js): one card, the remembered account on it, fingerprint or keypad. */
+#lockScreen{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:max(env(safe-area-inset-top,0px),40px) 16px max(env(safe-area-inset-bottom,0px),24px);background:var(--lk-bg);color:var(--lk-text);overflow:auto;font-family:var(--font-ui)}
 #lockScreen *{box-sizing:border-box}
-.lock-top{position:fixed;top:max(env(safe-area-inset-top,0px),.75rem);right:.75rem;z-index:2}
-.lock-pill{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem .75rem;border-radius:999px;border:1px solid var(--lk-line);background:var(--lk-card);font-size:.78rem;font-weight:650;color:var(--lk-text)}
-.lock-pill i{width:.55rem;height:.55rem;border-radius:50%;background:#94a3b8}
-.lock-pill.ok i{background:#22c55e;box-shadow:0 0 0 3px #22c55e33}
-.lock-pill.warn i{background:#f59e0b;box-shadow:0 0 0 3px #f59e0b33}
-.lock-card{width:min(100%,380px);padding:clamp(25px,7vw,36px);border-radius:24px;border:1px solid color-mix(in srgb,var(--lk-line) 85%,transparent);background:var(--lk-card);box-shadow:var(--lk-shadow);display:flex;flex-direction:column;gap:1.15rem}
-.lock-brand{text-align:center;margin-bottom:.35rem}
-.lock-brand .logo{width:58px;height:58px;margin:0 auto 13px;display:grid;place-items:center;border-radius:19px;background:var(--lk-accent);color:var(--lk-on-accent);font-weight:850;font-size:1.75rem;letter-spacing:-.08em;box-shadow:0 8px 18px color-mix(in srgb,var(--lk-accent) 24%,transparent)}
-#lockScreen .lock-brand h1{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:1.75rem;letter-spacing:-.045em;color:var(--lk-text);font-weight:600}
-.lock-brand p{margin:6px 0 0;color:var(--lk-muted);font-size:.88rem}
-.lock-roles{display:grid;grid-template-columns:repeat(3,1fr);gap:.2rem;padding:.2rem;border-radius:12px;background:var(--lk-soft)}
-.lock-roles button{min-height:42px;border:0;border-radius:9px;background:transparent;color:var(--lk-muted);font:inherit;font-weight:650;font-size:.84rem;cursor:pointer}
-.lock-roles button[aria-selected="true"]{background:var(--lk-card);color:var(--lk-text);box-shadow:0 1px 4px rgba(0,0,0,.12)}
-.lock-body{display:flex;flex-direction:column;gap:.95rem;flex:1}
-.lk-form{display:grid;gap:17px}
-.lk-field{display:grid;gap:7px}
-.lk-field label,.lk-field>span{font-weight:650;font-size:.84rem;color:var(--lk-text)}
-.lk-wrap{position:relative}
-#lockScreen .lk-field input[type=email],#lockScreen .lk-field input[type=password],#lockScreen .lk-field input[type=text]{width:100%;height:51px;min-height:51px;border:1px solid var(--lk-line);border-radius:12px;background:var(--lk-card);color:var(--lk-text);-webkit-text-fill-color:var(--lk-text);padding:0 13px;font:inherit;font-size:.95rem;outline:none;transition:border-color .16s,box-shadow .16s}
-#lockScreen .lk-field input::placeholder{color:color-mix(in srgb,var(--lk-muted) 72%,transparent);-webkit-text-fill-color:color-mix(in srgb,var(--lk-muted) 72%,transparent)}
-#lockScreen .lk-field input:focus{border-color:var(--lk-focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--lk-focus) 18%,transparent)}
-#lockScreen .lk-field [aria-invalid="true"]{border-color:var(--lk-error)}
-#lockScreen .lk-wrap input{padding-right:53px}
-.lk-eye{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:9px;background:transparent;color:var(--lk-muted);cursor:pointer}
-.lk-eye:hover{background:var(--lk-soft);color:var(--lk-text)}
-.lk-eye svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.lk-err{color:var(--lk-error);font-size:.77rem;line-height:1.35}
-.lk-err:empty{display:none}
-.lk-opts{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.8rem}
-.lk-check{display:inline-flex;align-items:center;gap:8px;color:var(--lk-muted);cursor:pointer}
-#lockScreen .lk-check input{width:16px;height:16px;min-height:0;margin:0;accent-color:var(--lk-accent)}
-.lk-link2{background:none;border:0;padding:0;color:var(--lk-accent);font:inherit;font-weight:650;cursor:pointer;min-height:32px}
-.lk-link2:hover{text-decoration:underline}
-.lk-btn{width:100%;height:51px;min-height:51px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--lk-line);border-radius:12px;background:var(--lk-card);color:var(--lk-text);font:inherit;font-size:.94rem;font-weight:750;cursor:pointer;padding:0 1rem;transition:background .16s,transform .12s}
-.lk-btn.primary{background:var(--lk-accent);border-color:var(--lk-accent);color:var(--lk-on-accent)}
-.lk-btn.primary:hover{background:var(--lk-hover)}
-.lk-btn:active{transform:scale(.985)}
-.lk-btn:disabled{opacity:.78;cursor:wait}
-.lk-spin{display:none;width:17px;height:17px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:lkspin .7s linear infinite}
-.lk-btn.loading .lk-spin{display:inline-block}
-@keyframes lkspin{to{transform:rotate(360deg)}}
-.lk-divider{display:flex;align-items:center;gap:13px;margin:.4rem 0 0;color:var(--lk-muted);font-size:.75rem}
-.lk-divider:before,.lk-divider:after{content:"";height:1px;background:var(--lk-line);flex:1}
-.lk-alt{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.lk-alt.one{grid-template-columns:1fr}
-.lk-alt .lk-btn{height:46px;min-height:46px;font-size:.83rem;font-weight:650;border-radius:11px}
-.lk-alt .lk-btn:hover{background:var(--lk-soft)}
-.lk-signup{margin:.4rem 0 0;text-align:center;color:var(--lk-muted);font-size:.83rem}
-.lk-link{background:none;border:0;color:var(--lk-muted);font:inherit;font-size:.88rem;text-decoration:underline;min-height:44px;cursor:pointer}
-.lock-actions{display:flex;flex-wrap:wrap;gap:.25rem .9rem;justify-content:center}
-.lk-dots{display:flex;gap:1rem;justify-content:center;padding:.25rem 0}
-.lk-dots i{width:.95rem;height:.95rem;border-radius:50%;border:2px solid var(--lk-muted)}
-.lk-dots i.on{background:var(--lk-accent);border-color:var(--lk-accent)}
-.lk-msg{margin:0;text-align:center;color:var(--lk-muted);font-size:.84rem;min-height:1.2em}
-.lk-msg:empty{display:none}
-.lk-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem}
-.lk-pad button{min-height:64px;border-radius:16px;border:1px solid var(--lk-line);background:var(--lk-key);color:var(--lk-text);font:inherit;font-size:1.5rem;font-weight:600;cursor:pointer;touch-action:manipulation}
-.lk-pad button:active{background:var(--lk-accent);color:var(--lk-on-accent)}
-.lock-note{padding:1rem;border-radius:14px;background:var(--lk-soft)}
-.lock-note p{margin:.4rem 0 0;color:var(--lk-muted)}
 #lockScreen :focus-visible{outline:3px solid var(--lk-focus);outline-offset:3px}
-@media(max-width:560px){#lockScreen{padding:56px 16px 16px;place-items:start center}.lock-card{border-radius:20px;padding:26px 22px}}
-@media(max-width:560px){.lk-pad{padding-bottom:max(env(safe-area-inset-bottom,0px),.25rem)}}
+.lp-card{width:min(400px,100%);padding:30px 24px 22px;border:1px solid var(--lk-line);border-radius:26px;background:var(--lk-card);box-shadow:var(--lk-shadow);color:var(--lk-text);text-align:center}
+.lp-logo{width:64px;height:64px;margin:0 auto 14px;display:grid;place-items:center;border-radius:18px;background:var(--lime);color:var(--on-lime);font-size:2rem;font-weight:600}
+#lockScreen .lp-title{margin:0;font-family:var(--font-ui);font-size:1.55rem;font-weight:700;letter-spacing:-.02em;color:var(--lk-text)}
+.lp-sub{margin:.3rem 0 0;color:var(--lk-muted);font-size:.9rem}
+.lp-account{display:flex;align-items:center;gap:.75rem;margin:20px 0 18px;padding:.7rem .85rem;border:1px solid var(--lk-line);border-radius:16px;background:var(--lk-bg);text-align:left}
+.lp-avatar{flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;background:var(--lime);color:var(--on-lime);font-weight:700;font-size:1.15rem}
+.lp-who{min-width:0;flex:1}
+.lp-email{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:650;font-size:.95rem}
+.lp-role{display:flex;align-items:center;gap:.3rem;color:var(--lk-muted);font-size:.78rem}
+.lp-role svg{width:14px;height:14px;flex:none}
+.lp-bio{display:flex;align-items:center;justify-content:center;gap:.7rem;width:100%;min-height:58px;margin:4px 0 0;border:0;border-radius:16px;background:var(--lk-accent);color:var(--lk-on-accent);font:inherit;font-size:1rem;font-weight:650;cursor:pointer;transition:transform .1s,background .2s}
+.lp-bio:active{transform:scale(.98)}
+.lp-bio svg{width:28px;height:28px}
+.lp-bio.waiting svg{animation:lpPulse 1s ease-in-out infinite}
+.lp-bio.ok{background:color-mix(in srgb,var(--lime) 80%,var(--lk-accent));color:var(--on-lime)}
+@keyframes lpPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.92)}}
+.lp-links{display:flex;flex-direction:column;align-items:center;gap:.25rem;margin-top:14px}
+.lp-link{min-height:40px;padding:.3rem .6rem;border:0;background:none;color:var(--lk-accent);font:inherit;font-size:.88rem;font-weight:600;cursor:pointer}
+.lp-link.muted{color:var(--lk-muted);font-weight:500}
+.lp-msg{min-height:1.3em;margin:10px 0 0;color:var(--lk-muted);font-size:.86rem}
+.lp-msg:empty{min-height:0;margin:0}
+.lp-msg.err{color:var(--lk-error)}
+.lp-dots{display:flex;justify-content:center;gap:14px;margin:6px 0 4px}
+.lp-dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--lk-line);background:transparent;transition:background .15s,border-color .15s}
+.lp-dots i.on{background:var(--lk-accent);border-color:var(--lk-accent)}
+.lp-dots.shake{animation:lpShake .35s}
+@keyframes lpShake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.lp-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px auto 0;max-width:290px}
+.lp-pad button{min-height:62px;border:1px solid var(--lk-line);border-radius:18px;background:var(--lk-key);color:var(--lk-text);font:inherit;font-size:1.45rem;font-weight:600;cursor:pointer;touch-action:manipulation}
+.lp-pad button:active{background:var(--lk-soft)}
+.lp-pad .lp-key-icon{display:grid;place-items:center;border-color:transparent;background:transparent;color:var(--lk-accent)}
+.lp-pad .lp-key-icon svg{width:30px;height:30px}
+.lp-form{display:grid;gap:12px;margin-top:18px;text-align:left}
+.lp-form.tight{margin-top:0}
+.lp-field{display:grid;gap:6px;font-size:.82rem;font-weight:600;color:var(--lk-muted)}
+#lockScreen .lp-field input{width:100%;min-height:50px;margin:0;padding:.7rem .9rem;border:1px solid var(--lk-line);border-radius:14px;background:var(--lk-card);color:var(--lk-text);font:inherit;font-size:1rem;font-weight:400}
+#lockScreen .lp-field input:focus{outline:none;border-color:var(--lk-focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--lk-focus) 18%,transparent)}
+#lockScreen .lp-field input[aria-invalid="true"]{border-color:var(--lk-error)}
+.lp-pw{position:relative;display:block}
+#lockScreen .lp-pw input{padding-right:52px}
+.lp-eye{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:10px;background:transparent;color:var(--lk-muted);cursor:pointer}
+.lp-eye svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.lp-eye[aria-pressed="true"]{color:var(--lk-text)}
+.lp-primary{min-height:52px;border:0;border-radius:14px;background:var(--lk-accent);color:var(--lk-on-accent);font:inherit;font-size:1rem;font-weight:650;cursor:pointer}
+.lp-primary:disabled{opacity:.75;cursor:wait}
+.lp-or{display:flex;align-items:center;gap:.7rem;margin:14px 0 12px;color:var(--lk-muted);font-size:.8rem}
+.lp-or::before,.lp-or::after{content:"";flex:1;height:1px;background:var(--lk-line)}
+.lp-google{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;min-height:50px;border:1px solid var(--lk-line);border-radius:14px;background:var(--lk-card);color:var(--lk-text);font:inherit;font-weight:600;cursor:pointer}
+.lp-note{margin-top:16px;padding:.8rem .9rem;border-radius:14px;background:var(--lk-soft);color:var(--lk-text);font-size:.86rem;text-align:left}
+@media(max-width:560px){#lockScreen{place-items:start center}.lp-card{padding:26px 20px 18px}}
 @media(prefers-reduced-motion:reduce){#lockScreen *{animation-duration:.01ms!important;transition:none!important}}
 .timer-bar-clocks>div[hidden]{display:none}
 .eyebrow{display:block;font-size:.68rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--text-muted)}
@@ -1143,11 +1132,6 @@ input[type=text],input[type=number],input[type=date],input[type=tel],input[type=
 dialog{border-radius:20px}
 dialog .dlg-body>h2:first-child{font-size:1.35rem;font-weight:700;letter-spacing:-.02em}
 .toast{border-radius:12px}
-/* Sign-in and lock screen: the header's mark and type. */
-.lock-brand .logo{background:var(--lime);color:var(--on-lime);font-family:var(--font-ui);font-weight:600;letter-spacing:0;border-radius:16px;box-shadow:none}
-#lockScreen .lock-brand h1{font-family:var(--font-ui);font-weight:650;letter-spacing:-.02em}
-.lock-card{border-radius:24px}
-.lk-btn{border-radius:12px}
 /* Workout screen: the same sans-serif type as the rest of the app (it used a serif). */
 .session-overview h2{font-family:var(--font-ui);font-weight:700;letter-spacing:-.01em}
 .session-clock{font-family:var(--font-ui);font-weight:600;letter-spacing:.02em;font-variant-numeric:tabular-nums}
@@ -1201,7 +1185,6 @@ header.top .mark:after{font-size:33px}
   header.top .mark{width:46px;height:46px}
   .brand-name{font-size:1.3rem}
 }
-.lock-brand .logo{width:72px;height:72px;border-radius:19px;font-size:2.2rem}
 /* During a workout the header stays a little more compact, but the logo is still large. */
 body.in-session header.top{min-height:62px}
 body.in-session header.top .mark{width:46px;height:46px;border-radius:13px}
@@ -1271,7 +1254,136 @@ body.in-session nav.tabs{display:none!important}
   :root:not([data-theme="light"]) .timer-bar .bar-rest.running{background:color-mix(in srgb,var(--lime) 90%,var(--surface))}
   :root:not([data-theme="light"]) .set-swipe-action.copy{background:color-mix(in srgb,var(--lime) 80%,var(--surface))}
   :root:not([data-theme="light"]) nav.tabs button:not([aria-current="true"]){color:#b5b5b5}
-}</style>
+}
+/* ---- Settings and data as one quiet list (2026-10-24): grouped sections, compact rows, thin dividers, small muted
+   icons, values and controls on the right. The existing panels sit flat inside their row. ---- */
+.qs-page{max-width:760px;margin:0 auto}
+.qs-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6rem 1rem;margin:.2rem 0 .4rem}
+.qs-head h2{margin:0}
+.qs-search{position:relative;flex:1 1 260px;max-width:340px}
+.qs-search .qs-i{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);pointer-events:none}
+.qs-search input{width:100%;min-height:44px;padding:.5rem .8rem .5rem 2.4rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);font:inherit;font-size:.92rem}
+@media(max-width:560px){.qs-search{max-width:none;flex-basis:100%}}
+.qs-empty{margin:1rem .25rem}
+.qs-group{scroll-margin-top:1rem}
+.qs-title{display:flex;align-items:center;gap:.5rem;margin:1.35rem .3rem .45rem;font-size:.74rem!important;font-weight:650!important;letter-spacing:.08em!important;text-transform:uppercase;color:var(--text-muted)}
+.qs-flag{padding:.12rem .5rem;border-radius:999px;background:var(--warn-bg);color:var(--warn-text);font-size:.68rem;letter-spacing:0;text-transform:none}
+.qs-card{border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden}
+.qs-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .8rem;min-height:52px;padding:.6rem 1rem;border-top:1px solid var(--line-soft)}
+.qs-row:first-child{border-top:0}
+.qs-row[hidden],.qs-group[hidden]{display:none}
+.qs-i{width:19px;height:19px;flex:none;fill:none;stroke:var(--text-muted);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.qs-text{display:grid;gap:.1rem;flex:1 1 0;min-width:7rem}
+.qs-label{font-size:.95rem;font-weight:600;color:var(--text)}
+.qs-desc{font-size:.82rem;color:var(--text-muted);overflow-wrap:anywhere}
+.qs-right{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:.4rem;margin-left:auto;color:var(--text-muted);font-size:.88rem}
+.qs-right .btn.sm{min-height:38px}
+.qs-block{align-items:flex-start}
+.qs-block .storage-meter{margin:.35rem 0 .15rem}
+/* Profile */
+.qs-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border-radius:13px;background:var(--btn-primary);color:var(--on-primary);font-weight:650;font-size:.95rem}
+.qs-profile .qs-label{font-size:1.02rem}
+/* Switch (a checkbox) */
+.qs-switch{position:relative;display:inline-block;width:50px;height:30px;flex:none}
+.qs-switch input{position:absolute;inset:-7px;width:calc(100% + 14px);height:calc(100% + 14px);margin:0;opacity:0;cursor:pointer;z-index:1}
+.qs-switch span{position:absolute;inset:0;border-radius:999px;background:var(--line-strong);transition:background .18s}
+.qs-switch span::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0003;transition:transform .18s}
+.qs-switch input:checked+span{background:var(--btn-primary)}
+.qs-switch input:checked+span::after{transform:translateX(20px);background:var(--on-primary)}
+:root[data-theme="light"] .qs-switch input:checked+span::after{background:#fff}
+.qs-switch input:focus-visible+span{outline:3px solid var(--focus);outline-offset:2px}
+/* Picker (Default rest, Theme): one option per line, the current one ticked */
+.qs-pick{display:grid;gap:.4rem;margin-top:.5rem}
+.qs-pick-opt{display:flex;align-items:center;justify-content:space-between;gap:.6rem;min-height:48px;padding:.5rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);font:inherit;font-weight:600;text-align:left;cursor:pointer}
+.qs-pick-opt:hover{border-color:var(--accent-soft)}
+.qs-pick-opt[aria-checked="true"]{border-color:var(--accent-mid);background:var(--tint)}
+.qs-pick-tick{width:18px;height:18px;flex:none;fill:none;stroke:var(--accent-text);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+/* Stepper (slim: fits a one-line row; the buttons keep a 44 px tap area) */
+.qs-stepper{display:inline-flex;align-items:center;gap:.15rem;padding:2px;border:1px solid var(--line);border-radius:11px;background:var(--surface-2)}
+.qs-stepper button{position:relative;width:34px;height:30px;border:0;border-radius:8px;background:var(--surface);color:var(--text);font:inherit;font-size:1.05rem;font-weight:600;cursor:pointer;box-shadow:inset 0 0 0 1px var(--line)}
+.qs-stepper button::before{content:"";position:absolute;inset:-7px -4px}
+.qs-stepper button:disabled{opacity:.4;cursor:not-allowed}
+.qs-stepper output{min-width:4rem;text-align:center;font-weight:650;color:var(--text)}
+/* A row that opens its own page: the whole row is the button; value and › on the right */
+.qs-nav{width:100%;margin:0;border-right:0;border-bottom:0;border-left:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;flex-wrap:nowrap;-webkit-tap-highlight-color:transparent}
+.qs-card>.qs-nav:first-child{border-top:0}
+.qs-nav:hover{background:var(--surface-2)}
+.qs-nav:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
+.qs-nav .qs-right{flex-wrap:nowrap}
+.qs-value{color:var(--text-muted);font-size:.88rem;white-space:nowrap}
+.qs-chev{width:16px;height:16px;flex:none;fill:none;stroke:var(--text-muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* A page opened from a › row */
+.qs-subhead{display:flex;align-items:center;gap:.75rem;margin:.2rem 0 .9rem}
+.qs-subhead h2{margin:0}
+.qs-sub:not([data-qs-page="devices"]) .qs-panel>.panel>h3:first-child{display:none}   /* (the page title says it; "Devices and activity" keeps both headings) */
+.qs-sub .pv-identity,.qs-sub #devicesPanel #deleteAccount{display:none}   /* name and contact: Edit profile; Delete my account: Reset and delete */
+.qs-note{margin:.6rem .35rem 0;font-size:.8rem;line-height:1.4;color:var(--text-muted)}
+/* Existing panels inside a row: flat, no card of their own */
+.qs-panel{display:block;padding:.85rem 1rem}
+.qs-panel>.panel{margin:0;padding:0;border:0!important;border-radius:0;background:none;box-shadow:none}
+.qs-panel>.panel>h3{margin:0 0 .15rem;font-size:.95rem;font-weight:600}
+.qs-panel>.panel.stack{gap:.4rem}
+.qs-panel>.panel>p{margin:0}
+.qs-panel>.panel>p.small{font-size:.82rem}
+.qs-panel .spread{padding:.35rem 0;border-top:1px solid var(--line-soft)}
+.qs-page #conflictsPanel{margin:.8rem 0 0;border-radius:16px}
+/* Compact lists (Settings > Appearance) */
+html.compact-lists .qs-row{min-height:46px;padding-top:.45rem;padding-bottom:.45rem}
+html.compact-lists .qs-desc{font-size:.78rem}
+html.compact-lists .today-card,html.compact-lists .person-card{padding:.6rem .85rem}
+html.compact-lists .today-card .avatar,html.compact-lists .person-card .avatar{width:2.2rem;height:2.2rem;min-width:2.2rem;font-size:.95rem}
+html.compact-lists .today-card>.small,html.compact-lists .person-card>.small{margin-left:3rem}
+html.compact-lists .card{padding:.65rem .85rem}
+@media (prefers-reduced-motion:reduce){.qs-switch span,.qs-switch span::after{transition:none}}
+
+/* Log out: an exit icon at the top right of Settings */
+.qs-head h2{flex:1 1 auto}
+.qs-exit{display:grid;place-items:center;width:44px;height:44px;flex:none;order:3;padding:0;border:1px solid var(--bad-line);border-radius:50%;background:var(--surface);color:var(--bad-text);cursor:pointer}
+.qs-exit:hover{background:var(--bad-bg)}
+.qs-exit-i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.qs-head .qs-search{order:2}
+@media(max-width:560px){.qs-exit{order:1}.qs-head .qs-search{order:3}}   /* phone: icon beside the title, search on its own line */
+@media(max-width:900px){.qs-page{padding-bottom:2rem}}
+
+/* Bottom bar on Home only (2026-10-25): elsewhere it slides away and the + button drops into the corner. */
+@media(max-width:900px){
+  #bottomNav{transition:transform .26s ease,opacity .2s ease,visibility 0s linear 0s}
+  #bottomNav.bn-away{transform:translateY(calc(100% + 1.2rem + var(--bn-safe)));opacity:0;visibility:hidden;pointer-events:none;transition:transform .26s ease,opacity .2s ease,visibility 0s linear .26s}
+  #fab{transition:bottom .26s ease,transform .15s ease}
+  body.has-fab:not(.has-bottomnav) #fab{bottom:calc(1rem + var(--bn-safe))}
+  body.has-fab:not(.has-bottomnav) #navMenu[data-anchor="fab"]{bottom:calc(var(--fab) + 1.8rem + var(--bn-safe))}
+  body.has-fab:not(.has-bottomnav) main{padding-bottom:calc(var(--fab) + 2rem + var(--bn-safe))}
+}
+@media(prefers-reduced-motion:reduce){#bottomNav,#bottomNav.bn-away,#fab{transition:none}}
+/* Set rows: 50 px tall (was 62). Only the space above and below shrinks; the kg and reps boxes and the tick stay at
+   least 44 px (46 on a computer), so the numbers and the "Total" line under a bar weight keep their size. */
+.setrow{min-height:50px;padding-top:0;padding-bottom:0}
+/* Today: the attendance summary as one row ("8 due · 5 done · 1 missed · 2 pending") under the date, with the thin
+   attended bar. (209 px before; the three boxes are gone.) */
+.today-summary.today-line{padding:.8rem 1rem .85rem}
+.today-line .eyebrow{font-size:.76rem}
+.att-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:.2rem 1rem;margin:.35rem 0 0;font-size:.92rem;color:var(--text-muted)}
+.att-line strong{margin-right:.25rem;font-size:1.3rem;font-weight:650;line-height:1.2;color:var(--text)}
+.att-line i{display:inline-block;width:.5rem;height:.5rem;margin-right:.35rem;border-radius:50%;vertical-align:.15em}
+.att-line .ok i{background:var(--plate-green)}
+.att-line .bad i{background:var(--bad-text)}
+.att-line .warn i{background:var(--pill-pending)}
+.today-line .progress-track{height:5px;margin-top:.6rem}
+/* Client, History and Today cards: the detail lines sit under the name. With Compact lists (on unless switched off in
+   Settings) they become one line, "Pairing · Program · 12 sessions attended", cut with … when too long; about 70 px a card (120 before). */
+.today-card>.pc-meta,.person-card>.pc-meta{margin-left:3.55rem}
+html.compact-lists .today-card,html.compact-lists .person-card{padding:.5rem .85rem}
+html.compact-lists .today-card .avatar,html.compact-lists .person-card .avatar{width:2rem;height:2rem;min-width:2rem;font-size:.9rem}
+html.compact-lists .today-card>.pc-meta,html.compact-lists .person-card>.pc-meta{margin-left:2.8rem;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.compact-lists .pc-meta>.small{display:inline}
+html.compact-lists .pc-meta>.small:empty{display:none}
+html.compact-lists .pc-meta>.small:not(:empty)~.small:not(:empty)::before{content:" · ";font-weight:400;color:var(--text-muted)}
+html.compact-lists .person-card .name,html.compact-lists .today-card .name{font-size:1rem}
+/* The + button: smaller (48 px on a phone, at most 56; was 60-74) so it covers less of the rows; still over the 44 px
+   tap minimum. The + inside, the menu above it and the room left under lists follow --fab. */
+:root{--fab:clamp(48px,calc(2vw + 40px),56px)}
+@media(max-width:900px) and (max-height:480px){:root{--fab:46px}}
+</style>
 </head>
 <body>
 <div class="shell">
@@ -1281,7 +1393,7 @@ body.in-session nav.tabs{display:none!important}
     <div class="top-actions" id="topActions" hidden>
       <button type="button" id="hdrCalendar" aria-label="Schedule" title="Schedule"></button>
       <button type="button" id="hdrSearch" aria-label="Search" title="Search"></button>
-      <button type="button" id="hdrProfile" aria-label="Profile and settings" title="Profile" aria-haspopup="menu" aria-expanded="false"></button>
+      <button type="button" id="hdrProfile" aria-label="Profile and settings" title="Profile and settings"></button>
     </div>
   </header>
   <nav class="tabs" id="tabs" aria-label="Sections"></nav>
@@ -3255,7 +3367,7 @@ function downloadPrivacyNoticePdf(){
 function privacyPanelHTML(){
   return `<div class="panel stack owner-only"><h3>Privacy and data rights</h3>
     <p class="small muted">Used in the privacy notice you give clients.</p>
-    <div class="inline-fields">
+    <div class="inline-fields pv-identity">
       <label class="field"><span>Your name or business</span><input type="text" id="pv_controller" value="${esc(S.privacy.controller)}"></label>
       <label class="field"><span>Contact email or phone</span><input type="text" id="pv_contact" value="${esc(S.privacy.contact)}"></label>
     </div>
@@ -3648,9 +3760,11 @@ function newRecoveryCode(){
 }
 const Bio = {
   async available(){ try { return !!(window.isSecureContext && window.PublicKeyCredential && await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()); } catch { return false; } },
-  async register(){
+  /* With an account, the phone's prompt names its email and the key is tied to its id; without one, to this device. */
+  async register(account){
+    const email = account && account.email, uid = account && account.id ? new TextEncoder().encode(String(account.id)).slice(0, 64) : crypto.getRandomValues(new Uint8Array(16));
     const cred = await navigator.credentials.create({ publicKey:{ challenge:crypto.getRandomValues(new Uint8Array(32)), rp:{ name:'Nyaega', id:location.hostname },
-      user:{ id:crypto.getRandomValues(new Uint8Array(16)), name:'nyaega-this-device', displayName:'Nyaega on this device' },
+      user:{ id:uid, name:email || 'nyaega-this-device', displayName:email ? 'Nyaega · ' + email : 'Nyaega on this device' },
       pubKeyCredParams:[{ type:'public-key', alg:-7 }, { type:'public-key', alg:-257 }],
       authenticatorSelection:{ authenticatorAttachment:'platform', userVerification:'required', residentKey:'discouraged' }, timeout:60000, attestation:'none' } });
     return b64(new Uint8Array(cred.rawId));
@@ -3660,21 +3774,39 @@ const Bio = {
     return !!a;
   }
 };
+const LK_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const LK_ICON = {
+  finger:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5.5 9.5a7 7 0 0 1 13 0"/><path d="M4.6 14.5c.6-1.4.9-2.8.9-4.5"/><path d="M8.5 20c1.3-2.2 2-4.7 2-7.5a1.5 1.5 0 0 1 3 0c0 1.5-.2 3-.6 4.4"/><path d="M7.5 12.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5c0 2.6-.4 5-1.3 7.2"/><path d="M18.4 15.5c.1-1 .1-2 .1-3"/><path d="M11.3 21c.6-1 1.1-2.1 1.4-3.3"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>',
+  link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
+  del:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11v12H9l-6-6z"/><path d="M12.5 9.5l5 5M17.5 9.5l-5 5"/></svg>',
+  eye:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>',
+  google:'<svg viewBox="0 0 48 48" width="18" height="18" aria-hidden="true"><path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.9 6.1-15Z"/><path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.6-5.1c-1.8 1.2-4 1.9-6.9 1.9-5.3 0-9.9-3.6-11.5-8.4H5.7v5.3A20 20 0 0 0 24 44Z"/><path fill="#FBBC05" d="M12.5 27.5a12 12 0 0 1 0-7.1v-5.3H5.7a20 20 0 0 0 0 17.7l6.8-5.3Z"/><path fill="#EA4335" d="M24 12c3 0 5.6 1 7.7 3.1l5.8-5.8C34 5.9 29.5 4 24 4A20 20 0 0 0 5.7 15.1l6.8 5.3C14.1 15.6 18.7 12 24 12Z"/></svg>'
+};
+/* Screens (Lock.view): 'bio' fingerprint, 'pin' keypad, 'forgot' recovery code, 'password' the remembered account,
+   'credentials' any account (new device, or "Not you?"), 'client' a note for clients. */
 const Lock = {
-  cfg:null, view:'pin', pin:'', role:'owner', closable:false, hiddenAt:0, bioReady:false, busy:false,
+  cfg:null, view:'pin', pin:'', role:'owner', account:null, closable:false, hiddenAt:0, bioReady:false, busy:false, msg:'', err:false, bioState:'',
   enabled(){ return !!(this.cfg && this.cfg.pin); },
-  async load(){ this.cfg = await Store.getMeta('appLock', null); const lu = await Store.getMeta('syncUser', null); Sync.linkedId = (lu && lu.id) || null; try { const r = localStorage.getItem(LAST_ROLE_KEY); if (['owner', 'assistant', 'client'].includes(r)) this.role = r; } catch {} this.bioReady = await Bio.available(); },
+  canBio(){ return this.enabled() && this.bioReady && !!this.cfg.bio; },
+  bioName(){ return /iPhone|iPad|Macintosh/.test(navigator.userAgent) ? 'Face ID' : 'fingerprint'; },
+  async load(){ this.cfg = await Store.getMeta('appLock', null); const lu = await Store.getMeta('syncUser', null); this.account = lu && lu.id ? lu : null; Sync.linkedId = (lu && lu.id) || null; try { const r = localStorage.getItem(LAST_ROLE_KEY); if (['owner', 'assistant'].includes(r)) this.role = r; } catch {} this.bioReady = await Bio.available(); },
   async save(){ await Store.putMeta('appLock', this.cfg); },
   fails(){ try { return JSON.parse(localStorage.getItem(LOCK_FAILS_KEY)) || { count:0, until:0 }; } catch { return { count:0, until:0 }; } },
   setFails(f){ try { localStorage.setItem(LOCK_FAILS_KEY, JSON.stringify(f)); } catch {} },
   waitMs(){ const f = this.fails(); return Math.max(0, f.until - Date.now()); },
   show(opts = {}){
-    this.view = opts.view || (this.enabled() ? 'pin' : 'credentials'); this.pin = ''; this.closable = !!opts.closable; this.msg = '';
+    let v = opts.view || (this.enabled() ? 'pin' : 'credentials');
+    if (v === 'pin' && this.canBio()) v = 'bio';                                   // fingerprint first, the keypad one tap away
+    if (v === 'credentials' && this.account && this.account.email) v = 'password';   // the remembered account needs only its password
+    this.view = v; this.pin = ''; this.closable = !!opts.closable; this.msg = ''; this.err = false; this.bioState = '';
     this.locked = this.enabled() && !opts.closable;   // a locked screen offers only the PIN, biometrics and the linked account
     let el = document.getElementById('lockScreen');
-    if (!el){ el = document.createElement('div'); el.id = 'lockScreen'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Sign in to Nyaega'); document.body.appendChild(el); }
+    if (!el){ el = document.createElement('div'); el.id = 'lockScreen'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.appendChild(el); }
     document.querySelectorAll('.shell, #workoutDock, #timerBar, #bottomNav, #fab, #navMenu').forEach(n => { try { n.inert = true; } catch {} });
     this.draw();
+    // An account linked since start (a Google sign-in comes back through a page load) shows on the card too.
+    Store.getMeta('syncUser', null).then(u => { if (u && u.id && (!this.account || this.account.id !== u.id)){ this.account = u; if (document.getElementById('lockScreen')) this.redraw(); } }).catch(() => {});
   },
   hide(){
     this.locked = false;
@@ -3687,79 +3819,105 @@ const Lock = {
     return { cls:'idle', text:'Local mode · not signed in' };
   },
   updatePill(){ const p = document.getElementById('lockPill'); if (!p) return; const s = this.pillState(); p.className = 'lock-pill ' + s.cls; p.querySelector('span').textContent = s.text; },
-  setRole(r){ this.role = r; try { localStorage.setItem(LAST_ROLE_KEY, r); } catch {} this.draw(); },
+  /* The pieces each screen is built from. */
+  msgHTML(fallback = '', style = ''){ return `<p class="lp-msg${this.err ? ' err' : ''}" id="lkMsg" role="status" aria-live="polite"${style}>${esc(this.msg || fallback)}</p>`; },
+  link(action, label, muted){ return `<button type="button" class="lp-link${muted ? ' muted' : ''}" data-lk="${action}">${esc(label)}</button>`; },
+  head(title){
+    const a = this.account;
+    if (!a || !a.email) return `<div class="lp-logo" aria-hidden="true">N</div><h1 class="lp-title">${esc(title)}</h1><p class="lp-sub">Nyaega</p>`;
+    const role = this.role === 'assistant' ? 'Assistant coach' : 'Head coach';
+    return `<div class="lp-logo" aria-hidden="true">N</div><h1 class="lp-title">${esc(title)}</h1>
+      <div class="lp-account"><span class="lp-avatar" aria-hidden="true">${esc(a.email[0].toUpperCase())}</span><span class="lp-who"><span class="lp-email">${esc(a.email)}</span>
+      <span class="lp-role">${role}${this.canBio() ? ` · ${LK_ICON.link} ${this.bioName() === 'Face ID' ? 'Face ID' : 'Fingerprint'} linked` : ''}</span></span></div>`;
+  },
+  pwField(isNew){ return `<div class="lp-field"><label for="lkPassword">Password</label><span class="lp-pw"><input id="lkPassword" type="password" autocomplete="${isNew ? 'new-password' : 'current-password'}" placeholder="${isNew ? 'At least 8 characters' : 'Your password'}" required><button type="button" class="lp-eye" id="lkEye" aria-label="Show password" aria-pressed="false">${LK_ICON.eye}</button></span></div>`; },
+  submitBtn(){ return '<button class="lp-primary" id="lkSubmit" type="submit">Log in</button>'; },
+  screen(){
+    const canPass = !this.locked || !!Sync.linkedId, bio = this.bioName();
+    if (this.view === 'client') return `<div class="lp-logo" aria-hidden="true">N</div><h1 class="lp-title">Clients</h1>
+      <div class="lp-note">You don’t need an account. Your coach shares your program and progress with you as a PDF.</div>
+      <div class="lp-links">${this.link('clientback', 'Back')}</div>`;
+    if (this.view === 'bio') return `${this.head('Welcome back')}
+      <button type="button" class="lp-bio ${this.bioState}" data-lk="bio" id="lkBio">${this.bioState === 'ok' ? LK_ICON.check + 'Unlocked' : LK_ICON.finger + (this.bioState === 'waiting' ? (bio === 'Face ID' ? 'Look at your phone…' : 'Touch the sensor…') : 'Unlock with ' + bio)}</button>
+      ${this.msgHTML()}
+      <div class="lp-links">${this.link('pinview', 'Use PIN instead')}${canPass ? this.link('password', 'Use password instead', true) : ''}</div>`;
+    if (this.view === 'pin'){
+      const wait = Math.ceil(this.waitMs() / 1000);
+      return `${this.head('Welcome back')}
+      ${this.msgHTML(wait ? 'Too many attempts. Try again in ' + wait + ' s.' : 'Enter your PIN', ' style="margin-top:0"')}
+      <div class="lp-dots${this.err ? ' shake' : ''}" role="img" aria-label="${this.pin.length} of 4 digits entered">${[0, 1, 2, 3].map(i => `<i class="${i < this.pin.length ? 'on' : ''}"></i>`).join('')}</div>
+      <div class="lp-pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button type="button" data-lk="digit" data-d="${n}">${n}</button>`).join('')}
+        ${this.canBio() ? `<button type="button" class="lp-key-icon" data-lk="bio" aria-label="Unlock with ${bio}">${LK_ICON.finger}</button>` : '<span></span>'}
+        <button type="button" data-lk="digit" data-d="0">0</button><button type="button" class="lp-key-icon" data-lk="del" aria-label="Delete last digit">${LK_ICON.del}</button></div>
+      <div class="lp-links">${this.link('forgot', 'Forgot PIN?')}${canPass ? this.link('password', 'Use password instead', true) : ''}</div>`;
+    }
+    if (this.view === 'forgot') return `<div class="lp-logo" aria-hidden="true">N</div><h1 class="lp-title">Forgot PIN</h1>
+      <form id="lkForgot" class="lp-form" novalidate>${this.msgHTML('Enter the recovery code you saved when you set the PIN. The lock turns off; your data is not touched.', ' style="margin:0;text-align:center"')}
+      <label class="lp-field" for="lkRecovery">Recovery code<input type="text" id="lkRecovery" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX"></label>
+      <button type="submit" class="lp-primary">Turn off the lock</button></form>
+      <div class="lp-links">${this.link('pinview', 'Back to PIN', true)}</div>`;
+    if (this.view === 'register') return `<div class="lp-logo" aria-hidden="true">N</div><h1 class="lp-title">Create an account</h1><p class="lp-sub">for Nyaega</p>
+      <form class="lp-form" id="lkSignup" novalidate><label class="lp-field" for="lkEmail">Email<input type="email" id="lkEmail" autocomplete="username" inputmode="email" placeholder="you@example.com" required></label>
+      ${this.pwField(true)}
+      <label class="lp-field" for="lkPassword2">Repeat password<input id="lkPassword2" type="password" autocomplete="new-password" placeholder="The same password again" required></label>
+      <button class="lp-primary" id="lkCreate" type="submit">Create account</button></form>
+      <div class="lp-or">or</div><button type="button" class="lp-google" data-lk="google">${LK_ICON.google}Continue with Google</button>
+      ${this.msgHTML()}
+      <div class="lp-links">${this.link('login', 'Already have an account? Log in')}${this.link('client', 'I’m a client', true)}</div>`;
+    if (this.view === 'password') return `${this.head('Welcome back')}
+      <form class="lp-form tight" id="lkForm" novalidate><input type="email" id="lkEmail" autocomplete="username" value="${esc(this.account.email)}" hidden>${this.pwField()}${this.submitBtn()}</form>
+      ${this.msgHTML()}
+      <div class="lp-links">${this.link('reset', 'Forgot password?')}${this.enabled() ? this.link('pinview', 'Use PIN instead', true) : ''}${this.locked ? '' : this.link('other', 'Not you? Use another account', true) + this.link('register', 'Create a new account', true)}${this.closable && !this.locked ? this.link('close', 'Not now', true) : ''}</div>`;
+    // credentials: any account
+    const back = this.account && this.account.email ? this.link('backacct', 'Back to ' + this.account.email, true) : this.locked ? '' : this.link('close', 'Continue without an account', true);
+    return `<div class="lp-logo" aria-hidden="true">N</div><h1 class="lp-title">Sign in</h1><p class="lp-sub">to Nyaega</p>
+      <form class="lp-form" id="lkForm" novalidate><label class="lp-field" for="lkEmail">Email<input type="email" id="lkEmail" autocomplete="username" inputmode="email" placeholder="you@example.com" required></label>
+      ${this.pwField()}${this.submitBtn()}</form>
+      ${this.locked ? '' : `<div class="lp-or">or</div><button type="button" class="lp-google" data-lk="google">${LK_ICON.google}Continue with Google</button>`}
+      ${this.msgHTML()}
+      <div class="lp-links">${this.locked ? '' : this.link('register', 'Create an account')}${this.link('reset', 'Forgot password?', !this.locked)}${back}${this.locked ? '' : this.link('client', 'I’m a client', true)}</div>`;
+  },
   draw(){
     const el = document.getElementById('lockScreen'); if (!el) return;
-    if (this.locked && this.view === 'credentials' && !Sync.linkedId) this.view = 'pin';   // nothing to sign in to: PIN only
-    const roles = [['owner', 'Head Coach'], ['assistant', 'Assistant'], ['client', 'Client']];
-    const s = this.pillState();
-    let body = '';
-    if (this.role === 'client'){
-      body = `<div class="lock-note"><strong>Clients don't need an account.</strong><p>Your coach shares your program and summary with you as a PDF. Ask them for the latest files.</p></div>
-        <div class="lock-actions">${this.closable ? '<button type="button" class="lk-btn ghost" data-lk="close">Back to the app</button>' : '<button type="button" class="lk-btn ghost" data-lk="role-owner">I am a coach</button>'}</div>`;
-    } else if (this.view === 'pin' && this.enabled()){
-      const wait = Math.ceil(this.waitMs() / 1000);
-      body = `${this.bioReady && this.cfg.bio ? '<button type="button" class="lk-btn primary" data-lk="bio">Use Biometrics (Face ID / Fingerprint)</button>' : ''}
-        <div class="lk-dots" role="img" aria-label="${this.pin.length} of 4 digits entered">${[0, 1, 2, 3].map(i => `<i class="${i < this.pin.length ? 'on' : ''}"></i>`).join('')}</div>
-        <p class="lk-msg" id="lkMsg" role="status" aria-live="polite">${esc(wait ? 'Too many attempts. Try again in ' + wait + ' s.' : (this.msg || 'Enter your 4-digit PIN'))}</p>
-        <div class="lk-pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button type="button" data-lk="digit" data-d="${n}" aria-label="${n}">${n}</button>`).join('')}<span></span><button type="button" data-lk="digit" data-d="0" aria-label="0">0</button><button type="button" data-lk="back" aria-label="Delete last digit">&#9003;</button></div>
-        <div class="lock-actions">${!this.locked || Sync.linkedId ? '<button type="button" class="lk-link" data-lk="creds">Use email and password instead</button>' : ''}<button type="button" class="lk-link" data-lk="forgot">Forgot PIN?</button></div>`;
-    } else if (this.view === 'forgot'){
-      body = `<form id="lkForgot" class="lk-form"><p class="lk-msg" id="lkMsg" role="status" aria-live="polite">${esc(this.msg || 'Enter the recovery code you saved when you set the PIN. The lock will be turned off; your data is not touched.')}</p>
-        <label class="lk-field"><span>Recovery code</span><input type="text" id="lkRecovery" autocomplete="off" autocapitalize="characters" placeholder="XXXX-XXXX-XXXX-XXXX"></label>
-        <div class="lock-actions"><button type="submit" class="lk-btn primary">Turn off the lock</button><button type="button" class="lk-link" data-lk="pinview">Back to PIN</button></div></form>`;
-    } else {
-      const hint = this.role === 'assistant' ? 'Sign in with the account you used to accept your coach\'s invitation.' : '';
-      const eye = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>';
-      const alts = [];
-      if (this.enabled()) alts.push('<button type="button" class="lk-btn" data-lk="pinview">Use PIN</button>');
-      if (this.enabled() && this.bioReady && this.cfg.bio) alts.push('<button type="button" class="lk-btn" data-lk="bio">Biometrics</button>');
-      if (!this.enabled() || this.closable) alts.push('<button type="button" class="lk-btn" data-lk="close">Local mode</button>');
-      body = `<form id="lkForm" class="lk-form" novalidate>
-        <div class="lk-field"><label for="lkEmail">Email address</label><input id="lkEmail" type="email" autocomplete="username" inputmode="email" placeholder="you@example.com" aria-describedby="lkEmailErr" required><span class="lk-err" id="lkEmailErr" aria-live="polite"></span></div>
-        <div class="lk-field"><label for="lkPassword">Password</label><div class="lk-wrap"><input id="lkPassword" type="password" autocomplete="current-password" placeholder="Enter your password" aria-describedby="lkPwErr" required><button type="button" class="lk-eye" id="lkEye" aria-label="Show password" aria-pressed="false">${eye}</button></div><span class="lk-err" id="lkPwErr" aria-live="polite"></span></div>
-        <div class="lk-opts"><label class="lk-check"><input type="checkbox" id="lkKeep" checked> Remember me</label><button type="button" class="lk-link2" data-lk="reset">Forgot password?</button></div>
-        <button class="lk-btn primary" id="lkSubmit" type="submit"><span class="lk-label">Log In</span><span class="lk-spin" aria-hidden="true"></span></button>
-        <p class="lk-msg" id="lkMsg" role="status" aria-live="polite">${esc(this.msg || hint)}</p>
-        <div class="lk-divider">or continue with</div>
-        <div class="lk-alt"><button type="button" class="lk-btn" data-lk="google" aria-label="Continue with Google"><svg viewBox="0 0 48 48" width="18" height="18" aria-hidden="true"><path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.9 6.1-15Z"/><path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.6-5.1c-1.8 1.2-4 1.9-6.9 1.9-5.3 0-9.9-3.6-11.5-8.4H5.7v5.3A20 20 0 0 0 24 44Z"/><path fill="#FBBC05" d="M12.5 27.5a12 12 0 0 1 0-7.1v-5.3H5.7a20 20 0 0 0 0 17.7l6.8-5.3Z"/><path fill="#EA4335" d="M24 12c3 0 5.6 1 7.7 3.1l5.8-5.8C34 5.9 29.5 4 24 4A20 20 0 0 0 5.7 15.1l6.8 5.3C14.1 15.6 18.7 12 24 12Z"/></svg>Google</button><button type="button" class="lk-btn" data-lk="apple" aria-label="Continue with Apple"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M16.37 12.24c.02 2.15 1.89 2.87 1.91 2.88-.02.05-.3 1.03-.98 2.03-.59.87-1.2 1.74-2.16 1.76-.94.02-1.25-.57-2.34-.57-1.08 0-1.43.55-2.31.59-.92.03-1.62-.95-2.22-1.81-1.22-1.76-2.15-4.98-.9-7.15.62-1.08 1.72-1.77 2.91-1.79.91-.02 1.77.62 2.33.62.55 0 1.6-.77 2.7-.66.46.02 1.77.19 2.61 1.42-.07.04-1.56.91-1.55 2.68ZM14.6 6.95c.49-.6.82-1.43.73-2.26-.7.03-1.55.47-2.05 1.06-.45.52-.85 1.36-.74 2.16.78.06 1.57-.39 2.06-.96Z"/></svg>Apple</button></div>
-        ${alts.length ? `<div class="lk-alt${alts.length === 1 ? ' one' : ''}">${alts.join('')}</div>` : ''}
-        <p class="lk-signup">Don\u2019t have an account? <button type="button" class="lk-link2" data-lk="signup">Sign up</button></p></form>`;
-    }
-    el.innerHTML = `<div class="lock-card"><header class="lock-brand"><div class="logo" aria-hidden="true">N</div><h1>Nyaega</h1><p>Your coaching workspace</p></header>
-        <div class="lock-roles" role="tablist" aria-label="I am a">${roles.map(([k, l]) => `<button type="button" role="tab" id="lkrole-${k}" aria-selected="${this.role === k}" data-lk="role" data-r="${k}">${l}</button>`).join('')}</div>
-        <div class="lock-body">${body}</div></div>`;
-    if (this.locked){   // no sign-up, no other providers, no local-mode shortcut while locked
-      el.querySelectorAll('[data-lk="google"],[data-lk="apple"],[data-lk="signup"],[data-lk="close"]').forEach(b => b.remove());
-      el.querySelectorAll('.lk-alt').forEach(a => { if (!a.children.length) a.remove(); });
-      const dv = el.querySelector('.lk-divider'); if (dv) dv.textContent = 'or'; const su = el.querySelector('.lk-signup'); if (su) su.remove();
-    }
+    if (this.locked && (this.view === 'password' || this.view === 'credentials') && !Sync.linkedId) this.view = this.canBio() ? 'bio' : 'pin';   // nothing to sign in to: PIN only
+    if (this.locked && this.view === 'register') this.view = this.canBio() ? 'bio' : 'pin';   // no new accounts on a locked phone
+    if (this.view === 'password' && !(this.account && this.account.email)) this.view = 'credentials';
+    if (this.view === 'bio' && !this.canBio()) this.view = 'pin';
+    if ((this.view === 'pin' || this.view === 'forgot') && !this.enabled()) this.view = 'credentials';
+    el.className = 'lp';
+    el.setAttribute('aria-label', ['bio', 'pin', 'forgot'].includes(this.view) ? 'Unlock Nyaega' : this.view === 'register' ? 'Create a Nyaega account' : 'Sign in to Nyaega');
+    el.innerHTML = `<div class="lp-card">${this.screen()}</div>`;
     el.querySelectorAll('[data-lk]').forEach(b => b.onclick = () => this.act(b));
     const form = document.getElementById('lkForm'); if (form) form.onsubmit = e => { e.preventDefault(); this.signIn(); };
     const forgot = document.getElementById('lkForgot'); if (forgot) forgot.onsubmit = e => { e.preventDefault(); this.recover(); };
+    const signup = document.getElementById('lkSignup'); if (signup) signup.onsubmit = e => { e.preventDefault(); this.signUp(); };
     const eyeBtn = document.getElementById('lkEye'); if (eyeBtn) eyeBtn.onclick = () => { const p = document.getElementById('lkPassword'), show = p.type === 'password'; p.type = show ? 'text' : 'password'; eyeBtn.setAttribute('aria-label', show ? 'Hide password' : 'Show password'); eyeBtn.setAttribute('aria-pressed', String(show)); };
-    ['lkEmail', 'lkPassword'].forEach(id => { const i = document.getElementById(id); if (i) i.oninput = () => this.fieldError(id, ''); });
-    const first = el.querySelector('#lkEmail, #lkRecovery, .lk-pad button, .lock-roles [aria-selected="true"]'); if (first && !this.noFocus) { try { first.focus({ preventScroll:true }); } catch {} }
+    el.querySelectorAll('#lkEmail, #lkPassword, #lkPassword2').forEach(i => i.oninput = () => { i.removeAttribute('aria-invalid'); if (this.err){ this.err = false; this.say(''); } });
+    const first = el.querySelector('#lkEmail:not([hidden]), #lkPassword, #lkRecovery, #lkBio, .lp-pad button'); if (first && !this.noFocus) { try { first.focus({ preventScroll:true }); } catch {} }
   },
+  redraw(){ this.noFocus = true; this.draw(); this.noFocus = false; },
+  go(view){ this.view = view; this.msg = ''; this.err = false; this.pin = ''; this.bioState = ''; this.draw(); },
   async act(b){
     const a = b.dataset.lk;
-    if (a === 'role') return this.setRole(b.dataset.r);
-    if (a === 'role-owner') return this.setRole('owner');
-    if (a === 'close'){ if (!this.locked){ try { localStorage.setItem('nyaega:skipLogin', '1'); } catch {} } return this.hide(); }   // "Local mode": don't offer the sign-in page at every start
-    if (a === 'creds'){ this.view = 'credentials'; this.msg = ''; return this.draw(); }
-    if (a === 'pinview'){ this.view = 'pin'; this.msg = ''; this.pin = ''; return this.draw(); }
-    if (a === 'forgot'){ this.view = 'forgot'; this.msg = ''; return this.draw(); }
-    if (a === 'google' || a === 'apple'){ if (this.locked) return; try { await Sync.oauth(a); } catch(e){ this.say(e.message || 'Could not start the sign-in.'); } return; }
+    if (a === 'close'){ if (!this.locked){ try { localStorage.setItem('nyaega:skipLogin', '1'); } catch {} } return this.hide(); }   // without an account: don't offer the sign-in page at every start
+    if (a === 'pinview') return this.go('pin');
+    if (a === 'password') return this.go('password');
+    if (a === 'other') return this.go('credentials');
+    if (a === 'backacct') return this.go('password');
+    if (a === 'forgot') return this.go('forgot');
+    if (a === 'client'){ this.beforeClient = this.view; return this.go('client'); }
+    if (a === 'clientback') return this.go(this.beforeClient || 'credentials');
+    if (a === 'google'){ if (this.locked) return; try { await Sync.oauth('google'); } catch(e){ this.say(e.message || 'Could not start the sign-in.', true); } return; }
     if (a === 'reset') return this.resetPassword();
-    if (a === 'signup') return this.signUp();
+    if (a === 'register') return this.go('register');
+    if (a === 'login') return this.go(this.account && this.account.email ? 'password' : 'credentials');
     if (a === 'digit') return this.digit(b.dataset.d);
-    if (a === 'back'){ this.pin = this.pin.slice(0, -1); return this.redrawPin(); }
+    if (a === 'del'){ this.pin = this.pin.slice(0, -1); return this.redraw(); }
     if (a === 'bio') return this.bioUnlock();
   },
-  redrawPin(){ this.noFocus = true; this.draw(); this.noFocus = false; const k = document.querySelector('.lk-pad button'); },
   async digit(d){
     if (this.busy || this.waitMs() > 0 || this.pin.length >= 4) return;
-    this.pin += d; this.redrawPin();
+    this.pin += d; this.err = false; this.msg = ''; this.redraw();
     if (this.pin.length < 4) return;
     this.busy = true;
     const ok = await checkSecret(this.pin, this.cfg.pin);
@@ -3767,62 +3925,73 @@ const Lock = {
     if (ok){ this.setFails({ count:0, until:0 }); this.hide(); return this.afterUnlock(); }
     const f = this.fails(); f.count++;
     if (f.count >= 5) f.until = Date.now() + Math.min(15 * 60000, 30000 * Math.pow(2, f.count - 5));
-    this.setFails(f); this.pin = ''; this.msg = f.until > Date.now() ? '' : 'Wrong PIN (' + (5 - f.count) + ' tries left)';
-    this.noFocus = true; this.draw(); this.noFocus = false;
+    this.setFails(f); this.pin = ''; this.err = true; this.msg = f.until > Date.now() ? '' : 'Wrong PIN · ' + (5 - f.count) + ' tries left';
+    this.redraw();
     if (f.until > Date.now()) this.tickWait();
   },
-  tickWait(){ clearInterval(this.waitTimer); this.waitTimer = setInterval(() => { if (!document.getElementById('lockScreen') || this.waitMs() <= 0){ clearInterval(this.waitTimer); this.noFocus = true; this.draw(); this.noFocus = false; return; } const m = document.getElementById('lkMsg'); if (m) m.textContent = 'Too many attempts. Try again in ' + Math.ceil(this.waitMs() / 1000) + ' s.'; }, 1000); },
+  tickWait(){ clearInterval(this.waitTimer); this.waitTimer = setInterval(() => { if (!document.getElementById('lockScreen') || this.waitMs() <= 0){ clearInterval(this.waitTimer); this.err = false; this.redraw(); return; } const m = document.getElementById('lkMsg'); if (m) m.textContent = 'Too many attempts. Try again in ' + Math.ceil(this.waitMs() / 1000) + ' s.'; }, 1000); },
+  /* The phone's own prompt does the check (it names the account the fingerprint was linked to). */
   async bioUnlock(){
-    try { if (await Bio.verify(this.cfg.bio.id)){ this.hide(); return this.afterUnlock(); } }
-    catch(e){ this.msg = 'Biometrics did not work. Use your PIN.'; this.noFocus = true; this.draw(); this.noFocus = false; }
+    if (!this.canBio() || this.bioState === 'waiting') return;
+    this.view = 'bio'; this.bioState = 'waiting'; this.msg = ''; this.err = false; this.redraw();
+    let ok = false;
+    try { ok = await Bio.verify(this.cfg.bio.id); } catch {}
+    if (!document.getElementById('lockScreen')) return;
+    if (!ok){ this.bioState = ''; this.err = true; this.msg = (this.bioName() === 'Face ID' ? 'Face ID' : 'Fingerprint') + ' did not work. Try again or use your PIN.'; return this.redraw(); }
+    this.setFails({ count:0, until:0 }); this.bioState = 'ok'; this.redraw();
+    setTimeout(() => { this.hide(); this.afterUnlock(); }, 350);
   },
   async recover(){
     const code = (document.getElementById('lkRecovery').value || '').trim().toUpperCase();
-    if (!(await checkSecret(code, this.cfg && this.cfg.recovery))){ this.msg = 'That recovery code is not right.'; this.draw(); return; }
+    if (!(await checkSecret(code, this.cfg && this.cfg.recovery))){ this.err = true; this.msg = 'That recovery code is not right.'; this.redraw(); return; }
     this.cfg = null; await Store.putMeta('appLock', null); this.setFails({ count:0, until:0 });
-    this.hide(); toast('App lock turned off. Set a new PIN in the Data tab.'); this.afterUnlock();
+    this.hide(); toast('App lock turned off. Set a new PIN in Settings.'); this.afterUnlock();
   },
-  fieldError(id, text){
-    const err = document.getElementById(id === 'lkEmail' ? 'lkEmailErr' : 'lkPwErr'), inp = document.getElementById(id);
-    if (err) err.textContent = text; if (inp) inp.setAttribute('aria-invalid', String(!!text));
-  },
-  /* Checks the form fields; returns the values or null (with the problem shown next to the field). */
+  /* Checks the form fields; returns the values or null (with the problem shown under the form). */
   readCreds(needPassword = true){
-    const email = val('lkEmail').trim(), pw = document.getElementById('lkPassword').value;
-    this.fieldError('lkEmail', !email ? 'Enter your email address.' : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Enter a valid email address.' : '');
-    if (needPassword) this.fieldError('lkPassword', pw ? '' : 'Enter your password.');
-    const bad = !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || (needPassword && !pw);
-    if (bad){ (document.getElementById('lkEmailErr').textContent ? document.getElementById('lkEmail') : document.getElementById('lkPassword')).focus(); return null; }
-    return { email, pw };
+    const email = val('lkEmail').trim(), pwEl = document.getElementById('lkPassword'), pw = pwEl ? pwEl.value : '';
+    const bad = !email ? ['lkEmail', 'Enter your email address.'] : !LK_EMAIL_RE.test(email) ? ['lkEmail', 'Enter a valid email address.'] : needPassword && !pw ? ['lkPassword', 'Enter your password.'] : null;
+    if (!bad) return { email, pw };
+    this.say(bad[1], true);
+    const i = document.getElementById(bad[0]); if (i){ i.setAttribute('aria-invalid', 'true'); if (!i.hidden) i.focus(); }
+    return null;
   },
-  busyButton(on){
-    const b = document.getElementById('lkSubmit'); if (!b) return;
-    b.disabled = on; b.classList.toggle('loading', on); b.querySelector('.lk-label').textContent = on ? 'Signing in…' : 'Log In';
-  },
-  say(text){ const m = document.getElementById('lkMsg'); if (m) m.textContent = text; },
+  busyButton(on){ const b = document.getElementById('lkSubmit'); if (!b) return; b.disabled = on; b.textContent = on ? 'Signing in…' : 'Log in'; },
+  say(text, err = false){ this.msg = text; this.err = err; const m = document.getElementById('lkMsg'); if (m){ m.textContent = text; m.classList.toggle('err', err); } },
   async resetPassword(){
     const c = this.readCreds(false); if (!c) return;
-    try { await Sync.resetPassword(c.email); this.say('If that account exists, a reset link is on its way.'); } catch(e){ this.say(e.message || 'Could not send the email.'); }
+    try { await Sync.resetPassword(c.email); this.say('If that account exists, a reset link is on its way to ' + c.email + '.'); } catch(e){ this.say(e.message || 'Could not send the email.', true); }
   },
+  /* The "Create an account" screen: email, a password of 8 or more characters, typed twice. */
   async signUp(){
-    if (this.locked){ this.say('Sign up is not available while the app is locked.'); return; }
+    if (this.locked){ this.say('Sign up is not available while the app is locked.', true); return; }
     const c = this.readCreds(true); if (!c) return;
-    if (c.pw.length < 8){ this.fieldError('lkPassword', 'Use at least 8 characters.'); return; }
-    this.say('Creating account…');
-    Sync.keep = !!(document.getElementById('lkKeep') && document.getElementById('lkKeep').checked);
-    try { const r = await Sync.signUp(c.email, c.pw); if (r === 'signed-in'){ await Sync.detectRole(); this.hide(); this.afterUnlock(true); } else this.say('Check your email and click the confirmation link, then log in here.'); }
-    catch(e){ this.say(e.message || 'Could not create the account.'); }
+    const bad = id => { const i = document.getElementById(id); if (i){ i.setAttribute('aria-invalid', 'true'); i.focus(); } };
+    if (c.pw.length < 8){ this.say('Use at least 8 characters for the password.', true); return bad('lkPassword'); }
+    if (val('lkPassword2') !== c.pw){ this.say('The two passwords are not the same.', true); return bad('lkPassword2'); }
+    const btn = document.getElementById('lkCreate'), busy = on => { if (btn){ btn.disabled = on; btn.textContent = on ? 'Creating account…' : 'Create account'; } };
+    busy(true); this.say('');
+    Sync.keep = true;
+    try {
+      const r = await Sync.signUp(c.email, c.pw);
+      if (r === 'signed-in'){ await Sync.detectRole(); this.remember(); this.hide(); this.afterUnlock(true); return; }
+      busy(false); this.say('Account created. Open the email we sent to ' + c.email + ', tap the link, then log in.');
+    } catch(e){ busy(false); this.say(e.message || 'Could not create the account.', true); }
   },
   async signIn(){
     const c = this.readCreds(true); if (!c) return;
-    const { email, pw } = c;
+    if (this.locked && !Sync.linkedId){ this.say('Use your PIN.', true); return; }
     this.busyButton(true); this.say('');
-    if (this.locked && !Sync.linkedId){ this.busyButton(false); this.say('Use your PIN.'); return; }
-    try { await Sync.signIn(email, pw, document.getElementById('lkKeep').checked, { onlyUserId:this.locked ? Sync.linkedId : undefined }); await Sync.detectRole(); }
-    catch(e){ this.busyButton(false); this.say(e.status === 400 ? 'Email or password is wrong, or the email is not confirmed yet.' : (e.message || 'Could not sign in')); return; }
-    const actual = Sync.role === 'assistant' ? 'assistant' : 'owner';
-    if (this.role !== 'client' && this.role !== actual){ toast(actual === 'assistant' ? 'This account is an assistant account. Signed in as Assistant.' : 'This account is a Head Coach account. Signed in as Head Coach.'); this.role = actual; try { localStorage.setItem(LAST_ROLE_KEY, actual); } catch {} }
+    // Signed in stays signed in on this device (the session is kept); Settings > Sync or the exit icon signs out.
+    try { await Sync.signIn(c.email, c.pw, true, { onlyUserId:this.locked ? Sync.linkedId : undefined }); await Sync.detectRole(); }
+    catch(e){ this.busyButton(false); this.say(e.status === 400 ? 'Email or password is wrong, or the email is not confirmed yet.' : (e.message || 'Could not sign in'), true); return; }
+    this.remember();
     this.hide(); this.afterUnlock(true);
+  },
+  /* After a sign-in: the account (for the "Welcome back" card) and its role. */
+  remember(){
+    const u = Sync.session && Sync.session.user; if (u) this.account = { id:u.id, email:u.email };
+    this.role = Sync.role === 'assistant' ? 'assistant' : 'owner'; try { localStorage.setItem(LAST_ROLE_KEY, this.role); } catch {}
   },
   /* Success from any route lands on the Today screen (assistants see only their clients there). */
   afterUnlock(signedIn){
@@ -3840,51 +4009,36 @@ const Lock = {
     window.addEventListener('online', () => this.updatePill()); window.addEventListener('offline', () => this.updatePill());
   }
 };
-/* ---- Data tab: App lock settings ---- */
-function lockPanelHTML(){
-  const on = Lock.enabled(), bio = Lock.cfg && Lock.cfg.bio;
-  return `<div class="panel stack" id="lockPanel"><h3>App lock</h3>
-    <p class="small muted">Hides the app when you leave it. It doesn't encrypt your data, so keep your phone's passcode on too.</p>
-    <p class="small"><strong>${on ? 'PIN lock is on.' : 'PIN lock is off.'}</strong>${bio ? ' Biometric unlock is on.' : ''}</p>
-    <div class="row"><button type="button" class="btn primary sm" id="lockSetPin">${on ? 'Change PIN' : 'Set a PIN'}</button>
-      ${on ? '<button type="button" class="btn ghost sm" id="lockNow">Lock now</button><button type="button" class="btn ghost sm" id="lockOff">Turn off</button>' : ''}
-      ${on && Lock.bioReady ? `<button type="button" class="btn ghost sm" id="lockBio">${bio ? 'Remove biometrics' : 'Set up biometrics'}</button>` : ''}</div>
-    ${on ? `<label class="field" style="max-width:260px"><span>Lock automatically after leaving the app for</span><select id="lockAuto">${[[1, '1 minute'], [5, '5 minutes'], [15, '15 minutes'], [0, 'Never']].map(([v, l]) => `<option value="${v}" ${Number(Lock.cfg.autoMinutes ?? 5) === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>` : ''}</div>`;
+/* ---- Settings > App lock (the rows are drawn in 30-view-data.js: PIN lock, Change PIN, biometrics, auto-lock, Lock now) ---- */
+/* Set a PIN (lock off) or change it (lock on): the current PIN first, a 4-digit PIN twice; the first time, a recovery code. */
+function lockSetPinDialog(){
+  const ask = Lock.enabled() ? '<label class="field"><span>Current PIN</span><input type="password" id="lpOld" inputmode="numeric" maxlength="4" autocomplete="off"></label>' : '';
+  dialog(Lock.enabled() ? 'Change PIN' : 'Set a PIN', `${ask}<label class="field"><span>New 4-digit PIN</span><input type="password" id="lpNew" inputmode="numeric" maxlength="4" autocomplete="new-password"></label><label class="field"><span>Repeat PIN</span><input type="password" id="lpNew2" inputmode="numeric" maxlength="4" autocomplete="new-password"></label><p class="small muted">Avoid obvious PINs such as 1234 or your birth year.</p>`, [{label:'Cancel'}, {label:'Save PIN', kind:'primary', onClick: async () => {
+    if (Lock.enabled() && !(await checkSecret(val('lpOld'), Lock.cfg.pin))){ toast('Current PIN is not right'); return false; }
+    const p = val('lpNew');
+    if (!/^\d{4}$/.test(p)){ toast('Use exactly 4 digits'); return false; }
+    if (p !== val('lpNew2')){ toast('The two PINs do not match'); return false; }
+    if (['0000', '1111', '1234', '4321', '2222', '3333', '4444', '5555', '6666', '7777', '8888', '9999'].includes(p)){ toast('That PIN is too easy to guess'); return false; }
+    const first = !Lock.enabled(); let code = '';
+    const next = { ...(Lock.cfg || {}), pin:await makeSecret(p), autoMinutes:Lock.cfg && Lock.cfg.autoMinutes != null ? Lock.cfg.autoMinutes : 5 };
+    if (first || !next.recovery){ code = newRecoveryCode(); next.recovery = await makeSecret(code); }
+    Lock.cfg = next; try { await Lock.save(); } catch(e){ showSaveError(e); return false; }
+    Lock.setFails({ count:0, until:0 }); Audit.log('lock-set');
+    if (code) setTimeout(() => dialog('Save your recovery code', `<p>If you forget the PIN, this code turns the lock off without touching your data. <strong>It is shown only once.</strong> Write it down or store it in a password manager.</p><p class="lk-code" style="font-size:1.3rem;font-weight:700;letter-spacing:.08em;text-align:center">${esc(code)}</p>`, [{label:'I saved it', kind:'primary'}], { dismissible:false }), 80);
+    render({ keepScroll:true });
+  }}]);
 }
-function wireLockPanel(m){
-  const set = document.getElementById('lockSetPin');
-  if (set) set.onclick = () => {
-    const ask = Lock.enabled() ? '<label class="field"><span>Current PIN</span><input type="password" id="lpOld" inputmode="numeric" maxlength="4" autocomplete="off"></label>' : '';
-    dialog(Lock.enabled() ? 'Change PIN' : 'Set a PIN', `${ask}<label class="field"><span>New 4-digit PIN</span><input type="password" id="lpNew" inputmode="numeric" maxlength="4" autocomplete="new-password"></label><label class="field"><span>Repeat PIN</span><input type="password" id="lpNew2" inputmode="numeric" maxlength="4" autocomplete="new-password"></label><p class="small muted">Avoid obvious PINs such as 1234 or your birth year.</p>`, [{label:'Cancel'}, {label:'Save PIN', kind:'primary', onClick: async () => {
-      if (Lock.enabled() && !(await checkSecret(val('lpOld'), Lock.cfg.pin))){ toast('Current PIN is not right'); return false; }
-      const p = val('lpNew');
-      if (!/^\d{4}$/.test(p)){ toast('Use exactly 4 digits'); return false; }
-      if (p !== val('lpNew2')){ toast('The two PINs do not match'); return false; }
-      if (['0000', '1111', '1234', '4321', '2222', '3333', '4444', '5555', '6666', '7777', '8888', '9999'].includes(p)){ toast('That PIN is too easy to guess'); return false; }
-      const first = !Lock.enabled(); let code = '';
-      const next = { ...(Lock.cfg || {}), pin:await makeSecret(p), autoMinutes:Lock.cfg && Lock.cfg.autoMinutes != null ? Lock.cfg.autoMinutes : 5 };
-      if (first || !next.recovery){ code = newRecoveryCode(); next.recovery = await makeSecret(code); }
-      Lock.cfg = next; try { await Lock.save(); } catch(e){ showSaveError(e); return false; }
-      Lock.setFails({ count:0, until:0 }); Audit.log('lock-set');
-      if (code) setTimeout(() => dialog('Save your recovery code', `<p>If you forget the PIN, this code turns the lock off without touching your data. <strong>It is shown only once.</strong> Write it down or store it in a password manager.</p><p class="lk-code" style="font-size:1.3rem;font-weight:700;letter-spacing:.08em;text-align:center">${esc(code)}</p>`, [{label:'I saved it', kind:'primary'}], { dismissible:false }), 80);
-      render({ keepScroll:true });
-    }}]);
-  };
-  const now = document.getElementById('lockNow'); if (now) now.onclick = () => Lock.show({ view:'pin' });
-  const off = document.getElementById('lockOff');
-  if (off) off.onclick = () => dialog('Turn off the lock?', '<label class="field"><span>Enter your PIN to confirm</span><input type="password" id="loPin" inputmode="numeric" maxlength="4" autocomplete="off"></label>', [{label:'Cancel'}, {label:'Turn off', kind:'danger', onClick: async () => {
+/* Turn the lock off: asks for the PIN (biometrics go with it). */
+function lockOffDialog(){
+  dialog('Turn off the lock?', '<label class="field"><span>Enter your PIN to confirm</span><input type="password" id="loPin" inputmode="numeric" maxlength="4" autocomplete="off"></label>', [{label:'Cancel'}, {label:'Turn off', kind:'danger', onClick: async () => {
     if (!(await checkSecret(val('loPin'), Lock.cfg.pin))){ toast('That PIN is not right'); return false; }
     Lock.cfg = null; await Store.putMeta('appLock', null); Audit.log('lock-off'); render({ keepScroll:true });
   }}]);
-  const bio = document.getElementById('lockBio');
-  if (bio) bio.onclick = async () => {
-    try {
-      if (Lock.cfg.bio){ delete Lock.cfg.bio; await Lock.save(); toast('Biometrics removed'); }
-      else { Lock.cfg.bio = { id:await Bio.register() }; await Lock.save(); toast('Biometric unlock is on'); }
-      render({ keepScroll:true });
-    } catch(e){ toast('Could not set up biometrics' + (e && e.name === 'NotAllowedError' ? ' (cancelled)' : '')); }
-  };
-  const auto = document.getElementById('lockAuto'); if (auto) auto.onchange = async () => { Lock.cfg.autoMinutes = Number(auto.value); await Lock.save(); };
+}
+function wireLockPanel(m){
+  const set = document.getElementById('lockSetPin'); if (set) set.onclick = lockSetPinDialog;
+  const now = document.getElementById('lockNow'); if (now) now.onclick = () => Lock.show({ view:'pin' });
+  const off = document.getElementById('lockOff'); if (off) off.onclick = lockOffDialog;
 }
 
 /* ---------------------------------------------------------------
@@ -4701,9 +4855,13 @@ const Cues={
 };
 const cue=type=>Cues.play(type);
 ['pointerdown','keydown','touchstart'].forEach(ev=>window.addEventListener(ev,()=>Cues.unlock(),{passive:true}));
+/* Settings > Workouts (per device): the rest used when a program doesn't set one, and keeping the screen awake. */
+const REST_CHOICES=[60,90,120,180];
+function defaultRestSeconds(){try{const v=Number(localStorage.getItem('nyaega:defaultRest'));return REST_CHOICES.includes(v)?v:90;}catch{return 90;}}
+function keepAwakeOn(){try{return localStorage.getItem('nyaega:keepAwake')!=='0';}catch{return true;}}
 let wakeLockSentinel=null;
 async function syncWakeLock(){
-  const want=!!(S.sel?.draft||S.sel?.conditioningSession||S.parkedWorkout||S.sessions.length);
+  const want=keepAwakeOn()&&!!(S.sel?.draft||S.sel?.conditioningSession||S.parkedWorkout||S.sessions.length);
   if(want&&!wakeLockSentinel&&document.visibilityState==='visible'&&navigator.wakeLock){
     try{
       const sentinel=await navigator.wakeLock.request('screen');
@@ -4900,26 +5058,22 @@ function viewToday(){
     const a = attFor(iso, c.id);
     const oo = oneOffToday.find(s => (s.clientIds||[]).includes(c.id));
     const timeNote = g && g.time && pairingIds.has(c.id) ? fmtTime(g.time) : (individualIds.has(c.id) ? fmtTime(c.recurTime) : (oo ? fmtTime(oo.time) : ''));
-    const nextDay = p?.days?.[nextDayIndex(c.id)]?.name;
     return `<div class="card today-card">
       <div class="spread">
         <span class="name" style="display:flex;align-items:center;gap:.5rem">${avatarHTML(c.name)}${esc(c.name)}</span>
         ${statusPill(a ? a.status : '')}
       </div>
-      <div class="small muted">${p ? esc(p.name) + ' · ' + esc(weekTextFor(p, c.currentWeek || 1)) : 'No program assigned'}${timeNote ? ' · ' + esc(timeNote) : ''}</div>
-      ${nextDay ? `<div class="small"><strong>Next: ${esc(nextDay)}</strong></div>` : ''}
+      <div class="pc-meta"><div class="small muted">${p ? esc(p.name) + ' · ' + esc(weekTextFor(p, c.currentWeek || 1)) : 'No program assigned'}${timeNote ? ' · ' + esc(timeNote) : ''}</div></div>
     </div>`;
   };
 
   return `
-  <div class="panel today-summary">
+  <div class="panel today-summary today-line">
     <span class="eyebrow">${esc(new Date().toLocaleDateString(undefined,{weekday:'long', day:'numeric', month:'long'}))}</span>
-    <h2>Today's attendance</h2>
-    <div class="att-stats">
-      <div class="att-stat ok"><span>Attended</span><strong class="num">${attended}</strong></div>
-      <div class="att-stat bad"><span>Missed</span><strong class="num">${missed}</strong></div>
-      <div class="att-stat warn"><span>Pending</span><strong class="num">${pending}</strong></div>
-    </div>
+    <h2 class="sr-only">Today's attendance</h2>
+    <p class="att-line num">${total
+      ? `<span><strong>${total}</strong> due</span><span class="ok"><i aria-hidden="true"></i><strong>${attended}</strong> done</span>${missed ? `<span class="bad"><i aria-hidden="true"></i><strong>${missed}</strong> missed</span>` : ''}<span class="warn"><i aria-hidden="true"></i><strong>${pending}</strong> pending</span>`
+      : '<span class="muted">No one due today</span>'}</p>
     ${total ? `<div class="progress-track" role="img" aria-label="${pct}% attended so far"><div class="progress-fill" style="width:${pct}%"></div></div>` : ''}
   </div>
   ${!relevant.length
@@ -5002,7 +5156,7 @@ const REST_UNIT_SECONDS=[[/^(h|hr|hrs|hour|hours)$/,3600],[/^(m|min|mins|minute|
 function restUnitSeconds(unit){if(!unit)return null;const hit=REST_UNIT_SECONDS.find(([re])=>re.test(unit));return hit?hit[1]:undefined;}
 function prescribedRestSeconds(value){
   const text=String(value??'').trim().toLowerCase().replace(/,/g,'.').replace(/[’′]/g,"'").replace(/[”″]/g,'"').replace(/\s+/g,' ');
-  if(!text)return 90;
+  if(!text)return defaultRestSeconds();   // (Settings > Workouts > Default rest)
   const valid=n=>Number.isFinite(n)&&n>0?Math.round(n):90;
   const clock=text.match(/^(\d+):(\d{1,2})$/);if(clock)return valid(Number(clock[1])*60+Number(clock[2]));
   const range=text.match(/^(\d+(?:\.\d+)?) ?(?:-|–|to) ?\d+(?:\.\d+)? ?([a-z'"]*)\.?$/);
@@ -5045,7 +5199,11 @@ function programItemFor(entry){
   if(item)return weekItem(item,draft.week||1);
   return entry.targetReps?{sets:entry.targetSets,reps:entry.targetReps,progression:'double',increment:2.5}:null;
 }
+/* Progression suggestions ("add 2.5 kg", "+1 rep") are turned off for now (2026-10-25): the kg and reps boxes show last
+   time's numbers, and the warm-ups and plates work from those. Set to true to bring them back. */
+const PROGRESSION_SUGGESTIONS=false;
 function entrySuggestion(entry){
+  if(!PROGRESSION_SUGGESTIONS)return null;
   const item=programItemFor(entry);if(!item)return null;
   const draft=S.sel.draft;
   // A deload week, or a load set as a % of the client's max, is prescribed by the plan: no automatic "add weight" advice.
@@ -5053,16 +5211,16 @@ function entrySuggestion(entry){
   return progressionSuggestion(item,exerciseHistory(draft.clientId,entry.exId).last);
 }
 function shortDate(iso){return iso?new Date(iso+'T12:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short'}):'';}
-function exerciseTargetHTML(en,suggestion){
+/* No target line: the sets and reps are the rows, and the kg and reps boxes show the numbers (last time's; the
+   program's reps when there is no history). A line stays only for what the boxes can't show: a % load, RPE, RIR, tempo, the coach's note. */
+function exerciseTargetHTML(en){
   const parts=[];
-  if(en.targetSets&&en.targetReps)parts.push(`<strong>${esc(en.targetSets)} × ${esc(en.targetReps)}</strong>`);else if(en.targetReps)parts.push(`<strong>${esc(en.targetReps)} reps</strong>`);
-  if(en.targetLoad)parts.push(esc(/^\d+(\.\d+)?$/.test(String(en.targetLoad))?en.targetLoad+' kg':en.targetLoad)+(percentLoad(en.targetLoad)!=null?(en.targetKg?' ≈ '+esc(en.targetKg)+' kg':' (no past lifts to work out a weight)'):''));
+  if(en.targetLoad&&percentLoad(en.targetLoad)!=null)parts.push(esc(en.targetLoad)+(en.targetKg?' ≈ '+esc(en.targetKg)+' kg':' (no past lifts to work out a weight)'));
   if(en.targetRPE)parts.push('RPE '+esc(en.targetRPE));
   if(en.targetRIR)parts.push('RIR '+esc(en.targetRIR));
   if(en.targetTempo)parts.push('Tempo '+esc(en.targetTempo));
-  // (The rest time is not repeated here: the rest timer already uses it.)
-  if(!parts.length&&!suggestion&&!en.targetNotes)return '';
-  return `<div class="exercise-target">${parts.length?`<span>Target ${parts.join(' · ')}</span>`:''}${en.targetNotes?`<span class="exercise-cue">✎ ${esc(en.targetNotes)}</span>`:''}${suggestion?`<span class="exercise-suggestion">↗ ${esc(suggestion.note)}</span>`:''}</div>`;
+  if(!parts.length&&!en.targetNotes)return '';
+  return `<div class="exercise-target">${parts.length?`<span>${parts.join(' · ')}</span>`:''}${en.targetNotes?`<span class="exercise-cue">✎ ${esc(en.targetNotes)}</span>`:''}</div>`;
 }
 function exBlock(en, ei){
   const previous=exerciseHistory(S.sel.draft.clientId,en.exId).last;
@@ -5076,11 +5234,12 @@ function exBlock(en, ei){
         ${S.sel.draft.entries.length>1?'<p class="exercise-actions-hint">Hold the name to move it</p>':''}<button type="button" data-warmups="${ei}">Add warm-up sets</button>${entryBar(en)?`<button type="button" data-plates="${ei}">Plates</button>`:''}<button type="button" data-session-group="superset" data-ei="${ei}">Create superset</button><button type="button" data-session-group="triset" data-ei="${ei}">Create triset</button><button type="button" data-set-type="${ei}">Set type</button><button type="button" data-set-notes="${ei}">Set notes</button><button type="button" data-replace-session="${ei}">Replace exercise</button><button type="button" data-rmex="${ei}" data-remove-action>Remove exercise</button>
       </div></details></div>
     </header>
-    ${exerciseTargetHTML(en,suggestion)}
+    ${exerciseTargetHTML(en)}
     <div class="setheads"><span>Set</span><span>Previous</span>${kgHeadHTML(en,ei)}<span>Reps</span><span></span></div>
     ${en.sets.map((rawSet,si)=>{const s=ensureSetDefaults(rawSet),wi=workingIndexOf(en.sets,si),warm=wi<0;   // (warm-ups: W badge, no previous / hints)
       if(warm&&wu.done)return '';   // warm-ups all ticked: off the screen (still in the session, so saved and in History)
-      const prev=warm?null:previous?.sets?.[wi],lastWeight=warm?null:previous?(prev?.weight??null):s.lastWeight,lastReps=warm?null:previous?(prev?.reps??null):s.lastReps,sug=warm?null:suggestion?.sets?.[wi],hintWeight=warm?null:warmupShiftedHint(en,wi,sug?.weight??en.targetKg??lastWeight,baseHint0),hintReps=warm?null:sug?.reps??lastReps;return `
+      const prev=warm?null:previous?.sets?.[wi],lastWeight=warm?null:previous?(prev?.weight??null):s.lastWeight,lastReps=warm?null:previous?(prev?.reps??null):s.lastReps,sug=warm?null:suggestion?.sets?.[wi],hintWeight=warm?null:warmupShiftedHint(en,wi,sug?.weight??en.targetKg??lastWeight,baseHint0),hintReps=warm?null:sug?.reps??lastReps??(en.targetReps||null);   // (no history yet: the program's reps, "10" or "8-12")
+      return `
       <div class="set-swipe-wrap"><span class="set-swipe-action copy" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></span><span class="set-swipe-action delete" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></span><div class="setrow ${s.done?'done':''}${wu.done&&si===wu.next?' is-next':''}" data-si="${si}">${warm?'<span class="idx set-w" title="Warm-up set">W</span>':`<span class="idx num">${wi+1}</span>`}<span class="last num">${lastWeight!=null||lastReps!=null?esc((lastWeight??'—')+'kg × '+(lastReps??'—')):'—'}</span>
         ${entryBar(en)?`<label class="kg-cell"><input type="number" inputmode="decimal" step="0.25" class="num" data-set-input="weight" value="${esc(kgBoxValue(en,s.weight))}" placeholder="${esc(kgBoxValue(en,hintWeight))}" aria-label="Kilograms per side for ${warm?'warm-up set':'set '+(wi+1)}" aria-describedby="kgt-${ei}-${si}"><small class="kg-total" id="kgt-${ei}-${si}">${esc(kgTotalLabel(en,s.weight))}</small></label>`
           :`<input type="number" inputmode="decimal" step="0.5" class="num" data-set-input="weight" value="${esc(s.weight??'')}" placeholder="${esc(hintWeight??'')}" aria-label="Kilograms for ${warm?'warm-up set':'set '+(wi+1)}">`}
@@ -5139,7 +5298,7 @@ function buildRepeatWorkoutDraft(cid,log){
   });
   // The session being repeated: each set's weight in it (set 2 → set 2) for the Plates button, and its bar.
   if(loggedEntries.length)entries.forEach((en,k)=>{const from=loggedEntries[k]||{},fs=loggedExerciseSets(from);en.sets.forEach((st,n)=>{const w=Number(setWeight(fs[n]));if(w>0)st.repeatWeight=w;});if(from.bar)en.bar=from.bar;});
-  const draft={id:uid(),clientId:cid,date:todayISO(),dayLabel:day?.name||log.dayLabel||'Open session',programId,week:client.currentWeek||log.week||1,entries,notes:'',usePack:true,startedAt:Date.now(),restRemainingMs:90000,restDurationSeconds:90,restRunning:false,restEndAt:null,autoRestAfterSet:true,...(loggedEntries.length?{repeatOf:log.id}:{})};
+  const draft={id:uid(),clientId:cid,date:todayISO(),dayLabel:day?.name||log.dayLabel||'Open session',programId,week:client.currentWeek||log.week||1,entries,notes:'',usePack:true,startedAt:Date.now(),restRemainingMs:defaultRestSeconds()*1000,restDurationSeconds:defaultRestSeconds(),restRunning:false,restEndAt:null,autoRestAfterSet:true,...(loggedEntries.length?{repeatOf:log.id}:{})};
   return {draft,dayIndex:dayIndex>=0?dayIndex:0};
 }
 /* ---- editing a saved session: reopen it in the logger, save overwrites the same log ---- */
@@ -5155,7 +5314,7 @@ function beginEditSession(logId){
   });
   const draft={...copy,id:logId,clientId:cid,entries,editing:true,
     editOriginal:{date:log.date,completedAt:log.completedAt??null,durationSeconds:Object.prototype.hasOwnProperty.call(log,'durationSeconds')?log.durationSeconds:undefined},
-    notes:log.notes||'',usePack:false,startedAt:Date.now(),restRemainingMs:90000,restDurationSeconds:90,restRunning:false,restEndAt:null,autoRestAfterSet:true};
+    notes:log.notes||'',usePack:false,startedAt:Date.now(),restRemainingMs:defaultRestSeconds()*1000,restDurationSeconds:defaultRestSeconds(),restRunning:false,restEndAt:null,autoRestAfterSet:true};
   S.sel={logClient:cid,dayIndex:0,draft,backTo:''};
   // "Previous", best and hints come from sessions BEFORE this one (exerciseHistory skips the session being edited).
   entries.forEach(e=>{const h=exerciseHistory(cid,e.exId);e.best=h.best;e.lastDate=h.last?.date||null;e.sets.forEach((s,i)=>{s.lastWeight=h.last?.sets?.[i]?.weight??null;s.lastReps=h.last?.sets?.[i]?.reps??null;});});
@@ -5751,9 +5910,9 @@ function cardForClient(c){
   const p = S.programs[c.programId], g = S.groups[c.groupId];
   return `<div class="card person-card" data-client="${esc(c.id)}">
     <div class="spread"><span class="name">${avatarHTML(c.name)}${esc(c.name)}</span>${consentPillHTML(c)}${syncPillHTML(c)}</div>
-    <div class="small muted">${g ? esc(g.name) : 'No pairing'} · ${p ? esc(p.name) : 'No program'}</div>
+    <div class="pc-meta"><div class="small muted">${g ? esc(g.name) : 'No pairing'} · ${p ? esc(p.name) : 'No program'}</div>
     <div class="small muted num">${attendedCount(c.id)} sessions attended</div>
-    <div class="small muted">${esc(c.goal || '')}</div>
+    <div class="small muted">${esc(c.goal || '')}</div></div>
   </div>`;
 }
 
@@ -6618,8 +6777,8 @@ function viewProgress(){
     const logs = clientLogs(c.id);
     return `<div class="card person-card" data-historyclient="${esc(c.id)}">
       <span class="name" style="display:flex;align-items:center;gap:.5rem">${avatarHTML(c.name)}${esc(c.name)}${c.status==='archived' ? ' <span class="pill warn">Archived</span>' : ''}</span>
-      <div class="small muted num">${logs.length} session${logs.length===1?'':'s'} logged</div>
-      <div class="small muted">${logs.length ? 'Last trained ' + esc(logs[0].date) : 'No sessions yet'}</div>
+      <div class="pc-meta"><div class="small muted num">${logs.length} session${logs.length===1?'':'s'} logged</div>
+      <div class="small muted">${logs.length ? 'Last trained ' + esc(logs[0].date) : 'No sessions yet'}</div></div>
     </div>`;
   }).join('')}</div>`;
 }
@@ -7049,97 +7208,349 @@ function storageUsageHTML(){
     <div class="storage-meter ${level}" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="Storage used"><i style="width:${Math.max(pct,1)}%"></i></div>
     <div class="small ${level ? '' : 'muted'}">${note}</div></div>`;
 }
-/* The Data tab is split into sections so each page holds one kind of thing. */
+/* ---- Settings and data: one compact quiet list ----
+   One scrolling page of one-line rows in groups (Account, Workouts, Appearance, Data, Security and privacy, Team,
+   Reset and delete), the value or control on the right, and a search box that filters the rows. Bigger things open
+   their own page from a › row (S.dataSection = storage, copies, export, lock, devices, privacy, team, activity); each
+   page holds the existing panel unchanged, so its ids and wiring stay as they were. The phone's back gesture or
+   "← Settings" returns to that row. Older links that open a section (S.dataSection 'online', 'backup', 'team',
+   'security', 'general') scroll to the matching group once. */
 const DATA_SECTIONS = [['backup','Backup and files'],['online','Online account'],['team','Team and privacy'],['security','Security'],['general','Appearance and reset']];
-const dataSectionsFor = () => Sync.role === 'assistant' ? DATA_SECTIONS.filter(([k]) => ['online','security','general'].includes(k)) : DATA_SECTIONS;
-function dataSectionNow(){
-  const list = dataSectionsFor(), want = S.dataSection;
-  if (want === 'activity') return 'activity';   // its own page, opened from the Online account section (not one of the buttons)
-  return list.some(([k]) => k === want) ? want : list[0][0];
-}
-/* A small mark on a section that needs attention, so nothing important is hidden by being on another page. */
+const QS_JUMP = { online:'qs-account', backup:'qs-data', security:'qs-security', general:'qs-appearance' };   // ('team' opens its page)
+/* A small mark on a group that needs attention. */
 function dataSectionFlag(k){
   if (k === 'backup') return Sync.role !== 'assistant' && exportReminderDue() ? 'A backup is due' : '';
   if (k === 'online') return Sync.signedIn() && (Sync.state === 'attention' || Sync.state === 'offline' || (Sync.deviceStatus && Sync.deviceStatus !== 'approved')) ? 'Needs attention' : '';
   return '';
 }
-function dataSectionNavHTML(cur){
-  return `<nav class="settings-nav" aria-label="Data sections">${dataSectionsFor().map(([k, label]) => {
-    const flag = dataSectionFlag(k);
-    return `<button type="button" data-dsec="${k}" aria-current="${cur === k}">${esc(label)}${flag ? `<span class="sec-flag" role="img" aria-label="${esc(flag)}" title="${esc(flag)}"></span>` : ''}</button>`;
-  }).join('')}</nav>`;
+const QS_ICON = {
+  cloud:'<path d="M7 18a5 5 0 1 1 .9-9.9A6 6 0 0 1 19.5 10 4 4 0 0 1 18 18z"/>',
+  sync:'<path d="M20 11a8 8 0 0 0-14.8-4M4 4v4h4M4 13a8 8 0 0 0 14.8 4M20 20v-4h-4"/>',
+  logout:'<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 8l-4 4 4 4M6 12h10"/>',
+  scale:'<rect x="3" y="4" width="18" height="16" rx="4"/><path d="M8.5 10a3.5 3.5 0 0 1 7 0M12 10l1.5-2"/>',
+  barbell:'<path d="M1.5 12h21"/><rect x="5" y="6" width="3" height="12" rx="1"/><rect x="16" y="6" width="3" height="12" rx="1"/>',
+  timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  device:'<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
+  bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4"/>',
+  forward:'<path d="M5 5l8 7-8 7zM15 5v14"/>',
+  list:'<path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>',
+  folder:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  file:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',
+  database:'<ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  download:'<path d="M12 3v12M7 10l5 5 5-5M4 19h16"/>',
+  upload:'<path d="M12 21V9M7 14l5-5 5 5M4 5h16"/>',
+  lockkey:'<rect x="4" y="10.5" width="16" height="11" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/>',
+  fingerprint:'<path d="M12 11v2.5c0 2.5-.6 4.8-1.8 6.7M8.4 21c.9-1.6 1.6-3.8 1.6-6.5V11a2 2 0 0 1 4 0v1M15.8 21c.3-1.3.5-2.8.5-4.5M6.3 17.5c.4-1.2.7-2.6.7-4V11a5 5 0 0 1 9.4-2.4M19 16c.2-1 .3-2.1.3-3.2V11a7.3 7.3 0 0 0-11.6-5.9M4.8 14.3c.1-.8.2-1.6.2-2.6V11c0-1.2.3-2.3.8-3.3"/>',
+  key:'<circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L20 3M16 7l3 3"/>',
+  chart:'<path d="M3 3v18h18M7 15l4-4 3 3 5-6"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2.2.6 3.5 2.6 3.5 6"/>',
+  refresh:'<path d="M20 11a8 8 0 0 0-14.8-4M4 4v4h4M4 13a8 8 0 0 0 14.8 4M20 20v-4h-4"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  sliders:'<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+  activity:'<path d="M3 12h4l3-8 4 16 3-8h4"/>',
+  search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/>',
+  chev:'<path d="M9 6l6 6-6 6"/>'
+};
+const qsIcon = (k, cls = 'qs-i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${QS_ICON[k] || ''}</svg>`;
+const qsText = html => String(html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().toLocaleLowerCase();
+/* One row: icon, label (+ a short line under it), and the value / control on the right. */
+function qsRow({ icon = '', label, desc = '', right = '', keys = '', labelId = '', id = '' }){
+  return `<div class="qs-row"${id ? ` id="${id}"` : ''} data-qs-keys="${esc(qsText(label + ' ' + desc + ' ' + keys))}">${icon ? qsIcon(icon) : ''}<div class="qs-text"><span class="qs-label"${labelId ? ` id="${labelId}"` : ''}>${label}</span>${desc ? `<span class="qs-desc">${desc}</span>` : ''}</div>${right ? `<div class="qs-right">${right}</div>` : ''}</div>`;
 }
-function dataBackupSection(){
-  return `
-  <div class="panel stack">
-    <h2>Where your data lives</h2>
-    <p class="small muted">${
-      MODE === 'file' ? `Saving to <strong>${esc(FILE_HANDLE ? FILE_HANDLE.name : 'a file')}</strong>. You'll be asked to reconnect after a refresh.`
-      : `Saved in this browser on this device.`
-    }</p>
-  </div>
-
-  <div class="panel stack">
-    <h3>Save to a file</h3>
-    <p class="small muted">Chrome, Edge or Opera on a computer.</p>
-    ${MODE === 'file'
-      ? `<div class="row"><button class="btn danger sm" id="fileDisconnect">Disconnect this file</button></div>`
-      : `<div class="row">
-          <button class="btn primary sm" id="fileOpen">Open an existing data file…</button>
-          <button class="btn ghost sm" id="fileNew">Start a new data file…</button>
-        </div>
-        ${!fsApiSupported() ? '<p class="small muted">Not available in this browser. Use Export and Import below.</p>' : ''}`}
-  </div>
-
-  ${backupsPanelHTML(S.snapshotList)}
-
-  <div class="panel stack">
-    <h3>Backup and transfer</h3>
-    ${MODE === 'local' ? storageUsageHTML() : ''}
-    <div class="row">
-      <button class="btn ghost" id="exportJson">Export everything (JSON)</button>
-      <button class="btn ghost" id="exportEnc">Export encrypted backup…</button>
-      <button class="btn ghost" id="exportCsv">Export session log (CSV)</button>
-      <button class="btn ghost" id="exportAtt">Export attendance (CSV)</button>
-      <button class="btn ghost" id="exportRoster">Export roster (Excel)</button>
-      <button class="btn ghost" id="importBtn">Import a backup</button>
-      <input type="file" id="importFile" accept="application/json" hidden>
-    </div>
-  </div>`;
+/* An existing panel, unchanged, as one row (searchable by everything it says). */
+const qsPanel = (html, keys = '') => html ? `<div class="qs-row qs-panel" data-qs-keys="${esc(qsText(html + ' ' + keys))}">${html}</div>` : '';
+function qsGroup(key, title, rows, flag = ''){
+  const body = rows.filter(Boolean).join(''); if (!body) return '';
+  return `<section class="qs-group" id="qs-${key}" aria-labelledby="qsh-${key}"><h2 class="qs-title" id="qsh-${key}">${esc(title)}${flag ? `<span class="qs-flag">${esc(flag)}</span>` : ''}</h2><div class="qs-card">${body}</div></section>`;
 }
-function dataGeneralSection(){
-  return `
-  <div class="panel stack">
-    <h3>Theme</h3>
-    <div class="row"><button class="btn ghost" data-theme="light">Light</button>
-      <button class="btn ghost" data-theme="dark">Dark</button>
-      <button class="btn ghost" data-theme="">Match system</button></div>
-  </div>
+const qsSwitch = (id, on, labelId) => `<label class="qs-switch"><input type="checkbox" role="switch" id="${id}" ${on ? 'checked' : ''} aria-labelledby="${labelId}"><span aria-hidden="true"></span></label>`;
+const qsBtn = (id, label, kind = 'ghost', extra = '') => `<button type="button" class="btn sm ${kind}" id="${id}" ${extra}>${label}</button>`;
+const qsThemeNow = () => { try { const t = localStorage.getItem('nyaega:theme'); return t === null ? 'light' : (t || 'system'); } catch { return 'light'; } };
+const qsCompactOn = () => { try { return localStorage.getItem('nyaega:compact') !== '0'; } catch { return true; } };   // on unless switched off
+const qsInitials = n => String(n || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'N';
+const offlineCacheAvailable = () => 'caches' in window && !!(navigator.serviceWorker && navigator.serviceWorker.controller);
 
-  <div class="panel stack">
-    <h3>Workout sounds</h3>
-    <label class="small" style="display:flex;flex-wrap:nowrap;gap:.6rem;align-items:flex-start;cursor:pointer"><input type="checkbox" id="soundCues" ${Cues.muted() ? '' : 'checked'} style="width:auto;flex:none;margin-top:.15rem"><span style="flex:1;min-width:0">Beeps and vibration for the rest timer and conditioning intervals</span></label>
-  </div>
+/* A one-line row whose value opens a small picker (Default rest, Theme): label, the value, ›. */
+function qsPickRow({ id, icon, label, value, keys = '' }){
+  return `<button type="button" class="qs-row qs-nav" id="${id}" aria-haspopup="dialog" data-qs-keys="${esc(qsText(label + ' ' + keys))}">${qsIcon(icon)}<span class="qs-text"><span class="qs-label">${esc(label)}</span></span><span class="qs-right"><span class="qs-value" id="${id}Val">${esc(value)}</span>${qsIcon('chev', 'qs-chev')}</span></button>`;
+}
+const QS_THEMES = [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']];
+const qsThemeLabel = () => (QS_THEMES.find(([v]) => v === qsThemeNow()) || QS_THEMES[1])[1];
+/* A row that opens its own page (the existing panel, unchanged): label, the current value, ›. */
+function qsNav({ key, icon, label, value = '', keys = '', valueId = '' }){
+  return `<button type="button" class="qs-row qs-nav" id="qsRow-${key}" data-dsec="${key}" data-qs-keys="${esc(qsText(label + ' ' + keys))}">${qsIcon(icon)}<span class="qs-text"><span class="qs-label">${esc(label)}</span></span><span class="qs-right"><span class="qs-value"${valueId ? ` id="${valueId}"` : ''}>${value}</span>${qsIcon('chev', 'qs-chev')}</span></button>`;
+}
+const qsStorageValue = () => {
+  if (MODE === 'file') return 'Data file';
+  const e = S.storageEst; return 'This device' + (LOCAL === 'idb' && e && e.usage ? ' · ' + (e.usage / 1000000).toFixed(e.usage < 100000 ? 2 : 1) + ' MB' : '');
+};
+const qsCopiesValue = () => exportReminderDue() ? '<span class="pill warn">Backup due</span>' : (S.snapshotList && S.snapshotList.length ? S.snapshotList.length + ' saved' : 'None yet');
 
-  <div class="panel stack">
-    <h3>Reset</h3>
-    <p class="small muted">Removes all clients, programs and sessions from this device. Export a backup first.</p>
-    <div class="row"><button class="btn danger" id="wipe">Delete all data</button></div>
-  </div>`;
+function settingsAccountRows(owner){
+  const enabled = Sync.enabled(), signedIn = enabled && Sync.signedIn();
+  const email = signedIn ? ((Sync.session.user && Sync.session.user.email) || '') : '';
+  const name = (owner && S.privacy && S.privacy.controller) || (Sync.role === 'assistant' ? 'Assistant coach' : 'Coach');
+  const profile = `<div class="qs-row qs-profile" data-qs-keys="${esc(qsText('profile name email contact account coach ' + name + ' ' + email))}"><span class="qs-avatar" aria-hidden="true">${esc(qsInitials(name))}</span>
+    <div class="qs-text"><span class="qs-label">${esc(name)}</span><span class="qs-desc">${Sync.role === 'assistant' ? 'Assistant coach' : 'Head coach'} · ${signedIn ? esc(email) : 'this device only'}</span></div>
+    ${owner ? `<div class="qs-right">${qsBtn('qsEditProfile', 'Edit')}</div>` : ''}</div>`;
+  const rows = [profile];
+  if (!enabled) rows.push(qsRow({ icon:'cloud', label:'Sync', right:'<span class="qs-value">Not available here</span>', keys:'account online sign in' }));
+  else if (signedIn){
+    rows.push(qsRow({ icon:'sync', label:'Sync', desc:`<span id="syncStatusText" aria-live="polite">${esc(Sync.label())}</span>`, right:qsBtn('syncNow', 'Sync now', Sync.auto ? 'ghost' : 'primary'), keys:'cloud online account' }));
+    rows.push(qsRow({ icon:'cloud', label:'Sync automatically', labelId:'qslSyncAuto', right:qsSwitch('syncAuto', Sync.auto, 'qslSyncAuto') }));
+  } else rows.push(`<button type="button" class="qs-row qs-nav" id="syncOpenLogin" data-qs-keys="sync account online sign in not signed in">${qsIcon('cloud')}<span class="qs-text"><span class="qs-label">Sync</span></span><span class="qs-right"><span class="qs-value">Off</span>${qsIcon('chev', 'qs-chev')}</span></button>`);   // (the one way back to the sign-in page when not signed in)
+  if (owner) rows.push(qsNav({ key:'team', icon:'users', label:'Assistant coaches', value:signedIn ? String(S.teamSize || 0) : 'Not signed in', keys:'team roles invite clients' }));
+  return rows;
 }
-/* Recent activity is long, so it lives on its own page; the Online account section only has a button for it. */
-function activityLinkHTML(){
-  return `<div class="panel spread"><div><h3>Recent activity</h3></div><button type="button" class="btn ghost sm" data-dsec="activity">View</button></div>`;
+function settingsWorkoutRows(){
+  const bar = barKgOf('olympic'), rest = defaultRestSeconds();
+  return [
+    qsRow({ icon:'barbell', label:'Default bar', labelId:'qslBar', keys:'barbell weight olympic plates gym',
+      right:`<div class="qs-stepper" role="group" aria-labelledby="qslBar"><button type="button" id="qsBarDec" aria-label="Lighter bar" ${bar <= 5 ? 'disabled' : ''}>−</button><output id="qsBarOut" class="num" aria-live="polite">${esc(pcFmt(bar))} kg</output><button type="button" id="qsBarInc" aria-label="Heavier bar" ${bar >= 30 ? 'disabled' : ''}>+</button></div>` }),
+    qsPickRow({ id:'qsRestPick', icon:'timer', label:'Default rest', value:rest + ' s', keys:'rest timer seconds' }),
+    qsRow({ icon:'device', label:'Keep screen awake in workouts', labelId:'qslAwake', right:qsSwitch('keepAwake', keepAwakeOn(), 'qslAwake'), keys:'wake lock sleep' }),
+    qsRow({ icon:'bell', label:'Sounds and vibration', labelId:'qslSound', right:qsSwitch('soundCues', !Cues.muted(), 'qslSound'), keys:'timer sound haptics beep rest conditioning' })
+  ];
 }
+function settingsAppearanceRows(){
+  return [
+    qsPickRow({ id:'qsThemePick', icon:'sun', label:'Theme', value:qsThemeLabel(), keys:'light dark system appearance' }),
+    qsRow({ icon:'list', label:'Compact lists', labelId:'qslCompact', right:qsSwitch('compactLists', qsCompactOn(), 'qslCompact'), keys:'density tighter rows' })
+  ];
+}
+function settingsDataRows(){
+  return [
+    qsNav({ key:'storage', icon:'database', label:'Storage', value:esc(qsStorageValue()), valueId:'qsVal-storage', keys:'where data lives space used file save offline cache' }),
+    qsNav({ key:'copies', icon:'refresh', label:'Safety copies', value:qsCopiesValue(), valueId:'qsVal-copies', keys:'backup snapshots restore daily' }),
+    qsNav({ key:'export', icon:'download', label:'Export and import', keys:'download backup json encrypted passphrase csv sessions attendance roster excel import restore file' })
+  ];
+}
+function settingsSecurityRows(owner){
+  const signedIn = Sync.enabled() && Sync.signedIn(), devices = (Sync.devices || []).filter(d => !d.revoked_at).length;
+  return [
+    qsNav({ key:'lock', icon:'lockkey', label:'App lock', value:Lock.enabled() ? (Lock.cfg && Lock.cfg.bio ? 'On · biometrics' : 'On') : 'Off', keys:'pin lock auto biometrics biometric unlock face id fingerprint touch' }),
+    qsNav({ key:'devices', icon:'device', label:'Devices and activity', value:signedIn ? String(devices || '') : 'Not signed in', keys:'sessions sign out everywhere approve remove recent activity audit log history' }),
+    owner ? qsNav({ key:'privacy', icon:'key', label:'Privacy notice', keys:'privacy data rights retention region archive' }) : ''
+  ];
+}
+/* The App lock page: PIN lock (switch), then, while it's on, Change PIN, the time before it locks, Lock now.
+   Biometric unlock is always listed. The PIN dialogs are the lock's own (lockSetPinDialog / lockOffDialog). */
+const LOCK_AUTO = [['1', '1 minute'], ['5', '5 minutes'], ['15', '15 minutes'], ['0', 'Never']];
+const lockAutoLabel = () => { const v = Number(Lock.cfg && Lock.cfg.autoMinutes != null ? Lock.cfg.autoMinutes : 5); return v ? v + ' min' : 'Never'; };
+function settingsLockPage(){
+  const on = Lock.enabled();
+  const navBtn = (id, icon, label) => `<button type="button" class="qs-row qs-nav" id="${id}">${qsIcon(icon)}<span class="qs-text"><span class="qs-label">${label}</span></span><span class="qs-right">${qsIcon('chev', 'qs-chev')}</span></button>`;
+  return [
+    qsRow({ icon:'lockkey', label:'PIN lock', labelId:'qslPin', right:qsSwitch('qsPinLock', on, 'qslPin') }),
+    on ? navBtn('lockSetPin', 'key', 'Change PIN') : '',
+    qsBioRow(),
+    on ? qsPickRow({ id:'qsAutoLock', icon:'timer', label:'Lock after leaving', value:lockAutoLabel() }) : '',
+    on ? navBtn('lockNow', 'lockkey', 'Lock now') : ''
+  ].join('');
+}
+/* Biometric unlock (on the App lock page): it opens the app lock and the PIN is its fallback, so it needs a PIN.
+   Always shown, so it's easy to find; a device the browser can't use for it says so. */
+function qsBioRow(){
+  if (!Lock.bioReady) return qsRow({ icon:'fingerprint', label:'Biometric unlock', right:'<span class="qs-value">Not on this device</span>', keys:'biometrics face id fingerprint touch' });
+  return qsRow({ icon:'fingerprint', label:'Biometric unlock', labelId:'qslBio', desc:Lock.enabled() ? 'Face ID or fingerprint opens the app.' : 'Needs PIN lock.', right:qsSwitch('qsBio', !!(Lock.enabled() && Lock.cfg && Lock.cfg.bio), 'qslBio'), keys:'biometrics face id fingerprint touch' });
+}
+function settingsResetPage(){
+  const owner = Sync.role !== 'assistant', signedIn = Sync.enabled() && Sync.signedIn();
+  return [
+    qsRow({ icon:'sliders', label:'Reset settings', desc:'Bar, rest, theme, sounds, screen awake and compact lists back to their defaults.', right:qsBtn('qsResetSettings', 'Reset'), keys:'defaults preferences workout' }),
+    owner ? qsRow({ icon:'trash', label:'Delete all data', desc:'All clients, programs and sessions on this device. Export a backup first.', right:qsBtn('wipe', 'Delete…', 'danger'), keys:'wipe erase' }) : '',
+    signedIn ? qsRow({ icon:'trash', label:'Delete my account', desc:'Your account and everything stored online for it.', right:qsBtn('deleteAccount', 'Delete…', 'danger'), keys:'online copy' }) : ''
+  ].join('');
+}
+/* Log out: an exit icon at the top right of Settings (signed in only). Asks first (id syncSignOut, so the sync wiring
+   and the confirmation both find it); afterwards the sign-in page opens. */
+const settingsExitHTML = () => Sync.enabled() && Sync.signedIn() ? `<button type="button" class="qs-exit" id="syncSignOut" aria-label="Log out" title="Log out">${qsIcon('logout', 'qs-exit-i')}</button>` : '';
+/* Edit profile: your name or business and contact (the privacy notice uses the same two). From Settings and the profile menu. */
+function editProfileDialog(){
+  dialog('Edit profile', `<p class="small muted">Shown in Settings and in the privacy notice you give clients.</p>
+      <label class="field"><span>Your name or business</span><input type="text" id="qsProfName" maxlength="80" autocomplete="name" value="${esc(S.privacy.controller || '')}"></label>
+      <label class="field"><span>Contact email or phone</span><input type="text" id="qsProfContact" maxlength="120" value="${esc(S.privacy.contact || '')}"></label>`,
+    [{ label:'Cancel' }, { label:'Save', kind:'primary', onClick: async () => {
+      const privacy = { ...S.privacy, controller:val('qsProfName').trim(), contact:val('qsProfContact').trim() };
+      try { await Store.putMeta('privacy', privacy); } catch(e){ showSaveError(e); return false; }
+      S.privacy = privacy; toast('Profile saved'); render({ keepScroll:true });
+    } }]);
+}
+/* The pages opened from a › row. Each holds the existing panel unchanged (same ids, same wiring). */
+function settingsStoragePage(){
+  const cache = offlineCacheAvailable();
+  return [
+    qsRow({ icon:'folder', label:'Where your data lives', desc:MODE === 'file' ? `Saving to <strong>${esc(FILE_HANDLE ? FILE_HANDLE.name : 'a file')}</strong>. You'll be asked to reconnect after a refresh.` : 'Saved in this browser on this device.' }),
+    MODE === 'local' ? `<div class="qs-row qs-block">${qsIcon('database')}<div class="qs-text"><span class="qs-label">Space used</span>${storageUsageHTML()}</div></div>` : '',
+    qsRow({ icon:'file', label:'Save to a file', desc:MODE === 'file' ? 'Connected to a data file.' : fsApiSupported() ? 'Chrome, Edge or Opera on a computer.' : 'Not available in this browser. Use Export and Import.',
+      right:MODE === 'file' ? qsBtn('fileDisconnect', 'Disconnect', 'danger') : fsApiSupported() ? qsBtn('fileOpen', 'Open…') + qsBtn('fileNew', 'New…') : '' }),
+    qsRow({ icon:'refresh', label:'Offline copy of the app', desc:cache ? 'Download a fresh copy for offline use. Your data is not touched.' : 'Nothing is cached in this mode.', right:qsBtn('qsClearCache', 'Refresh', 'ghost', cache ? '' : 'disabled') })
+  ].join('');
+}
+function settingsExportPage(){
+  return [
+    qsRow({ icon:'download', label:'Full backup', desc:'JSON you can import again. Add a passphrase to encrypt it.', right:qsBtn('exportJson', 'Export') + qsBtn('exportEnc', 'With passphrase…') }),
+    qsRow({ icon:'download', label:'Session log', desc:'CSV', right:qsBtn('exportCsv', 'Export') }),
+    qsRow({ icon:'download', label:'Attendance', desc:'CSV', right:qsBtn('exportAtt', 'Export') }),
+    qsRow({ icon:'download', label:'Roster', desc:'Excel', right:qsBtn('exportRoster', 'Export') }),
+    qsRow({ icon:'upload', label:'Import a backup', desc:'JSON or encrypted file', right:qsBtn('importBtn', 'Import…') + '<input type="file" id="importFile" accept="application/json" hidden>' })
+  ].join('');
+}
+const QS_PAGES = {
+  storage:{ title:'Storage', owner:true, html:settingsStoragePage },
+  copies:{ title:'Safety copies', owner:true, html:() => qsPanel(backupsPanelHTML(S.snapshotList)) },
+  export:{ title:'Export and import', owner:true, html:settingsExportPage },
+  lock:{ title:'App lock', html:settingsLockPage, note:'Hides the app when you leave it. It doesn\'t encrypt your data, so keep your phone\'s own passcode on too.' },
+  devices:{ title:'Devices and activity', html:() => (Sync.enabled() && Sync.signedIn() ? qsPanel(devicesPanelHTML()) : qsRow({ icon:'device', label:'Your devices', desc:'Sign in to see and manage the devices on your account.' })) + qsPanel(activityPanelHTML()) },
+  privacy:{ title:'Privacy notice', owner:true, html:() => qsPanel(privacyPanelHTML()) },
+  team:{ title:'Assistant coaches', owner:true, html:() => Sync.enabled() && Sync.signedIn() ? qsPanel(teamPanelHTML()) || qsRow({ icon:'users', label:'Only the head coach can manage assistants.' }) : qsRow({ icon:'users', label:'Not signed in', desc:'Sign in to invite assistants and choose which clients they see.' }) },
+  activity:{ title:'Recent activity', html:() => qsPanel(activityPanelHTML()) },
+  reset:{ title:'Reset and delete', html:settingsResetPage }
+};
 function viewData(){
-  const cur = dataSectionNow();
-  if (cur === 'activity') return `<div class="page-head spread"><button type="button" class="btn ghost sm nav-back" data-dsec="online">← Back to Online account</button></div>${activityPanelHTML()}`;
-  const body = cur === 'backup' ? dataBackupSection()
-    : cur === 'online' ? `${syncPanelHTML()}${devicesPanelHTML()}${activityLinkHTML()}`
-    : cur === 'team' ? `${teamPanelHTML()}${privacyPanelHTML()}`
-    : cur === 'security' ? lockPanelHTML()
-    : dataGeneralSection();
-  return `${conflictsPanelHTML()}${dataSectionNavHTML(cur)}<div id="dataSection" data-section="${cur}">${body}</div>`;
+  const owner = Sync.role !== 'assistant', page = QS_PAGES[S.dataSection];
+  if (page && (!page.owner || owner)) return `<div class="qs-page qs-sub" data-qs-page="${esc(S.dataSection)}">
+    <div class="qs-subhead"><button type="button" class="btn ghost sm nav-back" data-dsec="back-${esc(S.dataSection)}">← Settings</button><h2>${esc(page.title)}</h2></div>
+    <div class="qs-card">${page.html()}</div>${page.note ? `<p class="qs-note">${esc(page.note)}</p>` : ''}</div>`;
+  // Back from a page goes to its row; older links that open a section go to that group (once; later redraws keep your place).
+  const back = /^back-/.test(S.dataSection || '') ? 'qsRow-' + S.dataSection.slice(5) : '';
+  if (back || QS_JUMP[S.dataSection]) S.qsJump = back || QS_JUMP[S.dataSection];
+  delete S.dataSection;
+  return `<div class="qs-page">
+    <div class="qs-head"><h2>Settings</h2>${settingsExitHTML()}
+      <div class="qs-search">${qsIcon('search')}<input type="search" id="settingsSearch" placeholder="Search settings" aria-label="Search settings" autocomplete="off" value="${esc(S.settingsQuery || '')}"></div></div>
+    ${conflictsPanelHTML()}
+    <p class="qs-empty small muted" id="qsNoMatch" role="status" hidden>No settings match.</p>
+    ${qsGroup('account', 'Account', settingsAccountRows(owner), dataSectionFlag('online'))}
+    ${qsGroup('workouts', 'Workouts', settingsWorkoutRows())}
+    ${qsGroup('appearance', 'Appearance', settingsAppearanceRows())}
+    ${owner ? qsGroup('data', 'Data', settingsDataRows()) : ''}
+    ${qsGroup('security', 'Security and privacy', settingsSecurityRows(owner))}
+    ${qsGroup('reset', 'Reset', [qsNav({ key:'reset', icon:'trash', label:'Reset and delete', keys:'reset settings defaults delete all data wipe erase account' })])}
+  </div>`;
+}
+/* A small picker: one option per line, the current one ticked. Choosing closes it; Cancel or Esc leaves it as it was.
+   Arrow keys move between the options. Focus goes back to the row that opened it. */
+function qsPicker(title, note, options, cur, onPick, from){
+  const tick = '<svg class="qs-pick-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  dialog(title, `${note ? `<p class="small muted">${esc(note)}</p>` : ''}<div class="qs-pick" role="radiogroup" aria-label="${esc(title)}">${options.map(([v, label]) => `<button type="button" class="qs-pick-opt" role="radio" data-pick="${esc(v)}" aria-checked="${v === cur}"><span>${esc(label)}</span>${v === cur ? tick : ''}</button>`).join('')}</div>`, [{ label:'Cancel' }]);
+  const dlg = document.getElementById('dlg'), opts = [...dlg.querySelectorAll('[data-pick]')];
+  const back = () => { if (from && document.body.contains(from)) try { from.focus({ preventScroll:true }); } catch {} };
+  dlg.addEventListener('close', back, { once:true });
+  opts.forEach((b, i) => {
+    b.onclick = () => { dlg._closedByAction = true; dlg.close(); onPick(b.dataset.pick); };
+    b.onkeydown = e => { const n = e.key === 'ArrowDown' ? i + 1 : e.key === 'ArrowUp' ? i - 1 : -1; if (n >= 0 && n < opts.length){ e.preventDefault(); opts[n].focus(); } };
+  });
+  (opts.find(b => b.dataset.pick === cur) || opts[0]).focus();
+}
+/* Filters the rows by every word typed; a group with no matching row is hidden. Nothing is redrawn. */
+function applySettingsSearch(q){
+  const words = String(q || '').toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  let any = false;
+  document.querySelectorAll('.qs-group').forEach(g => {
+    let shown = 0;
+    const title = (g.querySelector('.qs-title')?.textContent || '').toLocaleLowerCase();
+    g.querySelectorAll('.qs-row').forEach(r => { const hit = !words.length || words.every(w => (r.dataset.qsKeys || '').includes(w) || title.includes(w)); r.hidden = !hit; if (hit) shown++; });
+    g.hidden = !shown; if (shown) any = true;
+  });
+  const none = document.getElementById('qsNoMatch'); if (none) none.hidden = any;
+}
+function wireSettingsQuiet(m){
+  if (!m.querySelector('.qs-page')) return;
+  const search = document.getElementById('settingsSearch');
+  if (search){ search.oninput = () => { S.settingsQuery = search.value; applySettingsSearch(search.value); }; applySettingsSearch(search.value); }
+  // Default rest and Theme: one-line rows; the choices open in a small picker, and the row's value updates in place.
+  const restPick = document.getElementById('qsRestPick');
+  if (restPick) restPick.onclick = () => qsPicker('Default rest', 'Used when a program doesn\'t set one.', REST_CHOICES.map(s => [String(s), s + ' seconds']), String(defaultRestSeconds()), v => {
+    try { v === '90' ? localStorage.removeItem('nyaega:defaultRest') : localStorage.setItem('nyaega:defaultRest', v); } catch {}
+    const out = document.getElementById('qsRestPickVal'); if (out) out.textContent = v + ' s';
+    toast('Default rest: ' + v + ' seconds');
+  }, restPick);
+  const themePick = document.getElementById('qsThemePick');
+  if (themePick) themePick.onclick = () => qsPicker('Theme', '', QS_THEMES, qsThemeNow(), v => {
+    // (stored as before: 'light' / 'dark', '' = match the system)
+    if (v === 'system') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', v);
+    try { localStorage.setItem('nyaega:theme', v === 'system' ? '' : v); } catch {}
+    const out = document.getElementById('qsThemePickVal'); if (out) out.textContent = qsThemeLabel();
+    toast('Theme: ' + qsThemeLabel());
+  }, themePick);
+  const stepBar = d => {
+    const st = pcLoad(), now = barKgOf('olympic'), v = Math.min(30, Math.max(5, Math.round((now + d * 2.5) * 100) / 100)); if (v === now) return;
+    st.own = { ...st.own, olympic:{ ...(st.own.olympic || {}), kg:v } }; pcSave(st);
+    const out = document.getElementById('qsBarOut'); if (out) out.textContent = pcFmt(v) + ' kg';
+    const dec = document.getElementById('qsBarDec'), inc = document.getElementById('qsBarInc'); if (dec) dec.disabled = v <= 5; if (inc) inc.disabled = v >= 30;
+    toast('Default bar: ' + pcFmt(v) + ' kg');
+  };
+  const dec = document.getElementById('qsBarDec'); if (dec) dec.onclick = () => stepBar(-1);
+  const inc = document.getElementById('qsBarInc'); if (inc) inc.onclick = () => stepBar(1);
+  const awake = document.getElementById('keepAwake');
+  if (awake) awake.onchange = () => { try { awake.checked ? localStorage.removeItem('nyaega:keepAwake') : localStorage.setItem('nyaega:keepAwake', '0'); } catch {} syncWakeLock(); toast(awake.checked ? 'Screen stays awake during workouts' : 'The screen may sleep during workouts'); };
+  const compact = document.getElementById('compactLists');
+  if (compact) compact.onchange = () => { try { compact.checked ? localStorage.removeItem('nyaega:compact') : localStorage.setItem('nyaega:compact', '0'); } catch {} document.documentElement.classList.toggle('compact-lists', compact.checked); toast(compact.checked ? 'Compact lists on' : 'Compact lists off'); };
+  // Biometric unlock: the same setup as the App lock page (Bio.register, saved with the lock). Without a PIN it goes to App lock to set one.
+  const bio = document.getElementById('qsBio');
+  if (bio) bio.onchange = async () => {
+    const want = bio.checked;
+    if (!Lock.enabled()){ bio.checked = false; toast('Turn on PIN lock first, then biometric unlock'); document.getElementById('qsPinLock')?.focus(); return; }
+    try {
+      if (want && !Lock.cfg.bio){
+        const acct = await Store.getMeta('syncUser', null); if (acct && acct.id) Lock.account = acct;
+        Lock.cfg.bio = { id:await Bio.register(acct), user:(acct && acct.id) || null }; await Lock.save(); toast('Biometric unlock is on');
+      }
+      else if (!want && Lock.cfg.bio){ delete Lock.cfg.bio; await Lock.save(); toast('Biometric unlock is off'); }
+    } catch(e){ bio.checked = !want; toast('Could not set up biometrics' + (e && e.name === 'NotAllowedError' ? ' (cancelled)' : '')); }
+  };
+  // App lock: the switch opens the lock's own dialogs (set a PIN / enter it to turn off); it shows the saved state
+  // until a dialog succeeds and redraws. Lock after leaving uses the small picker.
+  const pinLock = document.getElementById('qsPinLock');
+  if (pinLock) pinLock.onchange = () => { const wantOn = pinLock.checked; pinLock.checked = Lock.enabled(); wantOn ? lockSetPinDialog() : lockOffDialog(); };
+  const autoLock = document.getElementById('qsAutoLock');
+  if (autoLock) autoLock.onclick = () => qsPicker('Lock after leaving', 'How long the app can be in the background before it locks.', LOCK_AUTO, String(Lock.cfg.autoMinutes ?? 5), async v => {
+    Lock.cfg.autoMinutes = Number(v); try { await Lock.save(); } catch(e){ showSaveError(e); return; }
+    const out = document.getElementById('qsAutoLockVal'); if (out) out.textContent = lockAutoLabel();
+    toast(v === '0' ? 'The app won\'t lock by itself' : 'Locks ' + lockAutoLabel() + ' after you leave');
+  }, autoLock);
+  // Log out always asks first (the same question as the profile menu).
+  const out = document.getElementById('syncSignOut'); if (out) out.onclick = confirmLogOut;
+  const edit = document.getElementById('qsEditProfile'); if (edit) edit.onclick = editProfileDialog;
+  const reset = document.getElementById('qsResetSettings');
+  if (reset) reset.onclick = () => dialog('Reset settings?', '<p>Default bar back to 20 kg, default rest to 90 seconds, theme to Light, sounds on, screen kept awake in workouts and compact lists off.</p><p class="small muted">Your clients, programs, sessions and account are not touched.</p>', [{ label:'Cancel' }, { label:'Reset', kind:'danger', onClick:() => {
+    try { ['nyaega:defaultRest', 'nyaega:theme', 'nyaega:keepAwake', 'nyaega:compact'].forEach(k => localStorage.removeItem(k)); } catch {}
+    const st = pcLoad(); if (st.own.olympic){ const o = { ...st.own }; delete o.olympic; st.own = o; pcSave(st); }
+    Cues.setMuted(false); document.documentElement.setAttribute('data-theme', 'light'); document.documentElement.classList.add('compact-lists'); syncWakeLock();
+    toast('Settings reset'); render({ keepScroll:true });
+  } }]);
+  const clearC = document.getElementById('qsClearCache');
+  if (clearC) clearC.onclick = () => {
+    if (!navigator.onLine){ toast('Connect to the internet first, so a fresh copy can download'); return; }
+    dialog('Refresh the offline copy?', '<p>The saved copy of the app is removed and a fresh one is downloaded straight away. Your clients, sessions and backups are not touched.</p>', [{ label:'Cancel' }, { label:'Refresh', kind:'primary', onClick: async () => {
+      try {
+        const keys = (await caches.keys()).filter(k => k.startsWith('nyaega-'));
+        const shell = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png', 'icon-dark-192.png'];
+        const libs = [...document.querySelectorAll('script[src^="https://"]')].map(s => s.src);
+        for (const k of keys){
+          await caches.delete(k);
+          const c = await caches.open(k);
+          await c.addAll(shell);
+          await Promise.all(libs.map(u => fetch(u, { mode:'cors', credentials:'omit' }).then(r => r.ok ? c.put(u, r) : null).catch(() => null)));
+        }
+        toast(keys.length ? 'Offline copy downloaded again' : 'Nothing was cached');
+      } catch(e){ toast('Could not refresh the offline copy — ' + e.message); }
+    } }]);
+  };
+  // The main list shows how many safety copies there are and the space used: read them once, then fill the values in.
+  if (m.querySelector('#qsVal-copies, #qsVal-storage') && MODE === 'local' && LOCAL === 'idb' && !S.qsValuesFresh){
+    S.qsValuesFresh = true; setTimeout(() => { S.qsValuesFresh = false; }, 5000);
+    Promise.all([listSnapshots(), refreshStorageEstimate()]).then(([list]) => {
+      S.snapshotList = list;
+      const c = document.getElementById('qsVal-copies'); if (c) c.innerHTML = qsCopiesValue();
+      const s = document.getElementById('qsVal-storage'); if (s) s.textContent = qsStorageValue();
+    }).catch(() => {});
+  }
+  // Opened for one group or back from a page: scroll there once (instant, so a redraw right after keeps the place);
+  // back from a page also puts the keyboard focus on its row.
+  if (S.qsJump){ const id = S.qsJump; delete S.qsJump; setTimeout(() => { const g = document.getElementById(id); if (!g) return; g.scrollIntoView({ block:g.classList.contains('qs-group') ? 'start' : 'center', behavior:'instant' }); if (g.classList.contains('qs-nav')) try { g.focus({ preventScroll:true }); } catch {} }, 0); }
 }
 
 function download(name, text, type){
@@ -8304,6 +8715,7 @@ if(event.target.closest('select,textarea,summary')||event.target.closest('button
   if (fileDisconnect) fileDisconnect.onclick = () => dialog('Disconnect this file',
     '<p>The page will reload and fall back to browser storage. The file itself is untouched — reconnect to it anytime.</p>',
     [{label:'Cancel'},{label:'Disconnect', kind:'danger', onClick: disconnectFile}]);
+  wireSettingsQuiet(m);   // Settings and data as one quiet list (after the panels above, so its Log out confirmation wins)
 
   wireConditioning();
   wireConditioningWorkout();
@@ -8395,6 +8807,8 @@ function groupDialog(gid){
 
 // Light is the default; "Dark" and "Match system" (stored as '') in Settings and data > Appearance still apply.
 try { const t = localStorage.getItem('nyaega:theme'); if (t !== '') document.documentElement.setAttribute('data-theme', t || 'light'); } catch { document.documentElement.setAttribute('data-theme', 'light'); }
+// Settings > Appearance > Compact lists (per device).
+try { if (localStorage.getItem('nyaega:compact') !== '0') document.documentElement.classList.add('compact-lists'); } catch { document.documentElement.classList.add('compact-lists'); }   // on unless switched off ('0')
 
 // The browser-tab icon follows the theme: green in light, black in dark. Only the published site has a tab icon.
 (() => {
@@ -8489,16 +8903,24 @@ function openNavMenu(anchor, items, headHTML = ''){
   m.querySelectorAll('[data-mi]').forEach(b => b.onclick = () => { const it = items[Number(b.dataset.mi)]; closeNavMenu(); it.go(); });
   const f = document.getElementById('fab'); if (f && anchor === 'fab'){ f.setAttribute('aria-expanded', 'true'); f.classList.add('open'); }
   const p = document.getElementById('hdrProfile'); if (p && anchor === 'profile') p.setAttribute('aria-expanded', 'true');
-  const first = m.querySelector('button'); if (first) { try { first.focus({ preventScroll:true }); } catch {} }
+  const first = m.querySelector('[data-mi]') || m.querySelector('button'); if (first) { try { first.focus({ preventScroll:true }); } catch {} }   // (the first item, not the card's exit icon)
 }
 /* Called at the end of every render(). */
+/* The bottom bar shows on Home only: opening any other screen slides it away (the screen gets the room); back, the
+   back swipe or the logo bring Home and the bar back. The + button stays on every screen (in the corner when the bar
+   is away). Both are hidden during a workout. */
 function updateBottomNav(){
   ensureMobileNav();
   const show = S.bootState === 'ready' && !document.body.classList.contains('in-session');
+  const home = show && S.view === 'dashboard' && (S.sub || 'today') === 'today';
   const nav = document.getElementById('bottomNav'), fab = document.getElementById('fab');
-  nav.hidden = !show; fab.hidden = !show;
-  document.body.classList.toggle('has-bottomnav', show);
-  if (!show) closeNavMenu();
+  // No + on Settings and History: nothing to add there, and it covered the ends of rows.
+  const noFab = (S.view === 'dashboard' && S.sub === 'data') || navKeyNow() === 'history';
+  nav.hidden = !show; fab.hidden = !show || noFab;
+  nav.classList.toggle('bn-away', !home); nav.inert = !home; nav.setAttribute('aria-hidden', String(!home));
+  document.body.classList.toggle('has-bottomnav', home);
+  document.body.classList.toggle('has-fab', show && !noFab);
+  if (!show || noFab) closeNavMenu();
   const cur = navKeyNow();
   nav.querySelectorAll('[data-bn]').forEach(b => b.setAttribute('aria-current', String(b.dataset.bn === cur)));
   const acts = document.getElementById('topActions'); if (acts) acts.hidden = S.bootState !== 'ready';
@@ -8513,27 +8935,15 @@ function wireHeader(){
   set('brandHome', '', () => { closeNavMenu(); navigateTo('dashboard', 'today'); });
   set('hdrCalendar', 'calendar', () => { closeNavMenu(); navigateTo('dashboard', 'calendar'); });
   set('hdrSearch', 'search', () => { closeNavMenu(); openSearch(); });
-  set('hdrProfile', 'profile', () => navMenuIsOpen('profile') ? closeNavMenu() : openProfileMenu());
+  set('hdrProfile', 'profile', () => { closeNavMenu(); S.dataSection = undefined; navigateTo('dashboard', 'data'); });   // the whole Settings page (profile, sync, log out are at its top)
 }
-function openProfileMenu(){
-  const signedIn = typeof Sync !== 'undefined' && Sync.signedIn();
-  const who = signedIn ? ((Sync.session.user && Sync.session.user.email) || 'Signed in') : 'Local mode · not signed in';
-  const role = Sync.role === 'assistant' ? 'Assistant coach' : 'Head coach';
-  const head = `<div class="menu-head"><strong>${esc(who)}</strong><span>${esc(role)}</span></div>`;
-  openNavMenu('profile', [
-    { label:'Profile', note:'Account details', icon:'profile', go:() => { S.dataSection = 'online'; navigateTo('dashboard', 'data'); } },
-    { label:'Settings and data', note:'Backup, restore, preferences', icon:'settings', go:() => { S.dataSection = undefined; navigateTo('dashboard', 'data'); } },
-    signedIn
-      ? { label:'Log out', icon:'logout', danger:true, go:confirmLogOut }
-      : { label:'Sign in', note:'Sync with your other devices', icon:'login', go:() => Lock.show({ view:'credentials', closable:true }) }
-  ], head);
-}
-/* Same sign-out as Settings and data > Online account. Data on this device stays; changes not yet uploaded wait for the next sign-in. */
+/* Log out (the exit icon at the top of Settings). Data on this device stays; changes not yet uploaded
+   wait for the next sign-in. Afterwards the sign-in page opens, as in most apps (signing in happens there, not in the app). */
 function confirmLogOut(){
   const waiting = Sync.pending > 0 ? `<p class="small"><strong>${Sync.pending} change${Sync.pending === 1 ? '' : 's'} not uploaded yet.</strong> They stay on this device and upload when you sign in again.</p>` : '';
   dialog('Log out?', `<p>Your clients and sessions stay on this device. Syncing with your other devices stops until you sign in again.</p>${waiting}`, [
     { label:'Cancel' },
-    { label:'Log out', kind:'danger', onClick: async () => { await Sync.signOut(); render({ keepScroll:true }); toast('Logged out'); } }
+    { label:'Log out', kind:'danger', onClick: async () => { await Sync.signOut(); render({ keepScroll:true }); toast('Logged out'); setTimeout(() => Lock.show({ view:'credentials', closable:true }), 80); } }
   ]);
 }
 
@@ -8641,6 +9051,9 @@ function openQuickAttendance(){
 const NAV_SEL_KEYS = ['client', 'clientPanel', 'program', 'programsKind', 'conditioningId', 'historyClient', 'historyDay', 'logClient', 'conditioningClient'];
 const NAV_HOME = { view:'dashboard', sub:'today', ds:'', sel:{} };
 const Nav = { started:false, idx:0, keys:[], restoring:false, expectBackTo:null, ignorePop:false };
+// The app puts the scroll position back itself (navApplyRoute); the browser's own restoring ran just after and sent
+// the page back to the top, so it is turned off.
+try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch {}
 
 function navRouteNow(){
   const view = S.view || 'dashboard', sub = view === 'dashboard' ? (S.sub || 'today') : '';
