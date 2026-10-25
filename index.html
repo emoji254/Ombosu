@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-OOpphvOTBH8Dtx9PI0IrCqCnI0PHwERKaQLmq0NQnnA=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-X5Ah0lebk9GOAJPW97J6DCUdX0wI2Lc7/bC9/n/qUVw=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -1345,6 +1345,46 @@ html.compact-lists .card{padding:.65rem .85rem}
   body.has-fab:not(.has-bottomnav) main{padding-bottom:calc(var(--fab) + 2rem + var(--bn-safe))}
 }
 @media(prefers-reduced-motion:reduce){#bottomNav,#bottomNav.bn-away,#fab{transition:none}}
+
+/* Workout card (PREVIEW 2026-10-25): one slim card - avatar, name, day and date, a ring for the sets done, a thin lime
+   line along the bottom. Tap for the program, the day (chips), the date and the rest timer. The timer card is gone
+   (the floating bar has the session and rest clocks). */
+.session-overview.session-mini{position:relative;display:block;overflow:hidden;padding:.55rem .8rem .65rem;margin:.6rem 0 .8rem;border-radius:20px;background:linear-gradient(135deg,var(--pine-2),var(--pine));border:0;box-shadow:0 10px 24px #17372d26}
+.session-mini summary{display:flex;align-items:center;gap:.7rem;min-height:48px;list-style:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.session-mini summary::-webkit-details-marker{display:none}
+.session-mini summary:focus-visible{outline:3px solid var(--lime);outline-offset:3px;border-radius:14px}
+.session-mini .overview-avatar .avatar{width:2.5rem;height:2.5rem;min-width:2.5rem;font-size:1.05rem;box-shadow:0 0 0 2px #ffffff26}
+.session-mini-text{display:grid;gap:.1rem;flex:1 1 auto;min-width:0}
+.session-mini-text strong{display:flex;align-items:center;gap:.45rem;font-size:1.08rem;font-weight:700;letter-spacing:-.01em;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.session-mini-text>span{font-size:.8rem;color:#ffffffa6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.session-mini-tag{padding:.08rem .45rem;border-radius:999px;background:var(--lime);color:var(--on-lime);font-size:.62rem;font-weight:750;letter-spacing:.05em;text-transform:uppercase}
+/* Sets ring */
+.session-ring{position:relative;display:grid;place-items:center;width:44px;height:44px;flex:none}
+.session-ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.session-ring circle{fill:none;stroke-width:3.2;stroke-linecap:round}
+.session-ring-track{stroke:#ffffff26}
+.session-ring-arc{stroke:var(--lime);stroke-dasharray:100;transition:stroke-dashoffset .4s ease}
+.session-ring>span{position:relative;font-size:.68rem;font-weight:750;color:#fff;letter-spacing:-.02em}
+.session-mini-chev{width:18px;height:18px;flex:none;fill:none;stroke:#ffffffa6;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .18s}
+.session-mini details[open] .session-mini-chev{transform:rotate(180deg)}
+.session-mini-bar{position:absolute;left:0;bottom:0;height:3px;width:var(--sess-pct,0%);background:var(--lime);border-radius:0 3px 3px 0;transition:width .4s ease}
+/* Opened: tidy rows */
+.session-mini-body{display:grid;margin-top:.45rem;padding:.15rem 0 .1rem;border-top:1px solid #ffffff1f}
+.session-mini-row{display:flex;align-items:center;justify-content:space-between;gap:.75rem;min-height:46px;padding:.35rem 0;border-bottom:1px solid #ffffff14}
+.session-mini-row:last-child{border-bottom:0}
+.session-mini-key{flex:none;font-size:.78rem;font-weight:600;color:#ffffffa6}
+.session-mini-val{display:flex;align-items:center;justify-content:flex-end;gap:.4rem;min-width:0;font-size:.9rem;font-weight:600;color:#fff;text-align:right}
+.session-mini-days{align-items:flex-start;padding-top:.55rem}
+.session-mini-chips{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.35rem}
+.session-day-chip{min-height:36px;padding:.3rem .8rem;border:1px solid #ffffff33;border-radius:999px;background:transparent;color:#fff;font:inherit;font-size:.84rem;font-weight:650;cursor:pointer}
+.session-day-chip:hover{background:#ffffff14}
+.session-day-chip[aria-checked="true"]{background:var(--lime);border-color:var(--lime);color:var(--on-lime)}
+.session-mini-btn{min-height:36px;padding:.3rem .8rem;border:0;border-radius:10px;background:#ffffff1f;color:#fff;font:inherit;font-size:.9rem;font-weight:700;cursor:pointer}
+.session-mini-btn:hover{background:#ffffff2e}
+.session-mini-btn.ghost{background:transparent;border:1px solid #ffffff33;font-weight:600}
+.session-mini-row input[type=date]{min-height:38px;padding:.25rem .5rem;border:1px solid #ffffff33;border-radius:10px;background:#ffffff12;color:#fff;-webkit-text-fill-color:#fff;font:inherit}
+.session-day-chip:focus-visible,.session-mini-btn:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.session-ring-arc,.session-mini-bar,.session-mini-chev{transition:none}}
 /* Set rows: 50 px tall (was 62). Only the space above and below shrinks; the kg and reps boxes and the tick stay at
    least 44 px (46 on a computer), so the numbers and the "Total" line under a bar weight keep their size. */
 .setrow{min-height:50px;padding-top:0;padding-bottom:0}
@@ -1389,6 +1429,51 @@ html.compact-lists .person-card .name,html.compact-lists .today-card .name{font-
 .lp-key-fn svg{width:30px;height:30px}
 .lp-fpkey.waiting svg{animation:lpPulse 1.1s ease-in-out infinite}
 .lp-lock .lp-links.lp-row{gap:1.25rem;margin-top:18px}
+/* Workout header (design B): a light bar in the app's colours, pinned to the top while you log. On a phone the app's
+   own header steps aside during a workout. Overrides the dark card styles above. */
+.session-overview.session-mini{position:sticky;top:max(env(safe-area-inset-top,0px),.4rem);z-index:30;margin:.4rem 0 .7rem;padding:.3rem .75rem .45rem;border-radius:14px;background:var(--surface);border:1px solid var(--line);box-shadow:0 1px 3px #17372d0d}
+.session-mini summary{min-height:44px;gap:.6rem}
+.session-mini summary:focus-visible{outline-color:var(--focus)}
+/* The client's initial: the same colour as on the Clients list (each client keeps its own). */
+.session-mini .overview-avatar .avatar{width:2.1rem;height:2.1rem;min-width:2.1rem;font-size:.9rem;border-radius:50%;background:var(--av-bg,var(--tint-2))!important;color:var(--surface);box-shadow:none}
+.session-mini-text strong{font-size:1rem;color:var(--text)}
+.session-mini-text>span,.session-mini-key{color:var(--text-muted)}
+.session-mini-val,.session-ring>span{color:var(--text)}
+.session-mini-chev{stroke:var(--text-muted)}
+.session-ring{width:36px;height:36px}
+.session-ring>span{font-size:.62rem}
+.session-ring-track{stroke:var(--line)}
+.session-ring-arc{stroke:var(--plate-green)}
+.session-mini-bar{background:var(--plate-green)}
+.session-mini-body{border-top-color:var(--line)}
+.session-mini-row{border-bottom-color:var(--line-soft)}
+.session-day-chip{border-color:var(--line);color:var(--text)}
+.session-day-chip:hover{background:var(--surface-2)}
+.session-day-chip[aria-checked="true"]{background:var(--lime);border-color:var(--lime);color:var(--on-lime)}
+.session-mini-btn{background:color-mix(in srgb,var(--text) 7%,transparent);color:var(--text)}
+.session-mini-btn:hover{background:color-mix(in srgb,var(--text) 12%,transparent)}
+.session-mini-btn.ghost{background:transparent;border-color:var(--line)}
+.session-mini-row input[type=date]{border-color:var(--line);background:var(--surface);color:var(--text);-webkit-text-fill-color:var(--text)}
+@media(max-width:900px){body.in-session:has(.session-mini) header.top{display:none}}
+/* Workout bar colour: the page's own off-white with a thin border, so it blends into the screen (follows light and
+   dark theme). Dark text, a green ring and progress line, the selected day in lime. */
+.session-overview.session-mini{background:var(--floor);border-color:var(--line);box-shadow:0 1px 3px #17372d0f}
+.session-mini-text strong,.session-mini-val,.session-ring>span{color:var(--text)}
+.session-mini-text>span,.session-mini-key{color:var(--text-muted)}
+.session-mini-chev{stroke:var(--text-muted)}
+.session-ring-track{stroke:color-mix(in srgb,var(--text) 14%,transparent)}
+.session-ring-arc{stroke:var(--plate-green)}
+.session-mini-bar{background:var(--plate-green)}
+.session-mini-body{border-top-color:color-mix(in srgb,var(--text) 10%,transparent)}
+.session-mini-row{border-bottom-color:color-mix(in srgb,var(--text) 7%,transparent)}
+.session-day-chip{border-color:color-mix(in srgb,var(--text) 18%,transparent);color:var(--text)}
+.session-day-chip:hover{background:color-mix(in srgb,var(--text) 6%,transparent)}
+.session-day-chip[aria-checked="true"]{background:var(--lime);border-color:var(--lime);color:var(--on-lime)}
+.session-mini-btn{background:color-mix(in srgb,var(--text) 7%,transparent);color:var(--text)}
+.session-mini-btn:hover{background:color-mix(in srgb,var(--text) 12%,transparent)}
+.session-mini-btn.ghost{background:transparent;border-color:color-mix(in srgb,var(--text) 18%,transparent)}
+.session-mini-row input[type=date]{border-color:var(--line);background:var(--surface);color:var(--text);-webkit-text-fill-color:var(--text)}
+.session-mini summary:focus-visible{outline-color:var(--focus)}
 </style>
 </head>
 <body>
@@ -2041,7 +2126,7 @@ function avatarHTML(name){
   const colors = ['var(--plate-blue)','var(--plate-red)','var(--series-2)','var(--plate-yellow)'];
   let sum = 0; for (const ch of String(name||'')) sum += ch.charCodeAt(0);
   const initial = (String(name||'?').trim()[0] || '?').toUpperCase();
-  return `<span class="avatar" style="background:${colors[sum % colors.length]}">${esc(initial)}</span>`;
+  return `<span class="avatar" style="--av-bg:${colors[sum % colors.length]};background:${colors[sum % colors.length]}">${esc(initial)}</span>`;   // (--av-bg: the workout bar uses the same colour)
 }
 
 /* Most recent session's set-by-set numbers, plus the heaviest weight ever
@@ -4920,7 +5005,14 @@ function updateWorkoutTimerUI(){
   const elapsed=Math.max(0,Math.floor((Date.now()-(Number(d.startedAt)||Date.now()))/1000));
   const session=document.getElementById('sessionClock'); if(session) session.textContent=formatSessionClock(elapsed);
   const barSession=document.getElementById('barSession'); if(barSession) barSession.textContent=formatSessionClock(elapsed);
-  const progress=document.getElementById('exerciseProgress'); if(progress) progress.textContent=S.sel&&S.sel.conditioningClient&&!S.parkedWorkout&&!S.sel.draft?'Conditioning session':workoutProgress(d);
+  const progress=document.getElementById('exerciseProgress');
+  if(progress){
+    const e=d.entries||[],done=e.reduce((n,x)=>n+(x.sets||[]).filter(s=>s.done).length,0),all=e.reduce((n,x)=>n+(x.sets||[]).length,0);
+    progress.textContent=S.sel&&S.sel.conditioningClient&&!S.parkedWorkout&&!S.sel.draft?'Conditioning session':progress.dataset.short==='ring'?done+'/'+all:workoutProgress(d);
+    // The workout card's ring and bottom line (sets done) follow too.
+    const arc=document.getElementById('sessRingArc'),pct=all?Math.round(done/all*100):0;
+    if(arc){arc.style.strokeDashoffset=String(100-pct);arc.closest('.session-ring')?.setAttribute('aria-label',done+' of '+all+' sets done');arc.closest('.session-mini')?.style.setProperty('--sess-pct',pct+'%');}
+  }
   if(d.restRemainingMs==null) d.restRemainingMs=90000;
   let remaining=Math.max(0,Math.ceil(Number(d.restRemainingMs)/1000));
   if(d.restRunning && d.restEndAt){
@@ -5115,29 +5207,40 @@ function logSheet(cid){
   if (draft.restRemainingMs == null) draft.restRemainingMs = 90000;
   const dayOpts = prog ? prog.days.map((d,i) => `<option value="${i}" ${i===S.sel.dayIndex?'selected':''}>${esc(d.name)}</option>`).join('') : '';
 
+  // One slim card for the workout: who, which day, when, and a ring for the sets done. Tap it for the program, the day
+  // (chips), the date and the rest timer.
+  const when = draft.date ? new Date(draft.date + 'T12:00:00') : null;
+  const shortWhen = when ? when.toLocaleDateString(undefined, { weekday:'short', day:'numeric', month:'short' }) : '';
+  const longWhen = when ? when.toLocaleDateString(undefined, { weekday:'long', day:'numeric', month:'long', year:'numeric' }) : todayISO();
+  const allSets = draft.entries.reduce((n, e) => n + e.sets.length, 0), doneSets = draft.entries.reduce((n, e) => n + e.sets.filter(s => s.done).length, 0);
+  const pct = allSets ? Math.round(doneSets / allSets * 100) : 0;
+  const chev = '<svg class="session-mini-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+  const row = (label, value) => `<div class="session-mini-row"><span class="session-mini-key">${label}</span><span class="session-mini-val">${value}</span></div>`;
   return `
-  <section class="session-overview panel" aria-label="Workout details">
-    <div class="session-overview-lead"><span class="overview-avatar">${avatarHTML(c.name)}</span><div><span class="timer-kicker">${draft.editing?'EDITING A SAVED SESSION':'NOW TRAINING'}</span><h2>${esc(c.name)}</h2><p>${prog ? esc(prog.name) : 'Free session'} · ${esc(prog ? weekTextFor(prog, c.currentWeek||1) : 'week ' + (c.currentWeek||1))}${draft.conditioningTemplateId&&S.conditioning[draft.conditioningTemplateId]?' · '+esc(S.conditioning[draft.conditioningTemplateId].name)+' conditioning':''}</p></div></div>
-    <div class="session-overview-fields">
-      ${draft.editing
-        ? `<label class="overview-field"><span>DATE</span><input type="date" id="editDate" value="${esc(draft.date)}" max="${esc(todayISO())}"></label>
-           <div class="overview-field"><span>SESSION</span><strong class="overview-value">${esc(draft.dayLabel||'Session')}</strong></div>`
-        : `<div class="overview-field"><span>DATE</span><strong class="overview-value" aria-label="Workout date, set when session started">${esc(draft.date?new Date(draft.date+'T12:00:00').toLocaleDateString():todayISO())}</strong></div>
-      ${prog ? `<label class="overview-field"><span>PROGRAM DAY</span><select id="dayPick">${dayOpts}</select></label>` : `<div class="overview-field"><span>PROGRAM DAY</span><strong>Free session</strong></div>`}`}
-    </div>
+  <section class="session-overview session-mini panel" aria-label="Workout details" style="--sess-pct:${pct}%">
+    <details id="sessionMini" ${S.sel.sessMiniOpen ? 'open' : ''}>
+      <summary><span class="overview-avatar">${avatarHTML(c.name)}</span>
+        <span class="session-mini-text"><strong>${esc(c.name)}${draft.editing ? '<span class="session-mini-tag">Editing</span>' : ''}</strong>
+          <span>${esc(draft.dayLabel || (prog ? '' : 'Free session'))}${shortWhen ? ' · ' + esc(shortWhen) : ''}</span></span>
+        ${draft.editing ? '' : `<span class="session-ring" role="img" aria-label="${doneSets} of ${allSets} sets done"><svg viewBox="0 0 36 36" aria-hidden="true"><circle class="session-ring-track" cx="18" cy="18" r="15.5" pathLength="100"/><circle class="session-ring-arc" id="sessRingArc" cx="18" cy="18" r="15.5" pathLength="100" style="stroke-dashoffset:${100 - pct}"/></svg><span id="exerciseProgress" data-short="ring" class="num">${doneSets}/${allSets}</span></span>`}
+        ${chev}</summary>
+      <div class="session-mini-body">
+        ${row('Program', `${prog ? esc(prog.name) : 'Free session'} · ${esc(prog ? weekTextFor(prog, c.currentWeek||1) : 'week ' + (c.currentWeek||1))}${draft.conditioningTemplateId&&S.conditioning[draft.conditioningTemplateId]?' · '+esc(S.conditioning[draft.conditioningTemplateId].name)+' conditioning':''}`)}
+        ${draft.editing
+          ? row('Date', `<input type="date" id="editDate" value="${esc(draft.date)}" max="${esc(todayISO())}">`) + row('Session', esc(draft.dayLabel || 'Session'))
+          : (prog ? `<div class="session-mini-row session-mini-days"><span class="session-mini-key" id="sessDayLabel">Day</span><span class="session-mini-chips" role="radiogroup" aria-labelledby="sessDayLabel">${prog.days.map((d, i) => `<button type="button" role="radio" class="session-day-chip" data-day-chip="${i}" aria-checked="${i === S.sel.dayIndex}">${esc(d.name)}</button>`).join('')}</span><select id="dayPick" class="sr-only" tabindex="-1" aria-hidden="true">${dayOpts}</select></div>` : row('Day', 'Free session'))
+            + row('Date', esc(longWhen))
+            + `<div class="session-mini-row"><span class="session-mini-key">Rest timer</span><span class="session-mini-val"><button type="button" id="restClock" class="session-mini-btn rest-clock-edit num" role="timer" aria-label="Rest timer length: tap to change">01:30</button><button type="button" class="session-mini-btn ghost" id="restReset" aria-label="Reset rest timer">Reset</button></span></div>`}
+      </div>
+    </details>
+    ${draft.editing ? '' : '<span class="session-mini-bar" aria-hidden="true"></span>'}
   </section>
   ${clientNotesBannerHTML(c)}
   ${draft.dayNotes?`<div class="panel day-notes-banner"><strong>${esc(draft.dayLabel||'Today')}</strong> — ${esc(draft.dayNotes)}</div>`:''}
   ${draft.dayConditioningId&&S.conditioning[draft.dayConditioningId]&&!draft.conditioningSession&&!draft.conditioningInProgress&&!draft.editing?`<div class="panel day-cond-banner"><div><strong>Day includes ${esc(S.conditioning[draft.dayConditioningId].name||'conditioning')}</strong><div class="small muted">${(S.conditioning[draft.dayConditioningId].blocks||[]).length} timed block${(S.conditioning[draft.dayConditioningId].blocks||[]).length===1?'':'s'}</div></div><button type="button" class="btn primary" id="startDayConditioning" data-template="${esc(draft.dayConditioningId)}">Start conditioning</button></div>`:''}
 
-  ${draft.editing?'':`<section class="session-timer panel" aria-label="Workout timers">
-    <div class="session-clock-block"><span class="timer-kicker">SESSION</span><strong id="sessionClock" class="session-clock num">00:00:00</strong><span id="exerciseProgress" class="timer-caption"></span></div>
-    <div class="rest-clock-block"><div class="rest-clock-title"><span class="timer-kicker">REST</span></div><button type="button" id="restClock" class="rest-clock rest-clock-edit num" role="timer" aria-label="Edit rest timer duration">01:30</button>
-      <div class="rest-controls"><button type="button" class="btn btn-light" id="restToggle">Start ${esc(draft.restDurationSeconds||90)}s</button><button type="button" class="btn btn-light" id="restReset" aria-label="Reset rest timer">Reset</button></div>
-    </div>
-  </section>`}
   ${draft.conditioningSession?`<div class="panel"><strong>Conditioning complete · ${esc(draft.conditioningSession.templateName||'Session')}</strong><div class="small muted">${(draft.conditioningSession.blocksCompleted||[]).length} timed blocks completed.</div></div>`:''}
-  <div id="exList">${draft.entries.map((en,ei) => exBlock(en, ei)).join('') || '<div class="panel muted">Nothing prescribed. Add a lift below.</div>'}</div>
+  <div id="exList">${draft.entries.map((en,ei) => exBlock(en, ei)).join('')}</div>
 
   <div class="panel">
     <div class="row">
@@ -8213,6 +8316,9 @@ if(event.target.closest('select,textarea,summary')||event.target.closest('button
   // Session notes fold to one line; open/closed is screen state only (kept across redraws, never saved).
   const snFold = document.getElementById('sessNotesFold');
   if (snFold) snFold.ontoggle = () => { S.sel.sessNotesOpen = snFold.open; };
+  const sessMini = document.getElementById('sessionMini'); if (sessMini) sessMini.ontoggle = () => { S.sel.sessMiniOpen = sessMini.open; };
+  // Day chips on the workout card: the same change as the day picker (#dayPick), which they set.
+  m.querySelectorAll('[data-day-chip]').forEach(b => b.onclick = () => { const dp = document.getElementById('dayPick'); if (!dp || dp.value === b.dataset.dayChip) return; dp.value = b.dataset.dayChip; dp.dispatchEvent(new Event('change')); });
   const up = document.getElementById('usePack');
   if (up) up.onchange = () => {S.sel.draft.usePack = up.checked;scheduleWorkoutAutosave();};
 
