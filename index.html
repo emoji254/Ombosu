@@ -1501,26 +1501,26 @@ html.text-large .cal-cell .d{font-size:min(.9rem,3.6vw)}   /* seven days must fi
 .exlib{display:flex;flex-direction:column;gap:1.6rem}
 .exlib>.panel{background:transparent;border:0;box-shadow:none;padding:0;margin:0;border-radius:0}
 .exlib>.panel.spread:first-child{align-items:center;gap:.75rem;flex-wrap:wrap;padding-top:.35rem}
-.exlib>.panel.spread:first-child h2{margin:0;line-height:1.15;font-size:1.65rem;font-weight:800;letter-spacing:-.02em;color:var(--accent-text)}
-.exlib>.panel.spread:first-child .muted{display:block;margin-top:.25rem;font-size:.88rem}
+.exlib>.panel.spread:first-child h2{margin:0;line-height:1.2}
+.exlib>.panel.spread:first-child .muted{display:block;margin-top:.2rem}
 .exlib #newEx{flex:none;min-height:44px}
 .exlib>.panel:nth-child(2){margin-top:-.5rem}
-.exlib #search_exercises{width:100%;min-height:50px;padding:.6rem .9rem .6rem 2.75rem;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2368736d' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:.95rem center!important;background-size:20px 20px!important;border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:none;font-size:1rem}
+.exlib #search_exercises{width:100%;min-height:50px;padding:.6rem .9rem .6rem 2.75rem;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2368736d' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:.95rem center!important;background-size:20px 20px!important;border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:none}
 .exlib #search_exercises::placeholder{color:var(--text-muted);text-overflow:ellipsis}
 .exlib #search_exercises{text-overflow:ellipsis}
 .exlib #search_exercises:focus-visible{outline:3px solid var(--focus);outline-offset:1px;border-color:transparent}
-.exlib h3{display:flex;align-items:center;gap:.55rem;margin:0 0 .6rem;padding:0 .15rem;font-size:1.12rem;font-weight:800;letter-spacing:-.01em;color:var(--accent-text)}
+.exlib h3{display:flex;align-items:center;gap:.55rem;margin:0 0 .6rem;padding:0 .15rem}
 .exlib .exlib-count{display:inline-grid;place-items:center;min-width:1.7rem;height:1.45rem;padding:0 .45rem;border-radius:99px;background:var(--tint);color:var(--accent-text);font-size:.75rem;font-weight:700;letter-spacing:0}
 .exlib .tablewrap{overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:none;margin:0}
 .exlib .exercise-library-table,.exlib .exercise-library-table tbody{display:block;width:100%;border:0;background:transparent}
-.exlib .exercise-library-table tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(4.5rem,6.5rem) auto;column-gap:.6rem;align-items:center;padding:.7rem .4rem .7rem 1rem;border:0;border-bottom:1px solid var(--line-soft);background:transparent}
+.exlib .exercise-library-table tr{display:grid;grid-template-columns:minmax(min-content,1fr) minmax(4.5rem,6.5rem) auto;column-gap:.6rem;align-items:center;padding:.7rem .4rem .7rem 1rem;border:0;border-bottom:1px solid var(--line-soft);background:transparent}
 .exlib .exercise-library-table tr:last-child{border-bottom:0}
 .exlib .exercise-library-table td{display:block;padding:0;border:0;background:transparent;min-width:0}
-.exlib .exercise-library-table td:first-child{grid-column:1;grid-row:1;font-size:1.02rem;font-weight:650;line-height:1.3;color:var(--text);overflow-wrap:break-word;word-break:normal;hyphens:manual}
-.exlib .exercise-library-table td:nth-child(2){grid-column:2;grid-row:1;font-size:.88rem;color:var(--text-muted);line-height:1.3;overflow-wrap:break-word;word-break:normal}
+.exlib .exercise-library-table td:first-child{grid-column:1;grid-row:1;line-height:1.35;color:var(--text);overflow-wrap:normal;word-break:normal;hyphens:manual}   /* (the column is never narrower than the longest word, so names break only between words) */
+.exlib .exercise-library-table td:nth-child(2){grid-column:2;grid-row:1;color:var(--text-muted);line-height:1.35;overflow-wrap:normal;word-break:normal}
 .exlib .exercise-library-table td.ex-actions{grid-column:3;grid-row:1;width:auto;display:flex;align-items:center;gap:.1rem;white-space:nowrap}
-.exlib .exercise-library-table td.ex-actions .btn{min-height:44px;min-width:44px;margin:0;padding:0 .7rem;border:0;background:transparent;box-shadow:none;font-size:.86rem;font-weight:600;color:var(--accent-text)}
-.exlib .exercise-library-table td.ex-actions .btn[data-archiveex]{color:var(--text-muted);font-weight:500}
+.exlib .exercise-library-table td.ex-actions .btn{min-height:44px;min-width:44px;margin:0;padding:0 .7rem;border:0;background:transparent;box-shadow:none;color:var(--accent-text)}
+.exlib .exercise-library-table td.ex-actions .btn[data-archiveex]{color:var(--text-muted)}
 .exlib .exercise-library-table td.ex-actions .btn:hover{background:var(--tint)}
 .exlib .exercise-library-table td.ex-actions .btn:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
 .exlib>.panel:last-child .spread{align-items:center;margin-bottom:.4rem}
@@ -1528,10 +1528,8 @@ html.text-large .cal-cell .d{font-size:min(.9rem,3.6vw)}   /* seven days must fi
 .exlib #toggleArchivedExercises{border:0;background:transparent;box-shadow:none;color:var(--accent-text);font-weight:600;min-height:44px}
 .exlib .empty{margin:0}
 @media (max-width:380px){   /* the smallest phones: a narrower equipment column and tighter buttons, so names keep whole words */
-  .exlib .exercise-library-table tr{grid-template-columns:minmax(0,1fr) minmax(3.6rem,auto) auto;column-gap:.4rem;padding-left:.8rem;padding-right:.2rem}
-  .exlib .exercise-library-table td:first-child{font-size:.96rem}
-  .exlib .exercise-library-table td:nth-child(2){font-size:.8rem}
-  .exlib .exercise-library-table td.ex-actions .btn{padding:0 .45rem;font-size:.82rem}
+  .exlib .exercise-library-table tr{grid-template-columns:minmax(min-content,1fr) minmax(3.6rem,auto) auto;column-gap:.4rem;padding-left:.8rem;padding-right:.2rem}
+  .exlib .exercise-library-table td.ex-actions .btn{padding:0 .45rem}
 }
 body.has-fab .exlib{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px))}   /* the last row stays clear of the + button */
 </style>

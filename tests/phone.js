@@ -61,6 +61,34 @@ module.exports = async ({ browser, base, openApp, waitReady, reporter, overrides
     } finally { await ctx.close(); }
   }
 
+  // ---- the exercise library: names wrap only between words, at the smallest and a normal phone width
+  for (const width of [320, 412]) {
+    const { ctx, page } = await openApp(browser, base, { ...phone, viewport: { width, height: 800 } });
+    try {
+      const out = await page.evaluate(async () => {
+        const long = [{ id: 'phLong1', name: 'Single-arm landmine Romanian deadlift', category: 'Hinge', equipment: 'Barbell' },
+                      { id: 'phLong2', name: 'Bulgarian split squat', category: 'Legs', equipment: 'Kettlebell' }];
+        const before = S.exercises; S.exercises = [...before, ...long]; navigateTo('exercises'); await new Promise(r => setTimeout(r, 150));
+        // A word is split when its letters land on more than one line.
+        const split = [];
+        document.querySelectorAll('.exercise-library-table td:first-child').forEach(td => {
+          const text = td.firstChild; if (!text || text.nodeType !== 3) return;
+          const re = /\S+/g; let m;
+          while ((m = re.exec(text.data))) {
+            const r = document.createRange(); r.setStart(text, m.index); r.setEnd(text, m.index + m[0].length);
+            const tops = new Set([...r.getClientRects()].map(x => Math.round(x.top)));
+            if (tops.size > 1) split.push(m[0] + ' in ' + text.data);
+          }
+        });
+        const overflow = document.documentElement.scrollWidth - document.documentElement.clientWidth;
+        S.exercises = before; S.view = 'dashboard'; S.sub = 'today'; render();
+        return { split, overflow };
+      });
+      ok(`${width} px: exercise library names wrap only between words`, !out.split.length, out.split.join('; '));
+      ok(`${width} px: the exercise library does not scroll sideways`, out.overflow <= 1, out.overflow + ' px');
+    } finally { await ctx.close(); }
+  }
+
   // ---- the set logger by touch
   {
     const { ctx, page } = await openApp(browser, base, phone);
