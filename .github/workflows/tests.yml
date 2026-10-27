@@ -1,0 +1,22 @@
+# Runs on every push and pull request: checks the security hash and cache name, then every test in tests/ in Chromium.
+name: Tests
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Security hash and cache name are up to date
+        run: node tools/update-hashes.js --check
+      - name: Install test tools
+        working-directory: tests
+        run: npm install && npx playwright install --with-deps chromium
+      - name: Run the tests
+        working-directory: tests
+        run: npm test

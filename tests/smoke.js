@@ -1,4 +1,4 @@
-/* Nyaega smoke test. Open the app from localhost (for example: serve-nyaega.ps1), open the browser console, paste this whole
+/* Nyaega smoke test. Open the app from localhost (see tests/README.md), open the browser console, paste this whole
    file and press Enter. It prints a table of checks and removes everything it created. It uses test data only
    (ids starting with "smk") and cleans up after itself, but run it on a profile you don't mind: it briefly adds and
    removes a client, a program, a conditioning program and two sessions.
@@ -55,8 +55,11 @@
     ok('group session has both clients', Array.isArray(ss.clientIds) && ss.clientIds.length === 2);
     captureConditioningResult(ss, { roundsCompleted: 6, elapsed: 300 }, { ask:false });
     ss.partnerResults[B][0].roundsCompleted = 5;
-    document.getElementById('completeConditioningWorkout').click(); await wait(500);
-    document.getElementById('completeConditioningWorkout').click(); await wait(900);
+    // One tap saves; with blocks not run yet the app asks first, so answer "Save session".
+    document.getElementById('completeConditioningWorkout').click(); await wait(300);
+    const saveBtn = [...document.querySelectorAll('#dlg[open] #dlgFoot button')].find(b => b.textContent === 'Save session');
+    ok('saving with a block not run asks first', !!saveBtn);
+    if (saveBtn) saveBtn.click(); await wait(900);
     const cl = Object.entries(S.logs).filter(([id, l]) => l.type === 'conditioning' && [A, B].includes(l.clientId) && l.sharedSessionId);
     cl.forEach(([id]) => made.logs.push(id));
     ok('group session saved one log per client', cl.length === 2 && cl.some(([, l]) => l.clientId === B && l.conditioningSession.results[0].roundsCompleted === 5), cl.length + ' logs');

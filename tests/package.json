@@ -1,0 +1,16 @@
+{
+  "name": "nyaega-tests",
+  "private": true,
+  "description": "Browser tests for the Nyaega app (see README.md)",
+  "scripts": {
+    "setup": "npx playwright install chromium",
+    "test": "node run.js"
+  },
+  "devDependencies": {
+    "axe-core": "4.10.2",
+    "jspdf": "2.5.1",
+    "jspdf-autotable": "3.8.2",
+    "playwright": "1.63.0",
+    "xlsx": "0.18.5"
+  }
+}
