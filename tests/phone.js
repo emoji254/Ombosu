@@ -158,5 +158,21 @@ module.exports = async ({ browser, base, openApp, waitReady, reporter, overrides
       ok('offline: no uncaught errors', !page.errors.length, page.errors.join(' | '));
     } finally { await ctx.close(); }
   }
+  // ---- offline when a CDN library fails on the first visit: the app is still cached, the library is cached once it loads
+  {
+    const { ctx, page } = await openApp(browser, base, phone);
+    try {
+      const XLSX_URL = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      let cdnDown = true;
+      await ctx.route(XLSX_URL, r => cdnDown ? r.fulfill({ status: 503, body: 'down' }) : r.fallback());   // (added last, so it runs first)
+      const cachedLibs = () => page.evaluate(async () => { const k = (await caches.keys()).find(n => n.startsWith('nyaega-')); return k ? (await (await caches.open(k)).keys()).filter(r => r.url.startsWith('https://cdnjs')).length : -1; });
+      ok('CDN down on the first visit: the service worker still installs', await page.evaluate(async () => !!(await navigator.serviceWorker.ready).active).catch(() => false));
+      await ctx.setOffline(true); await page.reload(); await waitReady(page);
+      ok('CDN down on the first visit: the app still starts offline', await page.evaluate(() => S.bootState === 'ready' && !!navigator.serviceWorker.controller));
+      ok('CDN down on the first visit: the two libraries that loaded are cached', await cachedLibs() === 2, await cachedLibs());
+      await ctx.setOffline(false); cdnDown = false; await page.reload(); await waitReady(page);
+      ok('the missing library is cached the next time it loads', await cachedLibs() === 3, await cachedLibs());
+    } finally { await ctx.close(); }
+  }
   return results;
 };

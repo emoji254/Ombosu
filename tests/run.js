@@ -5,7 +5,8 @@
      smoke.js, logger.js, movements.js   the same tests you can paste into the browser console
      phone.js                            phone checks: layout at phone widths, swipe gestures, large text, offline
      a11y.js                             accessibility checks (axe-core) on the main screens
-   The three CDN libraries (PDF and Excel export) are not downloaded: the tests don't need them, and they work offline. */
+   The three CDN libraries (PDF and Excel export) come from the same versions installed by npm (byte for byte the CDN files,
+   so their integrity hashes match), not from the internet: the tests work offline. */
 const http = require('http'), fs = require('fs'), path = require('path');
 const { chromium } = require('playwright');
 
@@ -25,10 +26,29 @@ function serve(){
   return new Promise(resolve => server.listen(0, '127.0.0.1', () => resolve(server)));
 }
 
+// The CDN libraries, served from node_modules (see package.json).
+const CDN_FILES = {
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js': 'jspdf/dist/jspdf.umd.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js': 'jspdf-autotable/dist/jspdf.plugin.autotable.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js': 'xlsx/dist/xlsx.full.min.js'
+};
+const cdnCache = new Map();
+function cdnBody(url){   // (read from the package folder: some packages don't let require.resolve reach their dist files)
+  if (!cdnCache.has(url)) {
+    const [pkg, ...rest] = CDN_FILES[url].split('/'), dir = require.resolve.paths(pkg).map(d => path.join(d, pkg)).find(d => fs.existsSync(d));
+    if (!dir) throw new Error(`npm package ${pkg} is missing: run npm install in tests`);
+    cdnCache.set(url, fs.readFileSync(path.join(dir, ...rest)));
+  }
+  return cdnCache.get(url);
+}
+
 /* A fresh profile with the app open and started (local mode, so no sign-in page). opts go to browser.newContext. */
 async function openApp(browser, base, opts = {}){
   const ctx = await browser.newContext(opts);
-  await ctx.route(/^https:\/\/cdnjs\.cloudflare\.com\//, r => r.fulfill({ status: 200, contentType: 'text/javascript', body: '/* stub */', headers: { 'Access-Control-Allow-Origin': '*' } }));
+  await ctx.route(/^https:\/\/cdnjs\.cloudflare\.com\//, r => {
+    let body = null; try { body = CDN_FILES[r.request().url()] && cdnBody(r.request().url()); } catch (e) { console.error(e.message); }
+    return body ? r.fulfill({ status: 200, contentType: 'text/javascript', body, headers: { 'Access-Control-Allow-Origin': '*' } }) : r.fulfill({ status: 404, body: 'not available' });
+  });
   await ctx.route(/supabase\.co/, r => r.abort());
   await ctx.addInitScript(() => { try { localStorage.setItem('nyaega:skipLogin', '1'); } catch {} });
   const page = await ctx.newPage();

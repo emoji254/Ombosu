@@ -37,4 +37,6 @@ This uses a fresh browser profile every time, so your own data is never touched.
 - `a11y.js`: accessibility. axe-core on every main screen, the logger, a dialog and the dark theme. Plus pinch-zoom,
   reduced motion, the page language and the screen-reader live region.
 
+After changing `index.html`, run `node tools/update-hashes.js` first (from the app folder), or the app won't start.
+
 `PASS` / `FAIL` rows count; `NOTE` rows are things worth knowing that don't fail the run.
