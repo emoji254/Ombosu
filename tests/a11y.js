@@ -27,7 +27,7 @@ module.exports = async ({ browser, base, openApp, reporter }) => {
       await Store.put('clients', 'a11yC', S.clients.a11yC); await Store.put('programs', 'a11yP', S.programs.a11yP);
     });
     for (const [view, sub, label] of [['dashboard', 'today', 'Today'], ['dashboard', 'calendar', 'Schedule'], ['dashboard', 'clients', 'Clients'], ['programs', '', 'Programs'],
-                                      ['conditioning', '', 'Conditioning'], ['exercises', '', 'Movements'], ['history', '', 'History'], ['dashboard', 'data', 'Settings']]) {
+                                      ['conditioning', '', 'Conditioning'], ['exercises', '', 'Movements'], ['history', '', 'History'], ['dashboard', 'data', 'Settings'], ['analysis', '', 'Program analysis']]) {
       await go(view, sub); await page.waitForTimeout(100); await scan(label);
     }
     await page.evaluate(async () => { beginClientWorkout('a11yC', 'strength'); await new Promise(r => setTimeout(r, 300)); });
