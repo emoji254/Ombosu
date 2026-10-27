@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-aDVqpMRl4xOKcl9A9rzCUXF7DquxuedLUwxPkEu7JOE=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-9p38mXm1SvNBbwogm+k9hDDHmYvn8S1RZuWf2U/2+ps=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -9398,12 +9398,14 @@ window.addEventListener('popstate', e => {
 
 /* Phones go back with their own gesture, so the in-app Back buttons are hidden there (styles: .has-system-back):
    Android has its back button / gesture, Safari on iPhone has its edge swipe, and the iPhone home-screen app, which has
-   neither, gets the edge swipe below. Computers keep the buttons. */
+   neither, gets the edge swipe below. Any other touch-screen device (a phone browser or app view that doesn't say it is
+   Android or iPhone) counts as a phone too. Computers keep the buttons. */
 const EDGE_BACK_PX = 24;
 const IS_IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const IS_ANDROID = /Android/i.test(navigator.userAgent);
 const IS_STANDALONE = navigator.standalone === true || !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches);
-if (IS_ANDROID || IS_IOS) document.documentElement.classList.add('has-system-back');
+const IS_TOUCH_SCREEN = navigator.maxTouchPoints > 0 && !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
+if (IS_ANDROID || IS_IOS || IS_TOUCH_SCREEN) document.documentElement.classList.add('has-system-back');
 if (IS_IOS && IS_STANDALONE) installEdgeSwipeBack();
 if (IS_IOS || IS_ANDROID || navigator.maxTouchPoints > 0) lockPinchZoom();
 
