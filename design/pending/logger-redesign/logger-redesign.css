@@ -1,0 +1,58 @@
+/* PREVIEW ONLY: the set logger laid out like the reference (flat, no cards), in the app's own colours. */
+body.in-session .exblock{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;margin:0 0 .6rem!important;padding:0!important}
+body.in-session .exblock>header{background:transparent!important;border:0!important;padding:1.1rem .25rem .4rem!important;align-items:center}
+body.in-session .exblock>header strong.cond{color:var(--accent-text);font-weight:650;font-size:1.08rem!important;letter-spacing:0}
+body.in-session .exercise-best{background:transparent;color:var(--text-muted);font-weight:500;font-size:.78rem}
+body.in-session .exercise-actions-menu summary{color:var(--accent-text);font-size:1.3rem}
+body.in-session .setheads{background:transparent!important;border:0!important;padding:.6rem .25rem .2rem!important;column-gap:.5rem;font-size:.68rem!important;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--text-muted)}
+body.in-session .setheads>span:nth-child(n+2){text-align:center;justify-content:center}
+body.in-session .setheads>span:last-child::after{content:'✓';letter-spacing:0;font-size:.9rem}
+body.in-session .set-swipe-wrap{border:0!important;background:var(--floor)!important}
+body.in-session .setrow{background:var(--floor)!important;border:0!important;padding:.35rem .25rem!important;align-items:center;border-radius:12px}
+body.in-session .setrow .idx{font-weight:700;font-size:1rem;text-align:center}
+body.in-session .setrow .last{background:transparent!important;border:0!important;color:var(--text-muted);font-size:.88rem;padding:0!important;justify-content:center;text-align:center}
+body.in-session .setrow input.num,body.in-session .setrow .kg-cell{background:var(--surface)!important;border:1px solid var(--line)!important;border-radius:11px!important;box-shadow:none!important}
+body.in-session .setrow input.num{text-align:center;font-size:1.1rem!important;min-height:46px;color:var(--text)}
+body.in-session .setrow .kg-cell input.num{background:transparent!important;border:0!important}
+body.in-session .setrow .kg-cell .kg-total{text-align:center;display:block}
+body.in-session .setrow .tick{background:var(--surface)!important;border:1px solid var(--line)!important;border-radius:11px!important;color:transparent!important;position:relative;min-height:46px}
+body.in-session .setrow .tick::after{content:'';position:absolute;inset:0;margin:auto;width:18px;height:10px;border-left:2.4px solid var(--line-strong);border-bottom:2.4px solid var(--line-strong);transform:translateY(-3px) rotate(-45deg)}
+body.in-session .setrow.done{background:var(--tint)!important}
+body.in-session .setrow.done .tick{background:var(--good)!important;border-color:var(--good)!important}
+body.in-session .setrow.done .tick::after{border-color:var(--on-primary)}
+body.in-session .setrow.done input.num,body.in-session .setrow.done .kg-cell{background:transparent!important;border-color:transparent!important}
+/* text buttons, like the reference */
+body.in-session .exblock-foot{justify-content:center!important;border:0!important;padding:.4rem 0 .3rem!important;background:transparent!important}
+body.in-session .exblock-foot .btn,body.in-session #addExBtn{background:transparent!important;border:0!important;box-shadow:none!important;color:var(--accent-text)!important;text-transform:uppercase;letter-spacing:.1em;font-size:.82rem;font-weight:700}
+body.in-session #addExBtn{margin:0 auto;display:block}
+body.in-session #main .panel:has(#saveSess){background:transparent;border:0;box-shadow:none}
+body.in-session #main .panel:has(#saveSess)>.row:first-child{justify-content:center}
+body.in-session #main .panel:has(#saveSess) hr{display:none}
+body.in-session #main .panel:has(#saveSess) .row:last-child{flex-direction:column;align-items:stretch;gap:.4rem}
+body.in-session #saveSess{width:100%;min-height:50px;text-transform:uppercase;letter-spacing:.1em}
+body.in-session #cancelSession{background:transparent!important;border:0!important;color:var(--bad-text)!important;text-transform:uppercase;letter-spacing:.1em;font-size:.82rem;font-weight:700}
+/* polish: even rows, aligned columns, calmer spacing */
+body.in-session .exblock+.exblock{border-top:1px solid var(--line)!important;border-radius:0!important}
+body.in-session .exblock>header{padding:1rem .35rem .15rem!important;gap:.5rem}
+body.in-session .exblock>header strong.cond{line-height:1.25}
+body.in-session .exercise-best{font-size:.76rem;white-space:nowrap}
+body.in-session .setheads{padding:.55rem .35rem .3rem!important}
+body.in-session .setheads>span:first-child{text-align:center}
+body.in-session .setrow{align-items:stretch;padding:.28rem .35rem!important;column-gap:.5rem}
+body.in-session .setrow .idx,body.in-session .setrow .last{align-self:center}
+body.in-session .setrow input.num,body.in-session .setrow .tick,body.in-session .setrow .kg-cell{min-height:48px;height:auto;margin:0}
+body.in-session .setrow .kg-cell{display:flex;flex-direction:column;justify-content:center;padding:.15rem 0}
+body.in-session .setrow .kg-cell input.num{min-height:0;padding:0}
+body.in-session .setrow .kg-cell .kg-total{font-size:.68rem;color:var(--text-muted);line-height:1.2;margin-top:-.1rem}
+body.in-session .setrow .kg-cell .kg-total:empty{display:none}
+body.in-session .setrow .tick::after{border-color:color-mix(in srgb,var(--text-muted) 45%,var(--surface))}
+body.in-session .setrow.done .tick::after{border-color:var(--on-primary)}
+body.in-session .setrow input.num::placeholder{color:color-mix(in srgb,var(--text-muted) 70%,var(--surface))}
+body.in-session .exblock-foot{padding:.35rem 0 .9rem!important}
+body.in-session .exblock-foot .btn{min-height:44px}
+body.in-session #main .panel:has(#saveSess){padding-top:.4rem}
+body.in-session .set-swipe-wrap+.set-swipe-wrap{margin-top:3px}
+body.in-session #main .panel:has(#saveSess){padding:.2rem 0 0!important;margin-top:0;border-top:1px solid var(--line)!important;border-radius:0}
+body.in-session #main .panel:has(#saveSess)>.row:first-child{padding:.5rem 0 .6rem}
+body.in-session #main .panel:has(#saveSess)>*{margin-left:.35rem;margin-right:.35rem}
+body.in-session #main .panel:has(#saveSess)>*+*{margin-top:.75rem}
