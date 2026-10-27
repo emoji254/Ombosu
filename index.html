@@ -1532,6 +1532,51 @@ html.text-large .cal-cell .d{font-size:min(.9rem,3.6vw)}   /* seven days must fi
   .exlib .exercise-library-table td.ex-actions .btn{padding:0 .45rem}
 }
 body.has-fab .exlib{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px))}   /* the last row stays clear of the + button */
+
+/* ---- History, one session (.exgroup = one exercise): fewer, lighter lines; quiet headings; the same columns in every
+   exercise; a PR marked by a small badge instead of a coloured row. Scoped to .exgroup, which only this page uses. ---- */
+.exgroup{margin-top:1.5rem;padding-top:1.1rem;border-top:1px solid var(--line-soft)}
+.exgroup:first-of-type{margin-top:.8rem;padding-top:0;border-top:0}
+.exgroup h3{margin:0;font-size:1.05rem;font-weight:700;line-height:1.3;color:var(--text);overflow-wrap:break-word}
+.exgroup .history-bar{margin:.15rem 0 0;font-size:.78rem;font-weight:500;color:var(--text-muted)}
+.exgroup .history-pr-tags{margin:.45rem 0 0;gap:.3rem}
+.exgroup .history-pr-tag{padding:.1rem .5rem .1rem .4rem;background:color-mix(in srgb,var(--lime) 55%,var(--surface));font-size:.7rem;font-weight:650}
+.exgroup .tablewrap{margin-top:.55rem;border:0;border-radius:0;background:transparent;box-shadow:none;overflow-x:auto}
+.exgroup table{table-layout:fixed;width:100%;font-size:.9rem;border:0;background:transparent}
+.exgroup th,.exgroup td{padding:.5rem .4rem;border:0;border-bottom:1px solid var(--line-soft);background:transparent;text-align:left;vertical-align:middle}
+.exgroup tbody tr:last-child td{border-bottom:0}
+.exgroup th{padding-top:.2rem;padding-bottom:.35rem;font-size:.66rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* the same column widths in every exercise (a bar exercise has a Plate/side column too) */
+.exgroup th{width:auto!important}
+.exgroup th:nth-child(1){width:2.9rem!important}
+.exgroup th:nth-child(2){width:4.1rem!important}
+.exgroup th:nth-child(3){width:3.2rem!important}
+.exgroup table:has(th:nth-child(5)) th:nth-child(3){width:5.1rem!important}
+.exgroup table:has(th:nth-child(5)) th:nth-child(4){width:3.2rem!important}
+.exgroup td.num{font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap}
+.exgroup td:last-child{font-size:.8rem;color:var(--text-muted);line-height:1.35;overflow-wrap:break-word}
+/* PR: a small lime trophy badge by the set number; the row stays neutral */
+.exgroup tr.pr-set td{background:transparent!important}
+.exgroup .pr-mark{display:inline-grid;place-items:center;width:1.15rem;height:1.15rem;margin-left:.3rem;vertical-align:-3px;border-radius:50%;background:var(--lime);color:var(--on-lime)}
+.exgroup .pr-mark svg{width:11px;height:11px}
+.exgroup tr.pr-set td:nth-child(2){color:var(--accent-text)}
+/* warm-ups: a quiet summary line */
+.exgroup tr.hist-wu-sum td{padding:.15rem 0 .3rem;border-bottom:1px solid var(--line-soft)}
+.exgroup .hist-wu-toggle{min-height:40px;padding:.3rem .4rem;border-radius:8px;background:transparent;font-size:.84rem}
+.exgroup .hist-wu-toggle:hover{background:var(--tint)}
+.exgroup tr.hist-wu-set td{color:var(--text-muted)}
+/* Narrow phones, bar exercises (five columns): Type / note moves under the numbers, so nothing is squeezed. */
+@media (max-width:380px){
+  .exgroup table:has(th:nth-child(5)) thead tr,.exgroup table:has(th:nth-child(5)) tbody tr:not(.hist-wu-sum){display:grid;grid-template-columns:2.7rem 4rem 4.9rem 3rem;border-bottom:1px solid var(--line-soft)}
+  .exgroup table:has(th:nth-child(5)) tbody tr:not(.hist-wu-sum):last-child{border-bottom:0}
+  .exgroup table:has(th:nth-child(5)) th,.exgroup table:has(th:nth-child(5)) td{width:auto!important;border-bottom:0;padding-left:.3rem;padding-right:.3rem}
+  .exgroup table:has(th:nth-child(5)) th:nth-child(5){display:none}
+  .exgroup table:has(th:nth-child(5)) td:nth-child(5){grid-column:1 / -1;padding-top:0;padding-left:3rem}
+  .exgroup table:has(th:nth-child(5)) tr.hist-wu-sum{display:block}
+  .exgroup table:has(th:nth-child(5)) tr.hist-wu-sum td{display:block}
+  .exgroup table:not(.wu-open) tr.hist-wu-set{display:none!important}   /* (warm-ups stay folded until their summary is tapped) */
+  .exgroup table:has(th:nth-child(5)) td:nth-child(-n+4){padding-bottom:.15rem}
+}
 </style>
 </head>
 <body>
