@@ -61,6 +61,34 @@ module.exports = async ({ browser, base, openApp, waitReady, reporter, overrides
     } finally { await ctx.close(); }
   }
 
+  // ---- the exercise library: names wrap only between words, at the smallest and a normal phone width
+  for (const width of [320, 412]) {
+    const { ctx, page } = await openApp(browser, base, { ...phone, viewport: { width, height: 800 } });
+    try {
+      const out = await page.evaluate(async () => {
+        const long = [{ id: 'phLong1', name: 'Single-arm landmine Romanian deadlift', category: 'Hinge', equipment: 'Barbell' },
+                      { id: 'phLong2', name: 'Bulgarian split squat', category: 'Legs', equipment: 'Kettlebell' }];
+        const before = S.exercises; S.exercises = [...before, ...long]; navigateTo('exercises'); await new Promise(r => setTimeout(r, 150));
+        // A word is split when its letters land on more than one line.
+        const split = [];
+        document.querySelectorAll('.exercise-library-table td:first-child').forEach(td => {
+          const text = td.firstChild; if (!text || text.nodeType !== 3) return;
+          const re = /\S+/g; let m;
+          while ((m = re.exec(text.data))) {
+            const r = document.createRange(); r.setStart(text, m.index); r.setEnd(text, m.index + m[0].length);
+            const tops = new Set([...r.getClientRects()].map(x => Math.round(x.top)));
+            if (tops.size > 1) split.push(m[0] + ' in ' + text.data);
+          }
+        });
+        const overflow = document.documentElement.scrollWidth - document.documentElement.clientWidth;
+        S.exercises = before; S.view = 'dashboard'; S.sub = 'today'; render();
+        return { split, overflow };
+      });
+      ok(`${width} px: exercise library names wrap only between words`, !out.split.length, out.split.join('; '));
+      ok(`${width} px: the exercise library does not scroll sideways`, out.overflow <= 1, out.overflow + ' px');
+    } finally { await ctx.close(); }
+  }
+
   // ---- the set logger by touch
   {
     const { ctx, page } = await openApp(browser, base, phone);
@@ -106,12 +134,15 @@ module.exports = async ({ browser, base, openApp, waitReady, reporter, overrides
           const r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
           const mine = hit => !!hit && (el.contains(hit) || (el.labels && [...el.labels].some(l => l.contains(hit))) || hit.closest('label') === el.closest('label') && !!el.closest('label'));
           if (!mine(document.elementFromPoint(cx, cy))) return null;   // covered by something else here (a closed menu, a bar): not a size problem
-          const reach = [[11, 0], [-11, 0], [0, 11], [0, -11]].every(([dx, dy]) => mine(document.elementFromPoint(cx + dx, cy + dy)));
+          const floating = h => !!(h && h.closest('#timerBar, #fab, #bottomNav, #workoutDock, .toast'));   // (the floating timer, bars and toasts sit over the page for a moment or at one scroll position: not a size problem)
+          if ([[11, 0], [-11, 0], [0, 11], [0, -11]].some(([dx, dy]) => floating(document.elementFromPoint(cx + dx, cy + dy)))) return null;
+          const miss = [[11, 0], [-11, 0], [0, 11], [0, -11]].map(([dx, dy]) => document.elementFromPoint(cx + dx, cy + dy)).find(h => !mine(h));
+          const reach = !miss, hit = miss ? (miss.id ? '#' + miss.id : '') + (typeof miss.className === 'string' && miss.className ? '.' + miss.className.split(' ')[0] : miss.tagName.toLowerCase()) : '';
           const label = el.closest('label'), box = label ? label.getBoundingClientRect() : r;
-          return { reach, w: Math.round(box.width), h: Math.round(box.height), what: (el.getAttribute('aria-label') || el.textContent || el.tagName).trim().replace(/\s+/g, ' ').slice(0, 30) };
+          return { reach, hit, w: Math.round(box.width), h: Math.round(box.height), what: (el.getAttribute('aria-label') || el.textContent || el.tagName).trim().replace(/\s+/g, ' ').slice(0, 30) };
         }).filter(Boolean));
       const tiny = sizes.filter(t => !t.reach), under44 = sizes.filter(t => t.reach && (t.w < 44 || t.h < 44));
-      ok('phone: every button and box in the set logger can be tapped in a 24 × 24 px area', !tiny.length, tiny.map(t => `${t.what} ${t.w}×${t.h}`).join('; '));
+      ok('phone: every button and box in the set logger can be tapped in a 24 × 24 px area', !tiny.length, tiny.map(t => `${t.what} ${t.w}×${t.h}, an edge lands on ${t.hit}`).join('; '));
       if (under44.length) note('phone: controls under the 44 px comfortable size (still usable)', under44.length + ': ' + [...new Set(under44.map(t => `${t.what} ${t.w}×${t.h}`))].slice(0, 12).join('; '));
       ok('phone: no uncaught errors', !page.errors.length, page.errors.join(' | '));
     } finally { await ctx.close(); }
