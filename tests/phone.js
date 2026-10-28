@@ -134,12 +134,15 @@ module.exports = async ({ browser, base, openApp, waitReady, reporter, overrides
           const r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
           const mine = hit => !!hit && (el.contains(hit) || (el.labels && [...el.labels].some(l => l.contains(hit))) || hit.closest('label') === el.closest('label') && !!el.closest('label'));
           if (!mine(document.elementFromPoint(cx, cy))) return null;   // covered by something else here (a closed menu, a bar): not a size problem
-          const reach = [[11, 0], [-11, 0], [0, 11], [0, -11]].every(([dx, dy]) => mine(document.elementFromPoint(cx + dx, cy + dy)));
+          const floating = h => !!(h && h.closest('#timerBar, #fab, #bottomNav, #workoutDock, .toast'));   // (the floating timer, bars and toasts sit over the page for a moment or at one scroll position: not a size problem)
+          if ([[11, 0], [-11, 0], [0, 11], [0, -11]].some(([dx, dy]) => floating(document.elementFromPoint(cx + dx, cy + dy)))) return null;
+          const miss = [[11, 0], [-11, 0], [0, 11], [0, -11]].map(([dx, dy]) => document.elementFromPoint(cx + dx, cy + dy)).find(h => !mine(h));
+          const reach = !miss, hit = miss ? (miss.id ? '#' + miss.id : '') + (typeof miss.className === 'string' && miss.className ? '.' + miss.className.split(' ')[0] : miss.tagName.toLowerCase()) : '';
           const label = el.closest('label'), box = label ? label.getBoundingClientRect() : r;
-          return { reach, w: Math.round(box.width), h: Math.round(box.height), what: (el.getAttribute('aria-label') || el.textContent || el.tagName).trim().replace(/\s+/g, ' ').slice(0, 30) };
+          return { reach, hit, w: Math.round(box.width), h: Math.round(box.height), what: (el.getAttribute('aria-label') || el.textContent || el.tagName).trim().replace(/\s+/g, ' ').slice(0, 30) };
         }).filter(Boolean));
       const tiny = sizes.filter(t => !t.reach), under44 = sizes.filter(t => t.reach && (t.w < 44 || t.h < 44));
-      ok('phone: every button and box in the set logger can be tapped in a 24 × 24 px area', !tiny.length, tiny.map(t => `${t.what} ${t.w}×${t.h}`).join('; '));
+      ok('phone: every button and box in the set logger can be tapped in a 24 × 24 px area', !tiny.length, tiny.map(t => `${t.what} ${t.w}×${t.h}, an edge lands on ${t.hit}`).join('; '));
       if (under44.length) note('phone: controls under the 44 px comfortable size (still usable)', under44.length + ': ' + [...new Set(under44.map(t => `${t.what} ${t.w}×${t.h}`))].slice(0, 12).join('; '));
       ok('phone: no uncaught errors', !page.errors.length, page.errors.join(' | '));
     } finally { await ctx.close(); }

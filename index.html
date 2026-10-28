@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-9p38mXm1SvNBbwogm+k9hDDHmYvn8S1RZuWf2U/2+ps=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-BBXBtuOAt+kMgVywS1KGMC1ABjhTfMrE4kzV9gvpEOU=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -1510,7 +1510,6 @@ html.text-large .cal-cell .d{font-size:min(.9rem,3.6vw)}   /* seven days must fi
 .exlib #search_exercises{text-overflow:ellipsis}
 .exlib #search_exercises:focus-visible{outline:3px solid var(--focus);outline-offset:1px;border-color:transparent}
 .exlib h3{display:flex;align-items:center;gap:.55rem;margin:0 0 .6rem;padding:0 .15rem}
-.exlib .exlib-count{display:inline-grid;place-items:center;min-width:1.7rem;height:1.45rem;padding:0 .45rem;border-radius:99px;background:var(--tint);color:var(--accent-text);font-size:.75rem;font-weight:700;letter-spacing:0}
 .exlib .tablewrap{overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:none;margin:0}
 .exlib .exercise-library-table,.exlib .exercise-library-table tbody{display:block;width:100%;border:0;background:transparent}
 .exlib .exercise-library-table tr{display:grid;grid-template-columns:minmax(min-content,1fr) minmax(4.5rem,6.5rem) auto;column-gap:.6rem;align-items:center;padding:.7rem .4rem .7rem 1rem;border:0;border-bottom:1px solid var(--line-soft);background:transparent}
@@ -1537,15 +1536,14 @@ body.has-fab .exlib{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px))
    exercise; a PR marked by a small badge instead of a coloured row. Scoped to .exgroup, which only this page uses. ---- */
 .exgroup{margin-top:1.5rem;padding-top:1.1rem;border-top:1px solid var(--line-soft)}
 .exgroup:first-of-type{margin-top:.8rem;padding-top:0;border-top:0}
-.exgroup h3{margin:0;font-size:1.05rem;font-weight:700;line-height:1.3;color:var(--text);overflow-wrap:break-word}
-.exgroup .history-bar{margin:.15rem 0 0;font-size:.78rem;font-weight:500;color:var(--text-muted)}
+.exgroup h3{margin:0;line-height:1.3;overflow-wrap:break-word}
+.exgroup .history-bar{margin:.15rem 0 0}
 .exgroup .history-pr-tags{margin:.45rem 0 0;gap:.3rem}
-.exgroup .history-pr-tag{padding:.1rem .5rem .1rem .4rem;background:color-mix(in srgb,var(--lime) 55%,var(--surface));font-size:.7rem;font-weight:650}
 .exgroup .tablewrap{margin-top:.55rem;border:0;border-radius:0;background:transparent;box-shadow:none;overflow-x:auto}
-.exgroup table{table-layout:fixed;width:100%;font-size:.9rem;border:0;background:transparent}
+.exgroup table{table-layout:fixed;width:100%;border:0;background:transparent}
 .exgroup th,.exgroup td{padding:.5rem .4rem;border:0;border-bottom:1px solid var(--line-soft);background:transparent;text-align:left;vertical-align:middle}
 .exgroup tbody tr:last-child td{border-bottom:0}
-.exgroup th{padding-top:.2rem;padding-bottom:.35rem;font-size:.66rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exgroup th{padding-top:.2rem;padding-bottom:.35rem;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* the same column widths in every exercise (a bar exercise has a Plate/side column too) */
 .exgroup th{width:auto!important}
 .exgroup th:nth-child(1){width:2.9rem!important}
@@ -1554,7 +1552,7 @@ body.has-fab .exlib{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px))
 .exgroup table:has(th:nth-child(5)) th:nth-child(3){width:5.1rem!important}
 .exgroup table:has(th:nth-child(5)) th:nth-child(4){width:3.2rem!important}
 .exgroup td.num{font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap}
-.exgroup td:last-child{font-size:.8rem;color:var(--text-muted);line-height:1.35;overflow-wrap:break-word}
+.exgroup td:last-child{color:var(--text-muted);line-height:1.35;overflow-wrap:break-word}
 /* PR: a small lime trophy badge by the set number; the row stays neutral */
 .exgroup tr.pr-set td{background:transparent!important}
 .exgroup .pr-mark{display:inline-grid;place-items:center;width:1.15rem;height:1.15rem;margin-left:.3rem;vertical-align:-3px;border-radius:50%;background:var(--lime);color:var(--on-lime)}
@@ -1577,6 +1575,60 @@ body.has-fab .exlib{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px))
   .exgroup table:not(.wu-open) tr.hist-wu-set{display:none!important}   /* (warm-ups stay folded until their summary is tapped) */
   .exgroup table:has(th:nth-child(5)) td:nth-child(-n+4){padding-bottom:.15rem}
 }
+/* ---- Set logger (body.in-session): flat exercises with a line between them, quiet column headings, "Previous" as plain
+   text, white kg / reps boxes the same height, text buttons. Only the logger screen; the app's own colours. ---- */
+body.in-session .exblock{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;margin:0 0 .6rem!important;padding:0!important}
+body.in-session .exblock>header{background:transparent!important;border:0!important;padding:1.1rem .25rem .4rem!important;align-items:center}
+body.in-session .exblock>header strong.cond{color:var(--accent-text)}
+body.in-session .exercise-best{background:transparent;color:var(--text-muted)}
+body.in-session .exercise-actions-menu summary{color:var(--accent-text)}
+body.in-session .setheads{background:transparent!important;border:0!important;padding:.6rem .25rem .2rem!important;column-gap:6px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+body.in-session .setheads>span:nth-child(n+2){text-align:center;justify-content:center}
+body.in-session .set-swipe-wrap{border:0!important;background:var(--floor)!important}
+body.in-session .setrow{background:var(--floor)!important;border:0!important;padding:.35rem .25rem!important;align-items:center;border-radius:12px}
+body.in-session .setrow .idx{text-align:center}
+body.in-session .setrow .last{background:transparent!important;border:0!important;color:var(--text-muted);padding:0!important;justify-content:center;text-align:center}
+body.in-session .setrow input.num,body.in-session .setrow .kg-cell{background:var(--surface)!important;border:1px solid var(--line)!important;border-radius:11px!important;box-shadow:none!important}
+body.in-session .setrow input.num{text-align:center;min-height:46px;color:var(--text)}
+body.in-session .setrow .kg-cell input.num{background:transparent!important;border:0!important}
+body.in-session .setrow .kg-cell .kg-total{text-align:center;display:block}
+body.in-session .setrow .tick{background:var(--surface)!important;border:1px solid var(--line)!important;border-radius:11px!important;min-height:46px}
+body.in-session .setrow.done{background:var(--tint)!important}
+body.in-session .setrow.done .tick{background:var(--good)!important;border-color:var(--good)!important;color:var(--on-primary)!important}
+body.in-session .setrow.done input.num,body.in-session .setrow.done .kg-cell{background:transparent!important;border-color:transparent!important}
+/* text buttons, like the reference */
+body.in-session .exblock-foot{justify-content:center!important;border:0!important;padding:.4rem 0 .3rem!important;background:transparent!important}
+body.in-session .exblock-foot .btn,body.in-session #addExBtn{background:transparent!important;border:0!important;box-shadow:none!important;color:var(--accent-text)!important;text-transform:uppercase;letter-spacing:.08em}
+body.in-session #addExBtn{margin:0 auto;display:block}
+body.in-session #main .panel:has(#saveSess){background:transparent;border:0;box-shadow:none}
+body.in-session #main .panel:has(#saveSess)>.row:first-child{justify-content:center}
+body.in-session #main .panel:has(#saveSess) hr{display:none}
+body.in-session #main .panel:has(#saveSess) .row:last-child{flex-direction:column;align-items:stretch;gap:.4rem}
+body.in-session #saveSess{width:100%;min-height:50px;text-transform:uppercase;letter-spacing:.08em}
+body.in-session #cancelSession{background:transparent!important;border:0!important;color:var(--bad-text)!important;text-transform:uppercase;letter-spacing:.08em}
+/* polish: even rows, aligned columns, calmer spacing */
+body.in-session .exblock+.exblock{border-top:1px solid var(--line)!important;border-radius:0!important}
+body.in-session .exblock>header{padding:1rem .35rem .15rem!important;gap:.5rem}
+body.in-session .exblock>header strong.cond{line-height:1.25}
+body.in-session .exercise-best{white-space:nowrap}
+body.in-session .setheads{padding:.55rem 5px .3rem!important}
+body.in-session .setheads>span:first-child{text-align:center}
+body.in-session .setrow{align-items:stretch;padding:4px 5px!important;column-gap:6px}   /* (fixed gaps: with large text a gap in rem pushed the ✓ off a small screen) */
+body.in-session .setrow .idx,body.in-session .setrow .last{align-self:center}
+body.in-session .setrow input.num,body.in-session .setrow .tick,body.in-session .setrow .kg-cell{min-height:48px;height:auto;margin:0}
+body.in-session .setrow .kg-cell{display:flex;flex-direction:column;justify-content:center;padding:.15rem 0}
+body.in-session .setrow .kg-cell input.num{min-height:0;padding:0}
+body.in-session .setrow .kg-cell .kg-total{font-size:.68rem;color:var(--text-muted);line-height:1.2;margin-top:-.1rem}
+body.in-session .setrow .kg-cell .kg-total:empty{display:none}
+body.in-session .setrow input.num::placeholder{color:color-mix(in srgb,var(--text-muted) 70%,var(--surface))}
+body.in-session .exblock-foot{padding:.35rem 0 .9rem!important}
+body.in-session .exblock-foot .btn{min-height:44px}
+body.in-session #main .panel:has(#saveSess){padding-top:.4rem}
+body.in-session .set-swipe-wrap+.set-swipe-wrap{margin-top:3px}
+body.in-session #main .panel:has(#saveSess){padding:.2rem 0 0!important;margin-top:0;border-top:1px solid var(--line)!important;border-radius:0}
+body.in-session #main .panel:has(#saveSess)>.row:first-child{padding:.5rem 0 .6rem}
+body.in-session #main .panel:has(#saveSess)>*{margin-left:.35rem;margin-right:.35rem}
+body.in-session #main .panel:has(#saveSess)>*+*{margin-top:.75rem}
 </style>
 </head>
 <body>
@@ -5481,7 +5533,7 @@ function exBlock(en, ei){
       if(warm&&wu.done)return '';   // warm-ups all ticked: off the screen (still in the session, so saved and in History)
       const prev=warm?null:previous?.sets?.[wi],lastWeight=warm?null:previous?(prev?.weight??null):s.lastWeight,lastReps=warm?null:previous?(prev?.reps??null):s.lastReps,sug=warm?null:suggestion?.sets?.[wi],hintWeight=warm?null:warmupShiftedHint(en,wi,sug?.weight??en.targetKg??lastWeight,baseHint0),hintReps=warm?null:sug?.reps??lastReps??(en.targetReps||null);   // (no history yet: the program's reps, "10" or "8-12")
       return `
-      <div class="set-swipe-wrap"><span class="set-swipe-action copy" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></span><span class="set-swipe-action delete" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></span><div class="setrow ${s.done?'done':''}${wu.done&&si===wu.next?' is-next':''}" data-si="${si}">${warm?'<span class="idx set-w" title="Warm-up set">W</span>':`<span class="idx num">${wi+1}</span>`}<span class="last num">${lastWeight!=null||lastReps!=null?esc((lastWeight??'—')+'kg × '+(lastReps??'—')):'—'}</span>
+      <div class="set-swipe-wrap"><span class="set-swipe-action copy" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></span><span class="set-swipe-action delete" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></span><div class="setrow ${s.done?'done':''}${wu.done&&si===wu.next?' is-next':''}" data-si="${si}">${warm?'<span class="idx set-w" title="Warm-up set">W</span>':`<span class="idx num">${wi+1}</span>`}<span class="last num">${lastWeight!=null||lastReps!=null?esc((lastWeight??'—')+' kg × '+(lastReps??'—')):'—'}</span>
         ${entryBar(en)?`<label class="kg-cell"><input type="number" inputmode="decimal" step="0.25" class="num" data-set-input="weight" value="${esc(kgBoxValue(en,s.weight))}" placeholder="${esc(kgBoxValue(en,hintWeight))}" aria-label="Kilograms per side for ${warm?'warm-up set':'set '+(wi+1)}" aria-describedby="kgt-${ei}-${si}"><small class="kg-total" id="kgt-${ei}-${si}">${esc(kgTotalLabel(en,s.weight))}</small></label>`
           :`<input type="number" inputmode="decimal" step="0.5" class="num" data-set-input="weight" value="${esc(s.weight??'')}" placeholder="${esc(hintWeight??'')}" aria-label="Kilograms for ${warm?'warm-up set':'set '+(wi+1)}">`}
         <input type="number" inputmode="numeric" class="num" data-set-input="reps" value="${esc(s.reps??'')}" placeholder="${esc(hintReps??'')}" aria-label="Reps for ${warm?'warm-up set':'set '+(wi+1)}">
@@ -6986,7 +7038,7 @@ function viewExercises(){
   <div class="panel">${searchBoxHTML('exercises', 'Search exercises', 'Search by name, category or equipment')}</div>
   ${q && !active.length && !archived.length ? `<div class="empty"><p>No exercises match “${esc(S.search.exercises)}”.</p></div>` : ''}
   ${cats.map(cat => { const inCat = active.filter(e => (e.category || 'Other') === cat); return `<div class="panel">
-    <h3>${esc(cat)} <span class="exlib-count num">${inCat.length}</span></h3>
+    <h3>${esc(cat)}</h3>
     <div class="tablewrap"><table class="exercise-library-table"><tbody>
     ${inCat.sort((a, b) => byName(a, b) || String(a.equipment || '').localeCompare(String(b.equipment || ''))).map(e => `<tr>
       <td>${esc(e.name)}</td><td class="muted small">${esc(e.equipment || '')}</td>

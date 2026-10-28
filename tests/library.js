@@ -16,8 +16,8 @@
     ok('every active movement is listed', rows.length === active.length, rows.length + ' of ' + active.length);
     ok('the title shows the movement count', main().textContent.includes(active.length + ' movements'));
     const cats = [...new Set(active.map(e => e.category || 'Other'))];
-    const heads = [...main().querySelectorAll('.exlib h3')].filter(h => h.querySelector('.exlib-count'));
-    ok('one heading per category, each with its count', heads.length === cats.length && heads.every(h => Number(h.querySelector('.exlib-count').textContent) === active.filter(e => (e.category || 'Other') === h.firstChild.textContent.trim()).length), heads.map(h => h.textContent.replace(/\s+/g, ' ')).join(', '));
+    const heads = [...main().querySelectorAll('.exlib h3')].filter(h => !/Archived/.test(h.textContent));
+    ok('one heading per category, with no count next to it', heads.length === cats.length && heads.every(h => cats.includes(h.textContent.trim())) && !main().querySelector('.exlib-count'), heads.map(h => h.textContent.trim()).join(', '));
     ok('every row has its Edit and Archive buttons', main().querySelectorAll('[data-archiveex]').length === active.length);
 
     await search('curl');
