@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-GxY0qUsj1oooyI7dWoxJhjkVvNY81L84hvBKwSVbRV8=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-0iDq9gWiQrEv+E4RXFaVAqA5KmP3nh7fG+WQG8zs/2o=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -7685,7 +7685,7 @@ function viewAnalysis(){
     ${!AI_COACH.endpoint && !AI_COACH.transport ? `<p class="small"><strong>Not set up.</strong> The coach needs a server endpoint that keeps the AI provider's key private (for example a Supabase Edge Function on your project). Once it is set, it explains the findings above. The numbers on this page never come from it.</p>
       <details class="small pa-peek"><summary>What it would receive</summary><p class="muted">Only the planned numbers and findings below: no client names, no history.</p><pre class="pa-pre">${esc(JSON.stringify(coachSummary(a, findings, settings, 'general'), null, 2))}</pre></details>`
     : ai && ai.status === 'ok' ? coachReplyHTML(ai.reply, findings)
-    : `${ai && ai.status === 'busy' ? '<p class="small muted">Asking the coach…</p>' : ''}${ai && (ai.status === 'error' || ai.status === 'invalid') ? `<p class="small pa-error" role="alert">The coach's answer could not be used${ai.status === 'invalid' ? ' (it did not match the analysis: ' + esc(ai.errors.slice(0, 2).join('; ')) + ')' : ': ' + esc(ai.message)}. The analysis above is unaffected.</p>` : ''}
+    : `<p class="small">Explains the findings above for the goal you pick and suggests optional changes. The numbers come from the analysis, not from the AI, and nothing is changed for you.</p>${ai && ai.status === 'busy' ? '<p class="small muted" role="status">Asking the coach… this can take up to a minute.</p>' : ''}${ai && (ai.status === 'error' || ai.status === 'invalid') ? `<p class="small pa-error" role="alert">The coach's answer could not be used${ai.status === 'invalid' ? ' (it did not match the analysis: ' + esc(ai.errors.slice(0, 2).join('; ')) + ')' : ': ' + esc(ai.message)}. The analysis above is unaffected.</p>` : ''}
        <label class="field pa-goal"><span>Goal</span><select id="paGoal">${[['general', 'General strength and size'], ['hypertrophy', 'Muscle size'], ['strength', 'Strength'], ['balance', 'Balance and health']].map(([v, l]) => `<option value="${v}" ${(S.sel.analysisGoal || 'general') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
        <button type="button" class="btn primary sm" id="paAskCoach" ${ai && ai.status === 'busy' ? 'disabled' : ''}>${ai && (ai.status === 'error' || ai.status === 'invalid') ? 'Try again' : 'Explain these findings'}</button>`}
   </section>
