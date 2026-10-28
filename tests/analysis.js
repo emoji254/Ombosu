@@ -181,6 +181,50 @@
     [...dlg.querySelectorAll('#dlgFoot button')].find(b => b.textContent === 'Save').click(); await wait(400);
     ok('saving a starter movement without touching its muscles adds no muscles field', !('muscles' in S.exercises.find(e => e.id === 'seed-bench-press')));
 
+    // ---- each secondary muscle's share of a set, set in the movement dialog
+    openExerciseDialog('smkOwn'); await wait(150);
+    const row = m => dlg.querySelector(`[data-ex-w-row="${m}"]`);
+    ok('shares: a row for each ticked secondary muscle only', row('triceps') && !row('triceps').hidden && row('core').hidden);
+    dlg.querySelector('[data-ex-mus="s"][value="core"]').checked = true; dlg.querySelector('[data-ex-mus="s"][value="core"]').dispatchEvent(new Event('change', { bubbles:true }));
+    ok('shares: ticking a secondary muscle shows its row', !row('core').hidden);
+    dlg.querySelector('[data-ex-mus="s"][value="core"]').checked = false; dlg.querySelector('[data-ex-mus="s"][value="core"]').dispatchEvent(new Event('change', { bubbles:true }));
+    ok('shares: unticking hides it again', row('core').hidden);
+    dlg.querySelector('#exMusNone').checked = true; dlg.querySelector('#exMusNone').dispatchEvent(new Event('change', { bubbles:true }));
+    ok('shares: "conditioning" turns the muscle choices off', [...dlg.querySelectorAll('.ex-muscles fieldset')].every(f => f.disabled));
+    dlg.querySelector('#exMusNone').checked = false; dlg.querySelector('#exMusNone').dispatchEvent(new Event('change', { bubbles:true }));
+    dlg.querySelector('[data-ex-w="triceps"]').value = '0.25';
+    [...dlg.querySelectorAll('#dlgFoot button')].find(b => b.textContent === 'Save').click(); await wait(400);
+    ok('shares: the chosen share is saved on the movement', S.exercises.find(e => e.id === 'smkOwn').muscles.weights.triceps === 0.25, JSON.stringify(S.exercises.find(e => e.id === 'smkOwn').muscles));
+    const unW = analyzeProgram(S.programs[P.un], 0, S.analysisSettings), ownSrc = unW.muscles.triceps.sources.find(x => /Smoke landmine/.test(x.name));
+    ok('shares: the analysis uses it (3 sets × 0.25 = 0.75 indirect triceps)', ownSrc && ownSrc.share === 0.25 && near({ lo:round2(ownSrc.sets.lo * ownSrc.share), hi:round2(ownSrc.sets.hi * ownSrc.share) }, 0.75));
+    openExerciseDialog('smkOwn'); await wait(150);
+    ok('shares: the dialog opens with the saved share', dlg.querySelector('[data-ex-w="triceps"]').value === '0.25');
+    dlg.querySelector('[data-ex-w="triceps"]').value = '';
+    [...dlg.querySelectorAll('#dlgFoot button')].find(b => b.textContent === 'Save').click(); await wait(400);
+    ok('shares: back to the default removes the movement\'s own share', !(S.exercises.find(e => e.id === 'smkOwn').muscles.weights || {}).triceps);
+
+    // ---- calf movements and the v5 starters
+    ok('starter calf raises exist and train calves', ['seed-standing-calf-raise', 'seed-seated-calf-raise'].every(id => { const e = SEED_EXERCISES.find(x => x.id === id); const mm = exerciseMuscles(e); return e && mm && mm.primary.join() === 'calves'; }));
+    S.programs[P.un].days[1].items.push(it('seed-standing-calf-raise', '4'));
+    const withCalves = analyzeProgram(S.programs[P.un], 0, S.analysisSettings);
+    S.programs[P.un].days[1].items.pop();
+    ok('a calf raise counts as direct calf sets (4)', S.exercises.some(e => e.id === 'seed-standing-calf-raise') ? near(withCalves.muscles.calves.direct, 4) : true, rangeText(withCalves.muscles.calves.direct));
+    const libBefore = S.exercises.slice();
+    await saveExerciseList(libBefore.filter(e => !STARTERS_V5.includes(e.id)));
+    ok('v5 adds the calf raises to a library that lacks them', (await addStarterMovements(STARTERS_V5)) === 2 && STARTERS_V5.every(id => S.exercises.some(e => e.id === id)));
+    ok('v5 run again adds nothing', (await addStarterMovements(STARTERS_V5)) === 0);
+    await saveExerciseList([...libBefore.filter(e => !STARTERS_V5.includes(e.id)), { id:'smkMyCalf', name:'Standing calf raise', category:'Legs', equipment:'Machine' }]);
+    const added = await addStarterMovements(STARTERS_V5);
+    ok('v5 skips a movement the coach already has under their own id (same name and equipment)', added === 1 && !S.exercises.some(e => e.id === 'seed-standing-calf-raise') && S.exercises.some(e => e.id === 'seed-seated-calf-raise'));
+    await saveExerciseList(libBefore);
+
+    // ---- the muscle map: anatomical shapes, both sides
+    document.getElementById('paProgram').value = P.fb; document.getElementById('paProgram').dispatchEvent(new Event('change')); await wait(150);
+    const regionsOk = MUSCLE_IDS.every(mu => { const g = document.querySelectorAll(`.pa-map [data-hm="${mu}"]`); return g.length >= 1 && [...g].every(x => { const ps = x.querySelectorAll('path:not(.hm-line)'); return ps.length >= 2 && ps.length % 2 === 0 && [...ps].some(pp => pp.getAttribute('transform')); }); });
+    ok('map: every muscle is drawn as shapes on both sides of the body', regionsOk);
+    ok('map: front shows the chest, back shows the lower back', !!document.querySelector('.pa-map figure:first-child [data-hm="chest"]') && !!document.querySelector('.pa-map figure:last-child [data-hm="lowerBack"]'));
+    ok('map: the shapes stay inside the drawing', [...document.querySelectorAll('.pa-map svg')].every(svg => { const b = svg.getBBox(), v = svg.viewBox.baseVal; return b.x >= v.x - 1 && b.y >= v.y - 1 && b.x + b.width <= v.x + v.width + 1 && b.y + b.height <= v.y + v.height + 1; }));
+
     // ---- AI coach
     const a1 = analyzeProgram(S.programs[P.fb], 0, S.analysisSettings), f1 = analysisFindings(a1, S.analysisSettings, {}), sum = coachSummary(a1, f1, S.analysisSettings, 'general');
     ok('the coach summary has no client names or history', !/Smoke A|Smoke B|clientId|logs/.test(JSON.stringify(sum)));

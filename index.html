@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ja+9WOJncuofc98m2uGdmm2OMN/B8024s5y8lWUVCP4=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-92FjmJ7jx9RkXuC0K2P2UvoGr2K8/HFcaTTKKjuTuhw=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -1604,11 +1604,13 @@ body.has-fab .exlib{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px))
 .hm-fig{margin:0;text-align:center}
 .hm-fig svg{width:100%;height:auto;display:block}
 .hm-fig figcaption{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
-.hm-body *{fill:var(--line-soft);stroke:var(--line);stroke-width:1}
+.hm-body .hm-fill{fill:var(--line-soft);stroke:var(--line-soft);stroke-width:.6}
+.hm-body .hm-edge{fill:none;stroke:var(--line-strong);stroke-width:1;stroke-linejoin:round}
 .hm-region{cursor:pointer;outline:none}
-.hm-region>*{stroke-width:1.4;transition:fill .15s}
-.hm-region:focus-visible>*{stroke:var(--focus);stroke-width:3}
-.hm-region.hm-on>*{stroke:var(--text);stroke-width:2.6}
+.hm-region>*{stroke-width:1.2;stroke-linejoin:round;transition:fill .15s}
+.hm-region>.hm-line{fill:none!important;stroke:rgba(0,0,0,.18)!important;stroke-width:1!important;stroke-dasharray:none!important;pointer-events:none}
+.hm-region:focus-visible>:not(.hm-line){stroke:var(--focus);stroke-width:3}
+.hm-region.hm-on>:not(.hm-line){stroke:var(--text);stroke-width:2.4;stroke-dasharray:none}
 .hm-below>*,.pa-swatch.pa-below{fill:#f3c36f;background:#f3c36f;stroke:#b07a21}
 .hm-within>*,.pa-swatch.pa-within{fill:#8fcf86;background:#8fcf86;stroke:#3f7a45}
 .hm-above>*,.pa-swatch.pa-above{fill:#e58a6c;background:#e58a6c;stroke:#a24a2f}
@@ -1708,6 +1710,14 @@ body.has-fab .exlib{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px))
 .ex-mus-chip{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .55rem;border:1px solid var(--line);border-radius:999px;font-size:.8rem;cursor:pointer;min-height:36px}
 .ex-mus-chip input{width:auto;margin:0}
 .ex-mus-chip:has(input:checked){background:var(--tint);border-color:var(--accent-mid)}
+.ex-muscles fieldset:disabled{opacity:.5}
+.ex-mus-none{display:flex;align-items:center;gap:.5rem;min-height:40px;cursor:pointer}
+.ex-mus-none input{width:auto;margin:0;flex:none}
+.ex-mus-shares{display:flex;flex-direction:column;gap:.3rem;margin-top:.5rem}
+.ex-mus-shares-hint{margin:0}
+.ex-mus-w{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,13rem);align-items:center;gap:.6rem;font-size:.86rem}
+.ex-mus-w select{min-height:40px;padding:.3rem .5rem}
+.ex-mus-w[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -2182,7 +2192,8 @@ const SEED_EXERCISES = [
  ['Bicep curl','Arms','Dumbbell'],['Triceps pushdown','Arms','Cable'],['Hammer curl','Arms','Dumbbell'],
  ['Lateral raise','Shoulders','Dumbbell'],['Rear delt fly','Shoulders','Dumbbell'],
  ['Assault bike','Conditioning','Machine'],['Rower','Conditioning','Machine'],['Sled push','Conditioning','Sled'],
- ['Box jump','Power','Bodyweight'],['Medicine ball slam','Power','Med ball'],['Jump rope','Conditioning','Rope']
+ ['Box jump','Power','Bodyweight'],['Medicine ball slam','Power','Med ball'],['Jump rope','Conditioning','Rope'],
+ ['Standing calf raise','Legs','Machine'],['Seated calf raise','Legs','Machine']   // (v5)
 ].map(([name,category,equipment]) => ({ id: 'seed-' + seedSlug(name), name, category, equipment }))   // same id on every device
 /* Equipment variants of the starter exercises (schema v3 adds them to existing libraries). Their ids include the
    equipment, so they too are the same on every device. */
@@ -2883,8 +2894,10 @@ const numVal = id => { const v = val(id); return v === '' ? null : Number(v); };
    v3: the starter equipment variants are added to existing libraries (addStarterVariants).
    v4: bar movements saved before the bar was recorded (plates only) get the bar added and recorded
        (backfillBarWeights; also run after a sync pull and an import).
+   v5: starter movements added later (the calf raises) come to existing libraries (addStarterMovements).
 ----------------------------------------------------------------*/
-const SCHEMA_VERSION = 4;
+const SCHEMA_VERSION = 5;
+const STARTERS_V5 = ['seed-standing-calf-raise', 'seed-seated-calf-raise'];
 const LEGACY_LOG_LISTS = ['exercises', 'workoutEntries', 'movements', 'lifts'];
 const SET_ALIASES = ['kg', 'load', 'rep', 'actualWeight', 'actualReps', 'rpe'];
 function normalizeSetV1(s, i){
@@ -2971,6 +2984,7 @@ async function migrate(fromVersion, opts = {}){
   }
   if (fromVersion < 2){ try { n += await migrateSeedIds(); } catch(e){ console.warn('Starter-exercise ids were not unified', e); } }
   if (fromVersion < 3){ try { n += await addStarterVariants(); } catch(e){ console.warn('Starter equipment variants were not added', e); } }
+  if (fromVersion < 5){ try { n += await addStarterMovements(STARTERS_V5); } catch(e){ console.warn('New starter movements were not added', e); } }
   // (every time, not only from v3: an imported backup can bring plates-only sessions; entries with a bar are skipped)
   try { n += await backfillBarWeights(); } catch(e){ console.warn('The bar was not added to older sessions', e); }
   await Store.putMeta('schemaVersion', { version:SCHEMA_VERSION, at:new Date().toISOString() });
@@ -4664,6 +4678,14 @@ async function relinkExerciseIds(map){
      with it (its category is kept). The starter copy isn't added.
    - Otherwise the starter variant is added. Every other exercise is left as it is.
    Assistants get the library from their coach instead. */
+/* Schema v5: starter movements added to the app later come to an existing library, unless it already has the same
+   movement (by id, or the same name and equipment). Nothing else changes. Assistants get the library from their coach. */
+async function addStarterMovements(ids){
+  try { if (localStorage.getItem(LAST_ROLE_KEY) === 'assistant') return 0; } catch {}
+  const add = SEED_EXERCISES.filter(s => ids.includes(s.id) && !S.exercises.some(e => e.id === s.id) && !findExerciseVariant(S.exercises, s.name, s.equipment)).map(s => ({ ...s }));
+  if (add.length && !(await saveExerciseList([...S.exercises, ...add]))) throw new Error('Could not save the exercise library');
+  return add.length;
+}
 async function addStarterVariants(){
   try { if (localStorage.getItem(LAST_ROLE_KEY) === 'assistant') return 0; } catch {}
   let list = S.exercises.slice(), n = 0;
@@ -4807,6 +4829,7 @@ const STARTER_MUSCLES = {
   'hammer curl':{ p:['biceps','forearms'], s:[], k:'i' }, 'lateral raise':{ p:['sideDelts'], s:[], k:'i' },
   'rear delt fly':{ p:['rearDelts'], s:['back'], k:'i' },
   'box jump':{ p:['quads','glutes'], s:['calves'], k:'c' }, 'medicine ball slam':{ p:['core'], s:['back','frontDelts'], k:'c' },
+  'standing calf raise':{ p:['calves'], s:[], k:'i' }, 'seated calf raise':{ p:['calves'], s:[], k:'i' },
   'assault bike':{ none:true }, 'rower':{ none:true }, 'sled push':{ none:true }, 'jump rope':{ none:true }
 };
 /* A movement's muscles: { primary:[], secondary:[], weights:{}, kind, source:'own'|'starter' }, { none:true } for a
@@ -7408,27 +7431,46 @@ async function renameExerciseInLogs(exId, name){
   invalidateLogIndex(); return pairs.length;
 }
 /* Muscles for program analysis, in the movement dialog: primary and secondary muscles (or "conditioning", which adds no
-   set volume). Starter movements open with their starter muscles. Stored on the movement as exercise.muscles. */
+   set volume), and for each secondary muscle how much of a set it gets (blank = the analysis setting, 0.5 to start).
+   Starter movements open with their starter muscles. Stored on the movement as exercise.muscles. */
+const EX_MUS_SHARES = [['0.25', 'A quarter set'], ['0.5', 'Half a set'], ['0.75', 'Three quarters'], ['1', 'A full set']];
 function exerciseMusclesFieldsHTML(ex){
   const cur = exerciseMuscles(ex), prim = new Set(cur && !cur.none ? cur.primary : []), sec = new Set(cur && !cur.none ? cur.secondary : []);
+  const w = (cur && !cur.none && cur.weights) || {}, credit = (S.analysisSettings || analysisSettingsFrom(null)).indirectCredit, off = !!(cur && cur.none);
   const boxes = (kind, on) => MUSCLES.map(([id, name]) => `<label class="ex-mus-chip"><input type="checkbox" data-ex-mus="${kind}" value="${id}" ${on.has(id) ? 'checked' : ''}><span>${esc(name)}</span></label>`).join('');
+  const shares = MUSCLES.map(([id, name]) => `<label class="ex-mus-w" data-ex-w-row="${id}" ${sec.has(id) && !prim.has(id) ? '' : 'hidden'}><span>${esc(name)}</span><select data-ex-w="${id}" aria-label="${esc(name)}: share of a set">
+      <option value="">Default (${esc(pcFmt(credit))} of a set)</option>${EX_MUS_SHARES.map(([v, l]) => `<option value="${v}" ${w[id] != null && String(w[id]) === v ? 'selected' : ''}>${l} (${v})</option>`).join('')}</select></label>`).join('');
   return `<details class="ex-muscles"${ex && ex.id && !cur ? ' open' : ''}><summary>Muscles <span class="muted small">${!cur ? 'not set (needed for program analysis)' : cur.none ? 'conditioning' : esc(cur.primary.map(muscleName).join(', '))}</span></summary>
-    <fieldset><legend>Primary (each set counts in full)</legend><div class="ex-mus-grid">${boxes('p', prim)}</div></fieldset>
-    <fieldset><legend>Secondary (counts as part of a set)</legend><div class="ex-mus-grid">${boxes('s', sec)}</div></fieldset>
-    <label class="row tight small" style="gap:.4rem"><input type="checkbox" id="exMusNone" ${cur && cur.none ? 'checked' : ''} style="width:auto"> Conditioning movement (adds no muscle sets)</label></details>`;
+    <fieldset ${off ? 'disabled' : ''}><legend>Primary (each set counts in full)</legend><div class="ex-mus-grid">${boxes('p', prim)}</div></fieldset>
+    <fieldset ${off ? 'disabled' : ''}><legend>Secondary (counts as part of a set)</legend><div class="ex-mus-grid">${boxes('s', sec)}</div>
+      <div class="ex-mus-shares"><p class="small muted ex-mus-shares-hint" ${sec.size ? '' : 'hidden'}>How much of each set a secondary muscle gets. An estimate for planning.</p>${shares}</div></fieldset>
+    <label class="ex-mus-none small"><input type="checkbox" id="exMusNone" ${off ? 'checked' : ''}><span>Conditioning movement (adds no muscle sets)</span></label></details>`;
 }
-/* The muscles to save, or undefined to leave the movement as it is (nothing set and nothing set before). */
+/* Shows a share choice for each ticked secondary muscle (not one that is also primary); "conditioning" turns the rest off. */
+function wireExerciseMuscles(root){
+  const box = root.querySelector('.ex-muscles'); if (!box) return;
+  const sync = () => {
+    const prim = new Set([...box.querySelectorAll('[data-ex-mus="p"]:checked')].map(i => i.value)), none = box.querySelector('#exMusNone').checked;
+    let any = false;
+    box.querySelectorAll('[data-ex-w-row]').forEach(row => { const m = row.dataset.exWRow, on = !!box.querySelector(`[data-ex-mus="s"][value="${m}"]:checked`) && !prim.has(m); row.hidden = !on; if (on) any = true; });
+    box.querySelector('.ex-mus-shares-hint').hidden = !any;
+    box.querySelectorAll('fieldset').forEach(f => { f.disabled = none; });
+  };
+  box.addEventListener('change', sync);
+}
+/* The muscles to save, or undefined to leave the movement as it is (nothing set and nothing changed). */
 function readExerciseMuscles(root, ex){
   if (!root.querySelector('.ex-muscles')) return undefined;
   const before = exerciseMuscles(ex);
   if (root.querySelector('#exMusNone').checked) return before && before.none ? undefined : { none:true };
   const primary = [...root.querySelectorAll('[data-ex-mus="p"]:checked')].map(i => i.value);
   const secondary = [...root.querySelectorAll('[data-ex-mus="s"]:checked')].map(i => i.value).filter(m => !primary.includes(m));
-  const key = list => list.slice().sort().join();   // (as sets: the boxes come back in screen order)
-  const same = before && !before.none && key(before.primary) === key(primary) && key(before.secondary) === key(secondary);
+  const weights = {};
+  secondary.forEach(m => { const v = root.querySelector(`[data-ex-w="${m}"]`)?.value; if (v !== '' && v != null && Number(v) >= 0 && Number(v) <= 1) weights[m] = Number(v); });
+  const key = list => list.slice().sort().join(), wkey = o => JSON.stringify(Object.entries(o || {}).sort());   // (as sets: the boxes come back in screen order)
+  const same = before && !before.none && key(before.primary) === key(primary) && key(before.secondary) === key(secondary) && wkey(before.weights) === wkey(weights);
   if (same) return undefined;   // (a starter movement left as it was keeps following the starter map)
   if (!primary.length && !secondary.length) return ex && ex.muscles ? { primary:[], secondary:[] } : undefined;
-  const weights = {}; Object.entries((ex && ex.muscles && ex.muscles.weights) || {}).forEach(([m, w]) => { if (secondary.includes(m)) weights[m] = w; });
   return { primary, secondary, ...(Object.keys(weights).length ? { weights } : {}) };
 }
 function openExerciseDialog(id){
@@ -7457,6 +7499,7 @@ function openExerciseDialog(id){
     }}
   ]);
   wireExerciseFields(dlg, 'ex');
+  wireExerciseMuscles(dlg);
   const first = dlg.querySelector('#exName'); if (first) first.focus();
 }
 S.search.exercises = '';
@@ -7502,40 +7545,45 @@ function analysisSettingsNow(){
   }
   return analysisSettingsFrom(null);
 }
-/* Front and back outlines; each muscle is one or more shapes (both sides of the body). */
+/* The muscle map: a front and a back view. Each muscle is drawn once for the left side and mirrored for the right
+   (MIRROR), so both sides match; `lines` are thin inner lines (abs, quad heads) for shape only, not selectable. */
+const MIRROR = 'translate(200 0) scale(-1 1)';
 const HM_FRONT = {
-  frontDelts:['<ellipse cx="57" cy="84" rx="11" ry="12"/>', '<ellipse cx="143" cy="84" rx="11" ry="12"/>'],
-  sideDelts:['<ellipse cx="44" cy="92" rx="6" ry="12"/>', '<ellipse cx="156" cy="92" rx="6" ry="12"/>'],
-  chest:['<path d="M68 78h30v34c-12 3-24 1-31-6z"/>', '<path d="M102 78h30l1 28c-7 7-19 9-31 6z"/>'],
-  biceps:['<ellipse cx="47" cy="126" rx="8.5" ry="19"/>', '<ellipse cx="153" cy="126" rx="8.5" ry="19"/>'],
-  forearms:['<ellipse cx="41" cy="174" rx="7.5" ry="22"/>', '<ellipse cx="159" cy="174" rx="7.5" ry="22"/>'],
-  core:['<rect x="76" y="117" width="48" height="62" rx="12"/>'],
-  quads:['<ellipse cx="83" cy="244" rx="15" ry="42"/>', '<ellipse cx="117" cy="244" rx="15" ry="42"/>'],
-  calves:['<ellipse cx="83" cy="326" rx="9" ry="28"/>', '<ellipse cx="117" cy="326" rx="9" ry="28"/>']
+  frontDelts:{ d:['M63 71C56 73 50 78 47 86C51 90 55 97 57 105C61 95 65 86 71 79C69 75 66 72 63 71Z'] },
+  sideDelts:{ d:['M47 86C44 93 42 101 43 110C47 108 52 106 57 105C55 97 51 90 47 86Z'] },
+  chest:{ d:['M98 75L72 78C66 84 62 92 62 102C64 112 72 118 84 120C92 121 98 118 98 116Z'] },
+  biceps:{ d:['M45 113C43 125 43 139 46 151C50 154 54 153 56 149C58 137 58 123 56 113C52 110 48 110 45 113Z'] },
+  forearms:{ d:['M44 156C40 168 37 182 36 197C39 200 43 200 45 197C48 183 52 169 55 158C51 154 47 154 44 156Z'] },
+  core:{ d:['M98 123L89 123C87 141 87 159 89 177C92 183 95 186 98 188Z', 'M86 123C78 123 71 127 68 135C69 151 71 167 75 182C79 184 83 182 86 176C84 158 84 140 86 123Z'],
+    lines:['M89 140H98', 'M89 156H98', 'M89 171H97'] },
+  quads:{ d:['M70 205C66 225 66 251 70 277C76 285 86 285 92 279C96 257 97 233 97 213C90 207 78 203 70 205Z'], lines:['M84 212C82 236 82 258 84 280'] },
+  calves:{ d:['M70 307C67 323 68 341 71 357C75 361 80 361 82 357C84 341 85 323 84 307C80 303 74 303 70 307Z'] }
 };
 const HM_BACK = {
-  rearDelts:['<ellipse cx="57" cy="84" rx="11" ry="12"/>', '<ellipse cx="143" cy="84" rx="11" ry="12"/>'],
-  sideDelts:['<ellipse cx="44" cy="92" rx="6" ry="12"/>', '<ellipse cx="156" cy="92" rx="6" ry="12"/>'],
-  back:['<path d="M70 74h60l-4 64-26 10-26-10z"/>'],
-  lowerBack:['<rect x="80" y="152" width="40" height="26" rx="9"/>'],
-  triceps:['<ellipse cx="47" cy="126" rx="8.5" ry="19"/>', '<ellipse cx="153" cy="126" rx="8.5" ry="19"/>'],
-  forearms:['<ellipse cx="41" cy="174" rx="7.5" ry="22"/>', '<ellipse cx="159" cy="174" rx="7.5" ry="22"/>'],
-  glutes:['<ellipse cx="85" cy="200" rx="16" ry="17"/>', '<ellipse cx="115" cy="200" rx="16" ry="17"/>'],
-  hamstrings:['<ellipse cx="83" cy="252" rx="14" ry="34"/>', '<ellipse cx="117" cy="252" rx="14" ry="34"/>'],
-  calves:['<ellipse cx="83" cy="324" rx="10.5" ry="28"/>', '<ellipse cx="117" cy="324" rx="10.5" ry="28"/>']
+  back:{ d:['M98 60C90 62 78 66 66 72C74 76 84 84 92 100C95 104 97 108 98 110Z', 'M64 96C62 110 64 128 68 146C76 152 86 156 98 158L98 116C90 106 78 98 64 96Z'] },
+  rearDelts:{ d:['M63 71C56 73 50 78 47 86C52 91 57 96 62 100C64 92 66 84 67 76C66 73 65 72 63 71Z'] },
+  sideDelts:{ d:['M47 86C44 93 42 101 43 110C47 108 52 106 57 105C55 97 51 90 47 86Z'] },
+  triceps:{ d:['M45 113C43 125 43 139 46 151C50 154 54 153 56 149C58 137 58 123 56 113C52 110 48 110 45 113Z'] },
+  forearms:{ d:['M44 156C40 168 37 182 36 197C39 200 43 200 45 197C48 183 52 169 55 158C51 154 47 154 44 156Z'] },
+  lowerBack:{ d:['M98 161C90 161 82 159 74 156C74 166 76 176 80 186C86 188 92 188 98 188Z'] },
+  glutes:{ d:['M98 191C88 189 76 191 68 199C66 211 70 223 80 227C88 229 96 225 98 219Z'] },
+  hamstrings:{ d:['M70 231C66 249 67 267 71 285C78 291 88 291 93 285C96 267 97 249 96 231C88 227 78 227 70 231Z'], lines:['M83 234C82 252 82 268 83 286'] },
+  calves:{ d:['M69 301C64 315 65 331 70 345C74 351 80 351 83 345C87 331 87 315 84 301C80 295 74 295 69 301Z'] }
 };
-/* The body behind the muscles (not selectable). */
-const HM_BODY = '<g class="hm-body" aria-hidden="true"><circle cx="100" cy="36" r="19"/><rect x="91" y="52" width="18" height="16" rx="6"/>'
-  + '<path d="M58 70h84c10 0 14 8 14 18l-2 62c-2 18-8 34-10 48H56c-2-14-8-30-10-48l-2-62c0-10 4-18 14-18z"/>'
-  + '<rect x="33" y="76" width="22" height="128" rx="11"/><rect x="145" y="76" width="22" height="128" rx="11"/>'
-  + '<rect x="67" y="186" width="32" height="172" rx="15"/><rect x="101" y="186" width="32" height="172" rx="15"/></g>';
+/* The body behind the muscles (not selectable): the left half, mirrored. */
+const HM_BODY_HALF = 'M100 8C88 8 81 17 81 30C81 42 87 51 93 54L93 62C84 66 72 68 62 71C52 74 45 81 43 92C41 106 40 120 39 132C37 148 34 164 33 180C32 192 31 202 33 210C35 216 41 216 42 210C43 202 44 194 46 184C49 170 52 156 54 142C56 130 58 118 60 110C62 128 64 148 66 166C66 178 64 188 64 198C63 222 63 248 66 272C67 284 66 296 66 306C66 326 68 346 71 364C72 372 70 380 72 386C78 390 88 390 90 386C91 378 89 370 89 362C90 344 92 324 92 306C92 296 93 286 94 276C96 254 98 232 99 214L100 212Z';
+// (filled as two closed halves without an outline, then outlined as two open lines, so no seam runs down the middle)
+const HM_BODY_EDGE = HM_BODY_HALF.replace(/L100 212Z$/, '');
+const HM_BODY = `<g class="hm-body" aria-hidden="true"><path class="hm-fill" d="${HM_BODY_HALF}"/><path class="hm-fill" d="${HM_BODY_HALF}" transform="${MIRROR}"/><path class="hm-edge" d="${HM_BODY_EDGE}"/><path class="hm-edge" d="${HM_BODY_EDGE}" transform="${MIRROR}"/></g>`;
 function heatmapSVG(side, shapes, a, settings, selected){
-  const regions = Object.entries(shapes).map(([m, parts]) => {
+  const regions = Object.entries(shapes).map(([m, sh]) => {
     const st = muscleStatus(a, m, settings), x = a.muscles[m];
     const label = `${muscleName(m)}: ${rangeText(x.total)} sets, ${STATUS_LABEL[st].toLowerCase()}`;
-    return `<g class="hm-region hm-${st}${selected === m ? ' hm-on' : ''}" data-hm="${m}" role="button" tabindex="0" aria-label="${esc(label)}" aria-pressed="${selected === m}"><title>${esc(label)}</title>${parts.join('')}</g>`;
+    const paths = sh.d.map(d => `<path d="${d}"/><path d="${d}" transform="${MIRROR}"/>`).join('');
+    const lines = (sh.lines || []).map(d => `<path class="hm-line" d="${d}"/><path class="hm-line" d="${d}" transform="${MIRROR}"/>`).join('');
+    return `<g class="hm-region hm-${st}${selected === m ? ' hm-on' : ''}" data-hm="${m}" role="button" tabindex="0" aria-label="${esc(label)}" aria-pressed="${selected === m}"><title>${esc(label)}</title>${paths}${lines}</g>`;
   }).join('');
-  return `<figure class="hm-fig"><svg viewBox="20 10 160 360" role="group" aria-label="${side === 'front' ? 'Front' : 'Back'} of the body">${HM_BODY}${regions}</svg><figcaption>${side === 'front' ? 'Front' : 'Back'}</figcaption></figure>`;
+  return `<figure class="hm-fig"><svg viewBox="22 2 156 392" role="group" aria-label="${side === 'front' ? 'Front' : 'Back'} of the body">${HM_BODY}${regions}</svg><figcaption>${side === 'front' ? 'Front' : 'Back'}</figcaption></figure>`;
 }
 function viewAnalysis(){
   const programs = Object.entries(S.programs).map(([id, p]) => ({ id, ...p })).sort(byName);
