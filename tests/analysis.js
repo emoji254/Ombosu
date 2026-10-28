@@ -234,6 +234,9 @@
     ok('a reply citing a finding that does not exist is rejected', !validateCoachReply({ ...good, findings:[{ findingId:'f999', explanation:'x' }] }, sum).ok);
     ok('a reply with made-up current sets is rejected', !validateCoachReply({ ...good, adjustments:[{ ...good.adjustments[0], expectedEffect:{ muscle:'back', fromSets:99, toSets:100 } }] }, sum).ok);
     ok('a reply missing confidence is rejected', !validateCoachReply({ ...good, confidence:'sure' }, sum).ok);
+    ok('the coach prompt carries only the summary and asks for the checked reply shape', (pr => pr.includes(JSON.stringify(sum)) && /"findingId"/.test(pr) && /source of truth/.test(pr) && !/Smoke A/.test(pr))(coachPrompt(sum)));
+    ok('an "AI coach" button sits at the top of the analysis', !!document.getElementById('paGoCoach'));
+    ok('the AI coach section comes right after the findings', (h => h && h.closest('section').previousElementSibling && h.closest('section').previousElementSibling.querySelector('#paFindH'))(document.getElementById('paAiH')));
     ok('without a server the coach is "not set up"', (await requestCoach(sum)).status === 'unavailable' && /Not set up/.test(document.getElementById('main').textContent));
     document.getElementById('paProgram').value = P.fb; document.getElementById('paProgram').dispatchEvent(new Event('change')); await wait(150);
     AI_COACH.transport = async () => { throw new Error('offline'); }; render({ keepScroll:true }); await wait(100);

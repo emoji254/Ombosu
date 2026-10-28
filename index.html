@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-92FjmJ7jx9RkXuC0K2P2UvoGr2K8/HFcaTTKKjuTuhw=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-GxY0qUsj1oooyI7dWoxJhjkVvNY81L84hvBKwSVbRV8=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -1582,6 +1582,8 @@ body.has-fab .exlib{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px))
 .pa>.panel{margin:0}
 .pa-head{align-items:flex-start}
 .pa-head h2{margin:0}
+.pa-head-actions{flex-wrap:wrap;justify-content:flex-end}
+#paAiH{scroll-margin-top:90px}
 .pa-pickers{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.6rem}
 .pa-pickers .field{margin:0}
 .pa-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.6rem}
@@ -5098,6 +5100,27 @@ function validateCoachReply(r, summary){
   if (!arr(r.missingInformation) || !r.missingInformation.every(s => str(s, 400))) errors.push('missingInformation: a list of texts');
   return errors.length ? { ok:false, errors } : { ok:true, value:r };
 }
+/* What the coach is asked: explain the calculated findings for the goal, using only the numbers given, in the reply
+   shape validateCoachReply checks. A coach service sends this with the summary (nothing else) to the AI provider. */
+function coachPrompt(summary){
+  return `You are a strength coach reviewing a training program's planned weekly volume for a coach.
+The numbers below were calculated by the app and are the source of truth: do not compute or invent other metrics.
+"sets" are working sets in one program week (one pass through every day); "indirect" sets are estimates for secondary muscles.
+Goal: ${summary.goal}.
+
+Reply with only a JSON object of this shape:
+{"overall": string (2-4 sentences),
+ "strengths": [string, ...] (up to 5),
+ "findings": [{"findingId": one of the finding ids below, "explanation": string}, ...] (explain the important ones),
+ "adjustments": [{"change": string, "rationale": string, "expectedEffect": {"muscle": muscle id, "fromSets": that muscle's current total (use the "lo" value given), "toSets": number}} , ...] (optional changes; expectedEffect may be left out),
+ "confidence": "low" | "medium" | "high",
+ "limitations": [string, ...],
+ "missingInformation": [string, ...]}
+Keep each text short and practical. Never claim the person is overtrained from set counts alone.
+
+Data:
+${JSON.stringify(summary)}`;
+}
 async function requestCoach(summary){
   const send = AI_COACH.transport || (AI_COACH.endpoint ? async body => {
     const res = await fetch(AI_COACH.endpoint, { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify(body) });
@@ -7610,7 +7633,7 @@ function viewAnalysis(){
   const ai = S.sel.analysisAi || null;
   return `<div class="pa">
   <div class="panel spread pa-head"><div><h2>Program analysis</h2><span class="muted small">Planned work, read from the program. Nothing here changes it unless you approve a change.</span></div>
-    <button class="btn ghost" data-back="analysis">Back</button></div>
+    <div class="row tight pa-head-actions"><button type="button" class="btn ghost sm" id="paGoCoach">AI coach</button><button class="btn ghost" data-back="analysis">Back</button></div></div>
   <div class="pa-pickers">
     <label class="field"><span>Program</span><select id="paProgram">${programs.map(x => `<option value="${esc(x.id)}" ${x.id === pid ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select></label>
     <label class="field"><span>Week</span><select id="paWeek"><option value="0">Base (every week)</option>${Array.from({ length:weeks }, (_, i) => i + 1).map(w => `<option value="${w}" ${w === week ? 'selected' : ''}>Week ${w}${weekLabelOf(p, w) ? ' · ' + esc(weekLabelOf(p, w)) : ''}</option>`).join('')}</select></label>
@@ -7658,6 +7681,15 @@ function viewAnalysis(){
       ${f.kind === 'unmapped' ? `<div class="row tight">${[...new Map(f.rows.map(r => [String(r.exId), r])).values()].slice(0, 8).map(r => `<button type="button" class="btn ghost sm" data-editex="${esc(r.exId)}">Assign muscles: ${esc(r.name)}</button>`).join('')}</div>` : ''}</div></li>`).join('')}</ul>` : '<p class="small">No findings: every muscle is within its target and the days are balanced by the current rules.</p>'}
   </section>
 
+  <section class="panel pa-section" aria-labelledby="paAiH"><h3 id="paAiH">AI coach <span class="muted small">optional</span></h3>
+    ${!AI_COACH.endpoint && !AI_COACH.transport ? `<p class="small"><strong>Not set up.</strong> The coach needs a server endpoint that keeps the AI provider's key private (for example a Supabase Edge Function on your project). Once it is set, it explains the findings above. The numbers on this page never come from it.</p>
+      <details class="small pa-peek"><summary>What it would receive</summary><p class="muted">Only the planned numbers and findings below: no client names, no history.</p><pre class="pa-pre">${esc(JSON.stringify(coachSummary(a, findings, settings, 'general'), null, 2))}</pre></details>`
+    : ai && ai.status === 'ok' ? coachReplyHTML(ai.reply, findings)
+    : `${ai && ai.status === 'busy' ? '<p class="small muted">Asking the coach…</p>' : ''}${ai && (ai.status === 'error' || ai.status === 'invalid') ? `<p class="small pa-error" role="alert">The coach's answer could not be used${ai.status === 'invalid' ? ' (it did not match the analysis: ' + esc(ai.errors.slice(0, 2).join('; ')) + ')' : ': ' + esc(ai.message)}. The analysis above is unaffected.</p>` : ''}
+       <label class="field pa-goal"><span>Goal</span><select id="paGoal">${[['general', 'General strength and size'], ['hypertrophy', 'Muscle size'], ['strength', 'Strength'], ['balance', 'Balance and health']].map(([v, l]) => `<option value="${v}" ${(S.sel.analysisGoal || 'general') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+       <button type="button" class="btn primary sm" id="paAskCoach" ${ai && ai.status === 'busy' ? 'disabled' : ''}>${ai && (ai.status === 'error' || ai.status === 'invalid') ? 'Try again' : 'Explain these findings'}</button>`}
+  </section>
+
   ${pvc ? `<section class="panel pa-section" aria-labelledby="paPvcH"><h3 id="paPvcH">Planned and completed <span class="muted small">${esc(client.name)} · week ${week || client.currentWeek || 1}</span></h3>
     <div class="tablewrap pa-table"><table><thead><tr><th>Day</th><th>Planned sets</th><th>Completed sets</th><th>Saved</th></tr></thead><tbody>
       ${pvc.map(r => `<tr><td>${esc(r.day)}</td><td class="num">${rangeText(r.planned)}</td><td class="num">${r.completed == null ? '<span class="muted">Not logged</span>' : r.completed}</td><td class="small muted">${r.date ? esc(r.date) : ''}</td></tr>`).join('')}
@@ -7676,15 +7708,6 @@ function viewAnalysis(){
     </div>
     <div class="row tight"><button type="button" class="btn primary sm" id="paSaveSettings">Save targets</button><button type="button" class="btn ghost sm" id="paResetSettings">Back to the starting targets</button></div>
   </details>
-
-  <section class="panel pa-section" aria-labelledby="paAiH"><h3 id="paAiH">AI coach <span class="muted small">optional</span></h3>
-    ${!AI_COACH.endpoint && !AI_COACH.transport ? `<p class="small"><strong>Not set up.</strong> The coach needs a server endpoint that keeps the AI provider's key private (for example a Supabase Edge Function on your project). Once it is set, it explains the findings above. The numbers on this page never come from it.</p>
-      <details class="small pa-peek"><summary>What it would receive</summary><p class="muted">Only the planned numbers and findings below: no client names, no history.</p><pre class="pa-pre">${esc(JSON.stringify(coachSummary(a, findings, settings, 'general'), null, 2))}</pre></details>`
-    : ai && ai.status === 'ok' ? coachReplyHTML(ai.reply, findings)
-    : `${ai && ai.status === 'busy' ? '<p class="small muted">Asking the coach…</p>' : ''}${ai && (ai.status === 'error' || ai.status === 'invalid') ? `<p class="small pa-error" role="alert">The coach's answer could not be used${ai.status === 'invalid' ? ' (it did not match the analysis: ' + esc(ai.errors.slice(0, 2).join('; ')) + ')' : ': ' + esc(ai.message)}. The analysis above is unaffected.</p>` : ''}
-       <label class="field pa-goal"><span>Goal</span><select id="paGoal">${[['general', 'General strength and size'], ['hypertrophy', 'Muscle size'], ['strength', 'Strength'], ['balance', 'Balance and health']].map(([v, l]) => `<option value="${v}" ${(S.sel.analysisGoal || 'general') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
-       <button type="button" class="btn primary sm" id="paAskCoach" ${ai && ai.status === 'busy' ? 'disabled' : ''}>${ai && (ai.status === 'error' || ai.status === 'invalid') ? 'Try again' : 'Explain these findings'}</button>`}
-  </section>
 
   <details class="panel pa-section"><summary><h3>How this is calculated</h3></summary><ul class="small pa-rules">
     <li>A program week is one pass through every day of the program (the week the app moves a client on after). Calendar weeks need a schedule.</li>
@@ -9619,6 +9642,7 @@ if(event.target.closest('select,textarea,summary')||event.target.closest('button
     const pw = document.getElementById('paWeek'); if (pw) pw.onchange = () => reAnalyse({ analysisWeek:Number(pw.value) || 0 });
     const pc = document.getElementById('paClient'); if (pc) pc.onchange = () => reAnalyse({ analysisClient:pc.value });
     const pg = document.getElementById('paGoal'); if (pg) pg.onchange = () => { S.sel.analysisGoal = pg.value; };
+    const goCoach = document.getElementById('paGoCoach'); if (goCoach) goCoach.onclick = () => { const h = document.getElementById('paAiH'); if (!h) return; h.scrollIntoView({ behavior:'smooth', block:'start' }); const b = document.getElementById('paAskCoach'); if (b) setTimeout(() => b.focus({ preventScroll:true }), 400); };
     m.querySelectorAll('[data-hm]').forEach(el => {
       const pick = () => { S.sel.analysisMuscle = el.dataset.hm; render({ keepScroll:true }); const again = m.querySelector(`.pa-map [data-hm="${el.dataset.hm}"]`); if (again && el.closest('.pa-map')) again.focus(); };
       el.onclick = pick;
