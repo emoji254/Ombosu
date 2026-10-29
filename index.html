@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-BBXBtuOAt+kMgVywS1KGMC1ABjhTfMrE4kzV9gvpEOU=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-V8iY7ZDrRAjFGhkcANjPr1zzrmDOkzltBUPjrmATgcE=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -1629,6 +1629,149 @@ body.in-session #main .panel:has(#saveSess){padding:.2rem 0 0!important;margin-t
 body.in-session #main .panel:has(#saveSess)>.row:first-child{padding:.5rem 0 .6rem}
 body.in-session #main .panel:has(#saveSess)>*{margin-left:.35rem;margin-right:.35rem}
 body.in-session #main .panel:has(#saveSess)>*+*{margin-top:.75rem}
+/* ---- Program analysis (.pa) and the movement dialog's muscles. Scoped to this screen and that dialog. ---- */
+.pa{display:flex;flex-direction:column;gap:1rem}
+.pa>.panel{margin:0}
+.pa-head{align-items:flex-start}
+.pa-head h2{margin:0}
+.pa-head-actions{flex-wrap:wrap;justify-content:flex-end}
+#paAiH{scroll-margin-top:90px}
+.pa-pickers{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.6rem}
+.pa-pickers .field{margin:0}
+.pa-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.6rem}
+.pa-tile{display:flex;flex-direction:column;gap:.15rem;padding:.7rem .85rem;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.pa-tile-label{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
+.pa-tile-value{font-size:1.25rem;font-weight:700;color:var(--text);line-height:1.25}
+.pa-unit{display:block;font-size:.75rem;font-weight:500;color:var(--text-muted)}
+.pa-cal{margin:0;color:var(--text)}
+.pa-section h3{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin:0 0 .7rem}
+.pa-section summary{cursor:pointer;list-style:none}
+.pa-section summary::-webkit-details-marker{display:none}
+.pa-section summary h3{display:inline-flex;margin:0}
+.pa-section summary h3::after{content:'▾';font-size:.8rem;color:var(--text-muted);margin-left:.4rem}
+.pa-section details[open]>summary h3::after,.pa-section[open]>summary h3::after{content:'▴'}
+.pa-section[open]>summary{margin-bottom:.6rem}
+/* map */
+.pa-map-wrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:1rem;align-items:start}
+@media (max-width:640px){.pa-map-wrap{grid-template-columns:1fr}}
+.pa-map{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;max-width:420px;margin:0 auto;width:100%}
+.hm-fig{margin:0;text-align:center}
+.hm-fig svg{width:100%;height:auto;display:block}
+.hm-fig figcaption{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
+.hm-body .hm-fill{fill:var(--line-soft);stroke:var(--line-soft);stroke-width:.6}
+.hm-body .hm-edge{fill:none;stroke:var(--line-strong);stroke-width:1;stroke-linejoin:round}
+.hm-region{cursor:pointer;outline:none}
+.hm-region>*{stroke-width:1.2;stroke-linejoin:round;transition:fill .15s}
+.hm-region>.hm-line{fill:none!important;stroke:rgba(0,0,0,.18)!important;stroke-width:1!important;stroke-dasharray:none!important;pointer-events:none}
+.hm-region:focus-visible>:not(.hm-line){stroke:var(--focus);stroke-width:3}
+.hm-region.hm-on>:not(.hm-line){stroke:var(--text);stroke-width:2.4;stroke-dasharray:none}
+.hm-below>*,.pa-swatch.pa-below{fill:#f3c36f;background:#f3c36f;stroke:#b07a21}
+.hm-within>*,.pa-swatch.pa-within{fill:#8fcf86;background:#8fcf86;stroke:#3f7a45}
+.hm-above>*,.pa-swatch.pa-above{fill:#e58a6c;background:#e58a6c;stroke:#a24a2f}
+.hm-review>*,.pa-swatch.pa-review{fill:#b9a7e6;background:#b9a7e6;stroke:#6b55a8}
+.hm-insufficient>*,.hm-none>*,.pa-swatch.pa-insufficient{fill:var(--surface);background:var(--surface);stroke:var(--text-muted);stroke-dasharray:3 2}
+.pa-legend{display:flex;flex-wrap:wrap;gap:.4rem 1rem;margin:.8rem 0 0;padding:0;list-style:none;font-size:.8rem;color:var(--text)}
+.pa-legend li{display:inline-flex;align-items:center;gap:.4rem}
+.pa-swatch{width:14px;height:14px;border-radius:4px;border:1.5px solid;display:inline-block}
+.pa-swatch.pa-insufficient{border-style:dashed;border-color:var(--text-muted)}
+.pa-detail h4{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin:0 0 .3rem;font-size:1.05rem}
+.pa-detail p{margin:.2rem 0 .5rem}
+.pa-sources{list-style:none;margin:0;padding:0;font-size:.85rem}
+.pa-sources li{display:flex;justify-content:space-between;gap:.6rem;padding:.35rem 0;border-bottom:1px solid var(--line-soft)}
+.pa-sources li:last-child{border-bottom:0}
+/* status labels (text, not only colour) */
+.pa-status{display:inline-block;padding:.08rem .5rem;border-radius:999px;font-size:.7rem;font-weight:700;white-space:nowrap;border:1px solid transparent}
+.pa-status.pa-below{background:#fdf0d6;color:#7a5410;border-color:#efd59c}
+.pa-status.pa-within{background:#e3f3e1;color:#2f6236;border-color:#bfe0bb}
+.pa-status.pa-above{background:#fbe4dc;color:#8a3a20;border-color:#efc2b3}
+.pa-status.pa-review{background:#eee8fa;color:#4f3d8a;border-color:#d5c9f1}
+.pa-status.pa-insufficient,.pa-status.pa-none,.pa-status.pa-info{background:var(--surface);color:var(--text-muted);border-color:var(--line)}
+/* bars */
+.pa-bars,.pa-days{display:flex;flex-direction:column;gap:.15rem}
+.pa-bar-row,.pa-day{display:grid;grid-template-columns:minmax(6.5rem,9rem) minmax(0,1fr) minmax(3.4rem,auto) auto;align-items:center;gap:.6rem;width:100%;padding:.35rem .3rem;border:0;border-radius:8px;background:transparent;color:var(--text);font:inherit;text-align:left;cursor:pointer;min-height:40px}
+.pa-day{grid-template-columns:minmax(6.5rem,9rem) minmax(0,1fr) minmax(3.4rem,auto);cursor:default}
+.pa-bar-row:hover{background:var(--tint)}
+.pa-bar-row.on{background:var(--tint)}
+.pa-bar-row:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
+.pa-bar-name{font-size:.86rem;overflow-wrap:break-word}
+.pa-bar{position:relative;height:12px;border-radius:6px;background:var(--line-soft);overflow:hidden}
+.pa-fill{position:absolute;top:0;bottom:0;left:0}
+.pa-direct{background:var(--accent-mid)}
+.pa-indirect{background:color-mix(in srgb,var(--accent-mid) 40%,var(--surface))}
+.pa-range{background:repeating-linear-gradient(90deg,var(--accent-mid) 0 3px,transparent 3px 6px);opacity:.7}
+.pa-target{position:absolute;top:0;bottom:0;border-left:2px solid var(--text);border-right:2px solid var(--text);background:color-mix(in srgb,var(--text) 6%,transparent);z-index:1}
+.pa-bar-num{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pa-key{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .5rem;margin:.6rem 0 0}
+.pa-k{display:inline-block;width:14px;height:10px;border-radius:3px}
+.pa-k.pa-target-k{border-left:2px solid var(--text);border-right:2px solid var(--text);background:color-mix(in srgb,var(--text) 6%,transparent)}
+@media (max-width:520px){
+  .pa-bar-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name num" "bar bar" "status status";row-gap:.25rem}
+  .pa-bar-row .pa-bar-name{grid-area:name}.pa-bar-row .pa-bar{grid-area:bar}.pa-bar-row .pa-bar-num{grid-area:num}.pa-bar-row .pa-status{grid-area:status;justify-self:start}
+  .pa-day{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name num" "bar bar";row-gap:.25rem}
+  .pa-day .pa-bar-name{grid-area:name}.pa-day .pa-bar{grid-area:bar}.pa-day .pa-bar-num{grid-area:num}
+}
+.pa-table{margin-top:.8rem}
+.pa-table table{min-width:0}
+.pa-table th,.pa-table td{overflow-wrap:normal;word-break:normal;hyphens:manual}
+.pa-table td:first-child{white-space:nowrap}
+.pa-peek>summary{display:inline-flex;align-items:center;gap:.35rem;min-height:40px;color:var(--accent-text);font-weight:600;cursor:pointer}
+.pa-peek>summary::before{content:'▸';font-size:.8rem}
+.pa-peek[open]>summary::before{content:'▾'}
+/* the movement list: one row per movement, name and sets on top, days and muscles under it */
+.pa-moves thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.pa-moves table,.pa-moves tbody{display:block}
+.pa-moves tr{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name sets" "days days" "mus mus";column-gap:.6rem;padding:.55rem .2rem;border-bottom:1px solid var(--line-soft)}
+.pa-moves tr:last-child{border-bottom:0}
+.pa-moves td{display:block;padding:0;border:0}
+.pa-moves td:nth-child(1){grid-area:name;font-weight:600}
+.pa-moves td:nth-child(2){grid-area:days;color:var(--text-muted)}
+.pa-moves td:nth-child(3){grid-area:sets;font-weight:600;white-space:nowrap}
+.pa-moves td:nth-child(3)::after{content:' sets';font-weight:400;color:var(--text-muted);font-size:.8rem}
+.pa-moves td:nth-child(4){grid-area:mus}
+.pa-moves .tablewrap,.pa-moves{border:0;background:transparent}
+/* findings */
+.pa-findings{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.pa-finding{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.4rem .7rem;padding:.7rem 0;border-bottom:1px solid var(--line-soft)}
+.pa-finding:last-child{border-bottom:0}
+.pa-finding p{margin:.15rem 0}
+.pa-finding .row{margin-top:.4rem;flex-wrap:wrap}
+@media (max-width:520px){.pa-finding{grid-template-columns:1fr}.pa-finding>.pa-status{justify-self:start}}
+/* targets */
+.pa-targets{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.3rem 1.2rem;margin:.6rem 0}
+.pa-target-row{display:grid;grid-template-columns:minmax(0,1fr) 4.2rem auto 4.2rem;align-items:center;gap:.4rem;font-size:.88rem}
+.pa-target-row input{min-height:40px;padding:.3rem .4rem;text-align:center}
+.pa-thresholds{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.6rem;margin:.6rem 0}
+.pa-thresholds .field{margin:0}
+.pa-rules{margin:.2rem 0 0;padding-left:1.1rem}
+.pa-rules li{margin:.25rem 0}
+/* AI */
+.pa-pre{max-height:240px;overflow:auto;padding:.6rem;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);font-size:.72rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.pa-error{color:var(--bad-text)}
+.pa-goal{max-width:260px;margin:.4rem 0}
+.pa-ai h4{margin:.8rem 0 .3rem}
+/* proposal dialog */
+.pa-compare{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.pa-compare h4,.pa-dialog h4{margin:.6rem 0 .3rem}
+.pa-compare ul,.pa-effect{list-style:none;margin:0;padding:0}
+.pa-compare li,.pa-effect li{display:flex;justify-content:space-between;gap:.5rem;padding:.3rem 0;border-bottom:1px solid var(--line-soft);font-size:.86rem}
+@media (max-width:480px){.pa-compare{grid-template-columns:1fr}}
+/* movement dialog: muscles */
+.ex-muscles{margin:.6rem 0;border:1px solid var(--line);border-radius:10px;padding:.5rem .7rem}
+.ex-muscles summary{cursor:pointer;font-weight:600;min-height:32px;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.ex-muscles fieldset{border:0;margin:.4rem 0;padding:0}
+.ex-muscles legend{font-size:.8rem;font-weight:600;color:var(--text-muted);margin-bottom:.3rem}
+.ex-mus-grid{display:flex;flex-wrap:wrap;gap:.3rem}
+.ex-mus-chip{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .55rem;border:1px solid var(--line);border-radius:999px;font-size:.8rem;cursor:pointer;min-height:36px}
+.ex-mus-chip input{width:auto;margin:0}
+.ex-mus-chip:has(input:checked){background:var(--tint);border-color:var(--accent-mid)}
+.ex-muscles fieldset:disabled{opacity:.5}
+.ex-mus-none{display:flex;align-items:center;gap:.5rem;min-height:40px;cursor:pointer}
+.ex-mus-none input{width:auto;margin:0;flex:none}
+.ex-mus-shares{display:flex;flex-direction:column;gap:.3rem;margin-top:.5rem}
+.ex-mus-shares-hint{margin:0}
+.ex-mus-w{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,13rem);align-items:center;gap:.6rem;font-size:.86rem}
+.ex-mus-w select{min-height:40px;padding:.3rem .5rem}
+.ex-mus-w[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -2103,7 +2246,8 @@ const SEED_EXERCISES = [
  ['Bicep curl','Arms','Dumbbell'],['Triceps pushdown','Arms','Cable'],['Hammer curl','Arms','Dumbbell'],
  ['Lateral raise','Shoulders','Dumbbell'],['Rear delt fly','Shoulders','Dumbbell'],
  ['Assault bike','Conditioning','Machine'],['Rower','Conditioning','Machine'],['Sled push','Conditioning','Sled'],
- ['Box jump','Power','Bodyweight'],['Medicine ball slam','Power','Med ball'],['Jump rope','Conditioning','Rope']
+ ['Box jump','Power','Bodyweight'],['Medicine ball slam','Power','Med ball'],['Jump rope','Conditioning','Rope'],
+ ['Standing calf raise','Legs','Machine'],['Seated calf raise','Legs','Machine']   // (v5)
 ].map(([name,category,equipment]) => ({ id: 'seed-' + seedSlug(name), name, category, equipment }))   // same id on every device
 /* Equipment variants of the starter exercises (schema v3 adds them to existing libraries). Their ids include the
    equipment, so they too are the same on every device. */
@@ -2804,8 +2948,10 @@ const numVal = id => { const v = val(id); return v === '' ? null : Number(v); };
    v3: the starter equipment variants are added to existing libraries (addStarterVariants).
    v4: bar movements saved before the bar was recorded (plates only) get the bar added and recorded
        (backfillBarWeights; also run after a sync pull and an import).
+   v5: starter movements added later (the calf raises) come to existing libraries (addStarterMovements).
 ----------------------------------------------------------------*/
-const SCHEMA_VERSION = 4;
+const SCHEMA_VERSION = 5;
+const STARTERS_V5 = ['seed-standing-calf-raise', 'seed-seated-calf-raise'];
 const LEGACY_LOG_LISTS = ['exercises', 'workoutEntries', 'movements', 'lifts'];
 const SET_ALIASES = ['kg', 'load', 'rep', 'actualWeight', 'actualReps', 'rpe'];
 function normalizeSetV1(s, i){
@@ -2892,6 +3038,7 @@ async function migrate(fromVersion, opts = {}){
   }
   if (fromVersion < 2){ try { n += await migrateSeedIds(); } catch(e){ console.warn('Starter-exercise ids were not unified', e); } }
   if (fromVersion < 3){ try { n += await addStarterVariants(); } catch(e){ console.warn('Starter equipment variants were not added', e); } }
+  if (fromVersion < 5){ try { n += await addStarterMovements(STARTERS_V5); } catch(e){ console.warn('New starter movements were not added', e); } }
   // (every time, not only from v3: an imported backup can bring plates-only sessions; entries with a bar are skipped)
   try { n += await backfillBarWeights(); } catch(e){ console.warn('The bar was not added to older sessions', e); }
   await Store.putMeta('schemaVersion', { version:SCHEMA_VERSION, at:new Date().toISOString() });
@@ -4585,6 +4732,14 @@ async function relinkExerciseIds(map){
      with it (its category is kept). The starter copy isn't added.
    - Otherwise the starter variant is added. Every other exercise is left as it is.
    Assistants get the library from their coach instead. */
+/* Schema v5: starter movements added to the app later come to an existing library, unless it already has the same
+   movement (by id, or the same name and equipment). Nothing else changes. Assistants get the library from their coach. */
+async function addStarterMovements(ids){
+  try { if (localStorage.getItem(LAST_ROLE_KEY) === 'assistant') return 0; } catch {}
+  const add = SEED_EXERCISES.filter(s => ids.includes(s.id) && !S.exercises.some(e => e.id === s.id) && !findExerciseVariant(S.exercises, s.name, s.equipment)).map(s => ({ ...s }));
+  if (add.length && !(await saveExerciseList([...S.exercises, ...add]))) throw new Error('Could not save the exercise library');
+  return add.length;
+}
 async function addStarterVariants(){
   try { if (localStorage.getItem(LAST_ROLE_KEY) === 'assistant') return 0; } catch {}
   let list = S.exercises.slice(), n = 0;
@@ -4617,7 +4772,8 @@ async function mergeDuplicateExercises(){
     list.forEach(e => { if (e !== keep) map[e.id] = keep.id; });
   }
   if (!Object.keys(map).length) return 0;
-  if (!(await saveExerciseList(S.exercises.filter(e => !map[e.id])))) return 0;
+  const musclesOf = id => (S.exercises.find(e => map[e.id] === id && e.muscles) || {}).muscles;   // (the kept one gets the dropped one's muscles if it has none)
+  if (!(await saveExerciseList(S.exercises.filter(e => !map[e.id]).map(e => !e.muscles && musclesOf(e.id) ? { ...e, muscles:musclesOf(e.id) } : e)))) return 0;
   await relinkExerciseIds(map);
   return Object.keys(map).length;
 }
@@ -4678,6 +4834,357 @@ function programWeekBarHTML(p, wk){
       <label class="row tight small" style="gap:.4rem;align-self:end"><input type="checkbox" id="wk_deload" ${plan.deload ? 'checked' : ''} style="width:auto"> Deload week (no automatic load increases)</label></div>
       <div class="row tight"><button type="button" class="btn ghost sm" id="wkReset">Reset this week to the base</button>${others ? `<select id="wkCopyFrom" aria-label="Copy changes from another week"><option value="">Copy changes from…</option>${others}</select><button type="button" class="btn ghost sm" id="wkCopy">Copy</button>` : ''}</div>` : ''}
   </div>`;
+}
+
+/* ---------------------------------------------------------------
+   Program analysis: the calculations (read-only). Pure functions over the existing data: a program's days and rows
+   (a week's overrides through weekItem), the movement library (muscles from exercise.muscles, else the starter map
+   below), and, for a chosen client, their schedule and saved sessions. Nothing here writes.
+   Rules (shown on the screen as well):
+   - A "program week" is one pass through every day of the program, the same week that maybeAdvanceWeek counts.
+   - Planned sets are working sets (program rows hold no warm-ups; those are added in the logger). The Sets box is
+     read as typed: "3" is 3, "3-4" is a range and both ends are kept, blank is "not set", anything else is "not
+     readable". Rows that aren't set or readable add nothing and are listed as findings; nothing is guessed.
+   - Each set counts in full for the movement's primary muscles (direct). Its secondary muscles get set × weight
+     (indirect): the movement's own weight for that muscle, else the coach's indirect credit (default 0.5). These are
+     estimates for planning, not measurements.
+   - Reps, RPE and load are shown as written; RPE ranges are read only for the target-RPE summary. Sets are never
+     turned into tonnage or intensity.
+   - Completed work comes only from saved sessions (ticked working sets, warm-ups left out), never from the program
+     or the schedule. Calendar-week figures need a schedule and are estimates (the day rotation follows history).
+----------------------------------------------------------------*/
+const MUSCLES = [
+  ['chest', 'Chest'], ['frontDelts', 'Front shoulders'], ['sideDelts', 'Side shoulders'], ['rearDelts', 'Rear shoulders'],
+  ['back', 'Back (lats, upper back)'], ['lowerBack', 'Lower back'], ['biceps', 'Biceps'], ['triceps', 'Triceps'], ['forearms', 'Forearms'],
+  ['core', 'Core / abs'], ['quads', 'Quadriceps'], ['hamstrings', 'Hamstrings'], ['glutes', 'Glutes'], ['calves', 'Calves']
+];
+const MUSCLE_IDS = MUSCLES.map(m => m[0]);
+const muscleName = id => (MUSCLES.find(m => m[0] === id) || [id, String(id)])[1];
+/* Muscles for the starter movements, by name (equipment variants share their movement's muscles). p: primary,
+   s: secondary, k: 'c' compound / 'i' isolation, none: a conditioning movement that adds no set volume. */
+const STARTER_MUSCLES = {
+  'back squat':{ p:['quads','glutes'], s:['lowerBack','core'], k:'c' }, 'front squat':{ p:['quads'], s:['glutes','core'], k:'c' },
+  'goblet squat':{ p:['quads'], s:['glutes','core'], k:'c' }, 'split squat':{ p:['quads','glutes'], s:['hamstrings'], k:'c' },
+  'walking lunge':{ p:['quads','glutes'], s:['hamstrings'], k:'c' }, 'leg press':{ p:['quads'], s:['glutes'], k:'c' },
+  'romanian deadlift':{ p:['hamstrings','glutes'], s:['lowerBack','forearms'], k:'c' },
+  'conventional deadlift':{ p:['hamstrings','glutes','lowerBack'], s:['quads','back','forearms'], k:'c' },
+  'trap bar deadlift':{ p:['quads','glutes'], s:['hamstrings','lowerBack','forearms'], k:'c' },
+  'hip thrust':{ p:['glutes'], s:['hamstrings'], k:'c' }, 'back extension':{ p:['lowerBack'], s:['glutes','hamstrings'], k:'i' },
+  'kettlebell swing':{ p:['glutes','hamstrings'], s:['lowerBack','core'], k:'c' },
+  'bench press':{ p:['chest'], s:['triceps','frontDelts'], k:'c' }, 'incline dumbbell press':{ p:['chest','frontDelts'], s:['triceps'], k:'c' },
+  'overhead press':{ p:['frontDelts'], s:['triceps','sideDelts','core'], k:'c' }, 'push-up':{ p:['chest'], s:['triceps','frontDelts','core'], k:'c' },
+  'dip':{ p:['chest','triceps'], s:['frontDelts'], k:'c' }, 'cable fly':{ p:['chest'], s:['frontDelts'], k:'i' },
+  'pull-up':{ p:['back'], s:['biceps','rearDelts','forearms'], k:'c' }, 'lat pulldown':{ p:['back'], s:['biceps','rearDelts'], k:'c' },
+  'barbell row':{ p:['back'], s:['rearDelts','biceps','lowerBack'], k:'c' }, 'single-arm row':{ p:['back'], s:['rearDelts','biceps'], k:'c' },
+  'seated cable row':{ p:['back'], s:['rearDelts','biceps'], k:'c' }, 'face pull':{ p:['rearDelts'], s:['back'], k:'i' },
+  'plank':{ p:['core'], s:[], k:'i' }, 'dead bug':{ p:['core'], s:[], k:'i' }, 'pallof press':{ p:['core'], s:[], k:'i' },
+  'hanging knee raise':{ p:['core'], s:['forearms'], k:'i' }, 'farmer carry':{ p:['forearms','core'], s:['back'], k:'c' },
+  'bicep curl':{ p:['biceps'], s:['forearms'], k:'i' }, 'triceps pushdown':{ p:['triceps'], s:[], k:'i' },
+  'hammer curl':{ p:['biceps','forearms'], s:[], k:'i' }, 'lateral raise':{ p:['sideDelts'], s:[], k:'i' },
+  'rear delt fly':{ p:['rearDelts'], s:['back'], k:'i' },
+  'box jump':{ p:['quads','glutes'], s:['calves'], k:'c' }, 'medicine ball slam':{ p:['core'], s:['back','frontDelts'], k:'c' },
+  'standing calf raise':{ p:['calves'], s:[], k:'i' }, 'seated calf raise':{ p:['calves'], s:[], k:'i' },
+  'assault bike':{ none:true }, 'rower':{ none:true }, 'sled push':{ none:true }, 'jump rope':{ none:true }
+};
+/* A movement's muscles: { primary:[], secondary:[], weights:{}, kind, source:'own'|'starter' }, { none:true } for a
+   conditioning movement, or null when it isn't mapped. exercise.muscles (set in the movement dialog) wins; the
+   starter map applies only to the starter movements (ids starting "seed-") that the coach hasn't mapped. */
+function exerciseMuscles(ex){
+  if (!ex) return null;
+  const own = ex.muscles;
+  if (own && typeof own === 'object'){
+    if (own.none) return { none:true, source:'own' };
+    const primary = (Array.isArray(own.primary) ? own.primary : []).filter(m => MUSCLE_IDS.includes(m));
+    const secondary = (Array.isArray(own.secondary) ? own.secondary : []).filter(m => MUSCLE_IDS.includes(m) && !primary.includes(m));
+    if (!primary.length && !secondary.length) return null;
+    const weights = {};
+    Object.entries(own.weights || {}).forEach(([m, w]) => { const n = Number(w); if (secondary.includes(m) && n >= 0 && n <= 1) weights[m] = n; });
+    return { primary, secondary, weights, kind:own.kind === 'i' || own.kind === 'c' ? own.kind : (primary.length + secondary.length > 2 ? 'c' : 'i'), source:'own' };
+  }
+  if (!String(ex.id).startsWith('seed-')) return null;
+  const s = STARTER_MUSCLES[exNorm(ex.name)];
+  if (!s) return null;
+  return s.none ? { none:true, source:'starter' } : { primary:s.p.slice(), secondary:s.s.slice(), weights:{}, kind:s.k, source:'starter' };
+}
+/* A whole number or a range as typed ("3", "3-4", "3 to 4"). Returns { lo, hi } or { missing } / { bad } (with raw). */
+function parseRangeText(v, max, decimals){
+  const t = String(v == null ? '' : v).trim().toLowerCase().replace(/,/g, '.');
+  if (!t) return { lo:0, hi:0, missing:true, raw:'' };
+  const num = decimals ? '(\\d+(?:\\.\\d+)?)' : '(\\d+)';
+  let m = t.match(new RegExp('^' + num + '$'));
+  if (m){ const n = Number(m[1]); return n >= 0 && n <= max ? { lo:n, hi:n, raw:t } : { lo:0, hi:0, bad:true, raw:t }; }
+  m = t.match(new RegExp('^' + num + '\\s*(?:-|–|to)\\s*' + num + '$'));
+  if (m){ const a = Number(m[1]), b = Number(m[2]); if (a <= b && b <= max) return { lo:a, hi:b, raw:t }; }
+  return { lo:0, hi:0, bad:true, raw:t };
+}
+const parsePlannedSets = v => parseRangeText(v, 50, false);
+const parseTargetRpe = v => parseRangeText(v, 10, true);
+const rangeAdd = (a, b, k = 1) => ({ lo:round2(a.lo + b.lo * k), hi:round2(a.hi + b.hi * k) });
+const rangeText = r => r.lo === r.hi ? pcFmt(r.lo) : pcFmt(r.lo) + '–' + pcFmt(r.hi);
+
+const DEFAULT_ANALYSIS_SETTINGS = {
+  indirectCredit:0.5,   // a secondary muscle's share of a set
+  // Sets per program week. Starting points for planning (common hypertrophy guidance is about 10–20 hard sets per
+  // muscle per week); the coach sets their own.
+  targets:{ chest:{min:10,max:20}, back:{min:10,max:20}, quads:{min:10,max:20}, hamstrings:{min:8,max:16}, glutes:{min:8,max:16},
+    frontDelts:{min:4,max:12}, sideDelts:{min:6,max:16}, rearDelts:{min:6,max:16}, biceps:{min:6,max:14}, triceps:{min:6,max:14},
+    forearms:{min:0,max:12}, core:{min:4,max:12}, lowerBack:{min:0,max:10}, calves:{min:0,max:12} },
+  dayRatio:2,        // the biggest day may have up to this many times the sets of the smallest
+  sessionMax:10,     // direct sets for one muscle in one session before it is flagged
+  pairRatio:1.5,     // chest/back, quads/hamstrings, front/rear shoulders: the larger side may be this many times the smaller
+  recoveryMin:6      // direct sets for one muscle on two days in a row (scheduled back-to-back) before it is flagged
+};
+/* Stored settings over the defaults, with every value checked (a bad value falls back to the default). */
+function analysisSettingsFrom(saved){
+  const d = DEFAULT_ANALYSIS_SETTINGS, s = saved && typeof saved === 'object' ? saved : {};
+  const num = (v, lo, hi, def) => { const n = Number(v); return v !== '' && v != null && Number.isFinite(n) && n >= lo && n <= hi ? n : def; };
+  const targets = {};
+  MUSCLE_IDS.forEach(m => {
+    const t = (s.targets && s.targets[m]) || {}, dt = d.targets[m];
+    const min = num(t.min, 0, 60, dt.min), max = num(t.max, 0, 60, dt.max);
+    targets[m] = min <= max ? { min, max } : { min:dt.min, max:dt.max };
+  });
+  return { indirectCredit:num(s.indirectCredit, 0, 1, d.indirectCredit), targets, dayRatio:num(s.dayRatio, 1, 10, d.dayRatio),
+    sessionMax:num(s.sessionMax, 1, 40, d.sessionMax), pairRatio:num(s.pairRatio, 1, 10, d.pairRatio), recoveryMin:num(s.recoveryMin, 1, 40, d.recoveryMin) };
+}
+
+/* The planned week of a program: per day, per row, per movement and per muscle. week 0 = the base prescription. */
+function analyzeProgram(p, week, settings){
+  const credit = settings.indirectCredit, zero = () => ({ lo:0, hi:0 });
+  const out = { week:week || 0, days:[], muscles:{}, exercises:[], total:zero(), rows:0, countedRows:0,
+    issues:{ unmapped:[], missingSets:[], badSets:[], missingExercise:[], archived:[], noVolume:[] }, rpe:[], rpeMissing:0 };
+  MUSCLE_IDS.forEach(m => { out.muscles[m] = { direct:zero(), indirect:zero(), total:zero(), sources:[] }; });
+  const byEx = new Map();
+  ((p && p.days) || []).forEach((d, di) => {
+    const day = { index:di, name:String(d.name || 'Day ' + (di + 1)), total:zero(), muscles:{}, rows:[] };
+    MUSCLE_IDS.forEach(m => { day.muscles[m] = { direct:zero(), indirect:zero() }; });
+    (d.items || []).forEach((base, ii) => {
+      const it = week ? weekItem(base, week) : base;
+      const ex = S.exercises.find(e => String(e.id) === String(it.exId));
+      const sets = parsePlannedSets(it.sets), map = exerciseMuscles(ex), rpe = parseTargetRpe(it.rpe);
+      const row = { di, ii, exId:it.exId, name:ex ? exLabelOf(ex) : 'Missing exercise', dayName:day.name, sets, reps:String(it.reps ?? '').trim(),
+        rpe, load:String(it.load ?? '').trim(), rest:String(it.rest ?? '').trim(), map, archived:!!(ex && ex.archived) };
+      out.rows++; day.rows.push(row);
+      const where = { di, ii, name:row.name, dayName:day.name, raw:sets.raw };
+      if (!ex) out.issues.missingExercise.push(where);
+      else if (ex.archived) out.issues.archived.push(where);
+      if (sets.missing) out.issues.missingSets.push(where);
+      else if (sets.bad) out.issues.badSets.push(where);
+      if (ex && !map) out.issues.unmapped.push({ ...where, exId:ex.id });
+      if (map && map.none) out.issues.noVolume.push(where);
+      if (rpe.missing) out.rpeMissing++; else if (!rpe.bad) out.rpe.push(rpe);
+      if (sets.missing || sets.bad) return;
+      day.total = rangeAdd(day.total, sets); out.total = rangeAdd(out.total, sets);
+      const key = String(it.exId);
+      if (!byEx.has(key)) byEx.set(key, { exId:it.exId, name:row.name, sets:zero(), days:new Set(), map });
+      const e = byEx.get(key); e.sets = rangeAdd(e.sets, sets); e.days.add(day.name);
+      if (!map || map.none) return;
+      out.countedRows++;
+      map.primary.forEach(m => {
+        out.muscles[m].direct = rangeAdd(out.muscles[m].direct, sets); day.muscles[m].direct = rangeAdd(day.muscles[m].direct, sets);
+        out.muscles[m].sources.push({ di, ii, name:row.name, dayName:day.name, kind:'direct', sets, share:1 });
+      });
+      map.secondary.forEach(m => {
+        const w = map.weights[m] != null ? map.weights[m] : credit;
+        out.muscles[m].indirect = rangeAdd(out.muscles[m].indirect, sets, w); day.muscles[m].indirect = rangeAdd(day.muscles[m].indirect, sets, w);
+        out.muscles[m].sources.push({ di, ii, name:row.name, dayName:day.name, kind:'indirect', sets, share:w });
+      });
+    });
+    out.days.push(day);
+  });
+  MUSCLE_IDS.forEach(m => { const x = out.muscles[m]; x.total = rangeAdd(x.direct, x.indirect); });
+  out.exercises = [...byEx.values()].map(e => ({ ...e, days:[...e.days] })).sort((a, b) => b.sets.hi - a.sets.hi || a.name.localeCompare(b.name));
+  out.pending = out.issues.unmapped.length + out.issues.missingSets.length + out.issues.badSets.length + out.issues.missingExercise.length;
+  return out;
+}
+/* One muscle against its target: below / within / above / review (a range or uncounted rows leave it open) / none. */
+function muscleStatus(a, m, settings){
+  const t = settings.targets[m], tot = a.muscles[m].total;
+  if (!t) return 'none';
+  if (!a.countedRows && !tot.hi) return 'insufficient';
+  // Rows of this muscle whose Sets box is blank or unreadable could still add to it; with no counted sets at all and
+  // movements that have no muscles yet, there is too little to say.
+  const open = a.days.some(d => d.rows.some(r => (r.sets.missing || r.sets.bad) && r.map && !r.map.none && (r.map.primary.includes(m) || r.map.secondary.includes(m))));
+  if (tot.hi < t.min) return open ? 'review' : !tot.hi && a.issues.unmapped.length ? 'insufficient' : 'below';
+  if (tot.lo > t.max) return 'above';
+  if (tot.lo >= t.min && tot.hi <= t.max) return 'within';
+  return 'review';
+}
+const STATUS_LABEL = { below:'Below target', within:'Within target', above:'Above target', review:'Needs review', insufficient:'Insufficient data', none:'No target' };
+
+/* A client's planned sessions per calendar week, from their pairing's and their own recurring schedule (every 2 weeks
+   counts as half). null when nothing recurs. days: the weekdays (0 = Sunday) of the weekly rules. */
+function clientWeeklySchedule(cid){
+  const c = S.clients[cid]; if (!c) return null;
+  const rules = [], g = c.groupId && S.groups[c.groupId];
+  if (g && (g.dow || []).length) rules.push({ ...groupRule(g), from:'pairing' });
+  if ((c.recurDow || []).length) rules.push({ ...soloRule(c), from:'own' });
+  if (!rules.length) return null;
+  const today = todayISO(), live = rules.filter(r => !r.end || r.end >= today);
+  if (!live.length) return { perWeek:0, days:[], ended:true };
+  const perWeek = live.reduce((n, r) => n + r.dow.length / (Number(r.every) > 1 ? Number(r.every) : 1), 0);
+  const days = [...new Set(live.filter(r => !(Number(r.every) > 1)).flatMap(r => r.dow))].sort();
+  return { perWeek:round2(perWeek), days, ended:false };
+}
+/* Planned (this program week) next to completed (saved sessions of that week): per program day, the latest saved
+   session whose day name matches. Completed = ticked working sets (warm-ups left out). */
+function plannedVsCompleted(p, pid, a, cid, week){
+  const norm = v => String(v || '').trim().toLocaleLowerCase();
+  const logs = clientLogs(cid).filter(l => l.type !== 'conditioning' && l.programId === pid && (l.week || 1) === week);
+  return a.days.map(d => {
+    const log = logs.find(l => norm(l.dayLabel) === norm(d.name));   // (newest first)
+    let done = 0;
+    if (log) workoutLogEntries(log).forEach(e => loggedExerciseSets(e).forEach(s => { if (!isWarmupSet(s) && s.done) done++; }));
+    return { day:d.name, planned:d.total, completed:log ? done : null, date:log ? log.date : null };
+  });
+}
+
+/* Findings, each with the rule and the numbers behind it. level: below / above / review / insufficient / info. */
+function analysisFindings(a, settings, ctx = {}){
+  const out = [], add = f => out.push({ id:'f' + (out.length + 1), ...f });
+  const t = settings.targets;
+  MUSCLE_IDS.forEach(m => {
+    const st = muscleStatus(a, m, settings), x = a.muscles[m], tg = t[m];
+    if (st === 'below' || st === 'above' || st === 'review' || (st === 'insufficient' && tg.min > 0)){
+      const basis = `${rangeText(x.total)} sets a program week (${rangeText(x.direct)} direct + ${rangeText(x.indirect)} indirect at ${pcFmt(settings.indirectCredit)} a set) against a target of ${tg.min}–${tg.max}.`;
+      const why = st === 'review' ? (x.total.hi < tg.min ? ' A row for this muscle has no readable Sets value yet (see below), so this may change.' : ' A sets range in the program spans the target edge.')
+        : a.issues.unmapped.length && st === 'below' ? ' Movements without muscles are not counted (see below).' : '';
+      add({ level:st, muscle:m, title:`${muscleName(m)}: ${STATUS_LABEL[st].toLowerCase()}`, detail:basis + why, basis:'Weekly set target (Targets and settings).' });
+    }
+  });
+  const days = a.days.filter(d => d.rows.length);
+  if (days.length >= 2){
+    const empty = days.filter(d => !d.total.hi);
+    empty.forEach(d => add({ level:'review', title:`${d.name} has no counted sets`, detail:'Its rows have no readable Sets value.', basis:'Distribution across days.' }));
+    const counted = days.filter(d => d.total.lo > 0);
+    if (counted.length >= 2){
+      const big = counted.reduce((x, d) => d.total.lo > x.total.lo ? d : x), small = counted.reduce((x, d) => d.total.lo < x.total.lo ? d : x), ratio = big.total.lo / small.total.lo;
+      if (ratio > settings.dayRatio) add({ level:'review', title:'Uneven days', detail:`${big.name} has ${rangeText(big.total)} sets and ${small.name} ${rangeText(small.total)} (${pcFmt(round2(ratio))} times as many; the limit is ${pcFmt(settings.dayRatio)}).`, basis:'Day balance ratio (Targets and settings).' });
+    }
+  }
+  a.days.forEach(d => MUSCLE_IDS.forEach(m => {
+    const n = d.muscles[m].direct.lo;
+    if (n > settings.sessionMax) add({ level:'review', muscle:m, title:`${muscleName(m)}: a lot in one session`, detail:`${d.name} has ${rangeText(d.muscles[m].direct)} direct sets for ${muscleName(m).toLowerCase()} (more than ${settings.sessionMax}). Spreading them over more days is one option.`, basis:'Sets for one muscle in one session (Targets and settings).' });
+  }));
+  [['chest', 'back'], ['quads', 'hamstrings'], ['frontDelts', 'rearDelts']].forEach(([x, y]) => {
+    const vx = a.muscles[x].total.lo, vy = a.muscles[y].total.lo;
+    if (!vx && !vy) return;
+    const hi = vx >= vy ? x : y, lo = hi === x ? y : x, vh = Math.max(vx, vy), vl = Math.min(vx, vy);
+    if (!vl ? vh >= 4 : vh / vl > settings.pairRatio) add({ level:'review', muscle:lo, title:`${muscleName(hi)} and ${muscleName(lo).toLowerCase()} differ`, detail:`${muscleName(hi)} ${pcFmt(vh)} sets, ${muscleName(lo).toLowerCase()} ${pcFmt(vl)}${vl ? ` (${pcFmt(round2(vh / vl))} times; the limit is ${pcFmt(settings.pairRatio)})` : ''}.`, basis:'Balance between opposing muscle groups (Targets and settings).' });
+  });
+  const list = rows => rows.slice(0, 6).map(r => `${r.name} (${r.dayName})`).join(', ') + (rows.length > 6 ? ` and ${rows.length - 6} more` : '');
+  if (a.issues.unmapped.length) add({ level:'insufficient', kind:'unmapped', title:`${a.issues.unmapped.length} movement row${a.issues.unmapped.length === 1 ? '' : 's'} without muscles`, detail:`Not counted for any muscle: ${list(a.issues.unmapped)}. Assign muscles to the movement to count them.`, basis:'Muscle volume needs each movement\'s muscles.', rows:a.issues.unmapped });
+  if (a.issues.missingSets.length) add({ level:'insufficient', title:`Sets not set on ${a.issues.missingSets.length} row${a.issues.missingSets.length === 1 ? '' : 's'}`, detail:`Counted as nothing (the logger would start 3 sets): ${list(a.issues.missingSets)}.`, basis:'Planned sets come from the Sets box.' });
+  if (a.issues.badSets.length) add({ level:'insufficient', title:`Sets not readable on ${a.issues.badSets.length} row${a.issues.badSets.length === 1 ? '' : 's'}`, detail:`Use a number or a range like 3-4: ${a.issues.badSets.slice(0, 6).map(r => `${r.name} "${r.raw}"`).join(', ')}.`, basis:'Planned sets come from the Sets box.' });
+  if (a.issues.missingExercise.length) add({ level:'insufficient', title:`${a.issues.missingExercise.length} row${a.issues.missingExercise.length === 1 ? '' : 's'} without a movement`, detail:'The movement is no longer in the library: ' + list(a.issues.missingExercise) + '.', basis:'Each row needs a movement.' });
+  if (a.issues.archived.length) add({ level:'info', title:'Archived movements in the program', detail:list(a.issues.archived) + '. They are still counted.', basis:'Archived movements stay in programs.' });
+  if (a.issues.noVolume.length) add({ level:'info', title:'Conditioning movements not counted', detail:list(a.issues.noVolume) + ' add no muscle sets.', basis:'Set volume is for strength movements.' });
+  if (ctx.schedule && ctx.schedule.days && ctx.schedule.days.length >= 2 && a.days.length >= 2){
+    const sd = ctx.schedule.days, backToBack = sd.some(d => sd.includes((d + 1) % 7));
+    if (backToBack){
+      const pairs = [];
+      a.days.forEach((d, i) => { const n = a.days[(i + 1) % a.days.length]; if (n === d) return;
+        MUSCLE_IDS.forEach(m => { if (d.muscles[m].direct.lo >= settings.recoveryMin && n.muscles[m].direct.lo >= settings.recoveryMin) pairs.push(`${muscleName(m)} (${d.name} ${rangeText(d.muscles[m].direct)}, ${n.name} ${rangeText(n.muscles[m].direct)})`); }); });
+      if (pairs.length) add({ level:'review', title:'Same muscles on days that can fall back to back', detail:`${ctx.clientName} is scheduled on consecutive weekdays (${sd.map(d => DOW[d]).join(', ')}), and these muscles have ${settings.recoveryMin}+ direct sets on two days in a row of the rotation: ${[...new Set(pairs)].join('; ')}. Which program day lands on which weekday follows their history, so this is a possibility to check, not a certainty.`, basis:'Recovery between consecutive days (Targets and settings), only with a schedule.' });
+    }
+  }
+  return out;
+}
+
+/* A proposed change for one muscle below or above target: one set more (or fewer) on its rows where it is primary
+   and the Sets box is a single number, until the target is reached (at most 2 a row, never under 1 set). Returns
+   { changes:[{ di, ii, from, to, name, dayName }], before, after } or null when no simple change exists. */
+function proposeVolumeChange(p, week, settings, muscle){
+  const a = analyzeProgram(p, week, settings), tg = settings.targets[muscle], tot = a.muscles[muscle].total;
+  const rows = a.days.flatMap(d => d.rows).filter(r => r.map && !r.map.none && r.map.primary.includes(muscle) && !r.sets.missing && !r.sets.bad && r.sets.lo === r.sets.hi);
+  if (!rows.length || !tg) return null;
+  const up = tot.hi < tg.min, down = tot.lo > tg.max; if (!up && !down) return null;
+  let need = up ? tg.min - tot.hi : tot.lo - tg.max;
+  const changes = new Map(), order = up ? rows.slice().sort((x, y) => x.sets.lo - y.sets.lo) : rows.slice().sort((x, y) => y.sets.lo - x.sets.lo);
+  for (let round = 0; round < 2 && need > 0; round++) order.forEach(r => {
+    if (need <= 0) return;
+    const k = r.di + ':' + r.ii, cur = changes.has(k) ? changes.get(k).to : r.sets.lo, to = cur + (up ? 1 : -1);
+    if (to < 1) return;
+    changes.set(k, { di:r.di, ii:r.ii, from:r.sets.lo, to, name:r.name, dayName:r.dayName }); need--;
+  });
+  if (!changes.size) return null;
+  const list = [...changes.values()], copy = JSON.parse(JSON.stringify(p));
+  applyProgramSetChanges(copy, week, list);
+  return { muscle, changes:list, before:a, after:analyzeProgram(copy, week, settings) };
+}
+/* Writes proposed set counts into a program (the base rows, or that week's changes), the way the program editor stores
+   them: as text, and in a week only what differs from the base. */
+function applyProgramSetChanges(p, week, changes){
+  changes.forEach(c => {
+    const item = p.days[c.di] && p.days[c.di].items[c.ii]; if (!item) return;
+    if (!week){ item.sets = String(c.to); return; }
+    if (String(c.to) === String(item.sets ?? '')){ if (item.weeks && item.weeks[week]){ delete item.weeks[week].sets; if (!Object.keys(item.weeks[week]).length) delete item.weeks[week]; if (!Object.keys(item.weeks).length) delete item.weeks; } return; }
+    item.weeks = item.weeks || {}; (item.weeks[week] = item.weeks[week] || {}).sets = String(c.to);
+  });
+  return p;
+}
+
+/* ---- AI coach (optional). The analysis above is the source of truth; the coach only explains it. A server endpoint
+   that holds the provider key (for example a Supabase Edge Function, which the page's connect-src already allows)
+   must be set in AI_COACH.endpoint; until then the screen says it isn't set up. Nothing personal is sent: no client
+   names, no history, only the program's planned numbers and the findings. ---- */
+const AI_COACH = { endpoint:'', transport:null };
+function coachSummary(a, findings, settings, goal){
+  return { goal:String(goal || 'general'), programWeekDays:a.days.length, plannedWorkingSets:a.total,
+    days:a.days.map(d => ({ name:d.name, sets:d.total })),
+    muscles:MUSCLE_IDS.map(m => ({ id:m, direct:a.muscles[m].direct, indirect:a.muscles[m].indirect, total:a.muscles[m].total, target:settings.targets[m], status:muscleStatus(a, m, settings) })),
+    findings:findings.map(f => ({ id:f.id, level:f.level, muscle:f.muscle || null, title:f.title, detail:f.detail })),
+    assumptions:['A program week is one pass through every day.', `Secondary muscles get ${settings.indirectCredit} of a set.`, 'Warm-ups are not in the program.'] };
+}
+/* The reply must have this shape, cite only findings and muscles that exist, and quote current totals correctly. */
+function validateCoachReply(r, summary){
+  const errors = [], str = (v, max) => typeof v === 'string' && v.trim() && v.length <= max, arr = v => Array.isArray(v);
+  if (!r || typeof r !== 'object') return { ok:false, errors:['The reply is not an object'] };
+  if (!str(r.overall, 1500)) errors.push('overall: missing or too long');
+  if (!arr(r.strengths) || r.strengths.length > 10 || !r.strengths.every(s => str(s, 400))) errors.push('strengths: must be a list of short texts');
+  const ids = new Set(summary.findings.map(f => f.id)), mus = new Map(summary.muscles.map(m => [m.id, m]));
+  if (!arr(r.findings) || !r.findings.every(f => f && ids.has(f.findingId) && str(f.explanation, 800))) errors.push('findings: each needs a findingId from the analysis and an explanation');
+  if (!arr(r.adjustments) || !r.adjustments.every(x => x && str(x.change, 400) && str(x.rationale, 600) && (!x.expectedEffect || (mus.has(x.expectedEffect.muscle)
+      && Number(x.expectedEffect.fromSets) >= mus.get(x.expectedEffect.muscle).total.lo - 0.01 && Number(x.expectedEffect.fromSets) <= mus.get(x.expectedEffect.muscle).total.hi + 0.01
+      && Number.isFinite(Number(x.expectedEffect.toSets)))))) errors.push('adjustments: each needs a change and a rationale; an expected effect must name a muscle and start from its calculated sets');
+  if (!['low', 'medium', 'high'].includes(r.confidence)) errors.push('confidence: low, medium or high');
+  if (!arr(r.limitations) || !r.limitations.every(s => str(s, 400))) errors.push('limitations: a list of texts');
+  if (!arr(r.missingInformation) || !r.missingInformation.every(s => str(s, 400))) errors.push('missingInformation: a list of texts');
+  return errors.length ? { ok:false, errors } : { ok:true, value:r };
+}
+/* What the coach is asked: explain the calculated findings for the goal, using only the numbers given, in the reply
+   shape validateCoachReply checks. A coach service sends this with the summary (nothing else) to the AI provider. */
+function coachPrompt(summary){
+  return `You are a strength coach reviewing a training program's planned weekly volume for a coach.
+The numbers below were calculated by the app and are the source of truth: do not compute or invent other metrics.
+"sets" are working sets in one program week (one pass through every day); "indirect" sets are estimates for secondary muscles.
+Goal: ${summary.goal}.
+
+Reply with only a JSON object of this shape:
+{"overall": string (2-4 sentences),
+ "strengths": [string, ...] (up to 5),
+ "findings": [{"findingId": one of the finding ids below, "explanation": string}, ...] (explain the important ones),
+ "adjustments": [{"change": string, "rationale": string, "expectedEffect": {"muscle": muscle id, "fromSets": that muscle's current total (use the "lo" value given), "toSets": number}} , ...] (optional changes; expectedEffect may be left out),
+ "confidence": "low" | "medium" | "high",
+ "limitations": [string, ...],
+ "missingInformation": [string, ...]}
+Keep each text short and practical. Never claim the person is overtrained from set counts alone.
+
+Data:
+${JSON.stringify(summary)}`;
+}
+async function requestCoach(summary){
+  const send = AI_COACH.transport || (AI_COACH.endpoint ? async body => {
+    const res = await fetch(AI_COACH.endpoint, { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify(body) });
+    if (!res.ok) throw new Error('The coach service answered ' + res.status);
+    return res.json();
+  } : null);
+  if (!send) return { status:'unavailable' };
+  try {
+    const reply = await send({ summary, format:'nyaega-coach-v1' });
+    const v = validateCoachReply(reply, summary);
+    return v.ok ? { status:'ok', reply:v.value } : { status:'invalid', errors:v.errors };
+  } catch (e) { return { status:'error', message:(e && e.message) || 'The request failed' }; }
 }
 
 /* After a session is saved: if every day of the client's current week is now logged, move them to the next week. */
@@ -4804,7 +5311,7 @@ function showLoadFailure(err){
 
 const DASH_SUBS = [['today','Today'],['calendar','Calendar'],['clients','Clients'],['groups','Pairings'],['data','Data']];
 const DASH_VIEWFN = { today:viewToday, calendar:viewCalendar, clients:viewClients, groups:viewGroups, data:viewData };
-const TOP_VIEWFN = { programs:viewPrograms, conditioning:viewConditioning, exercises:viewExercises, history:viewProgress, session:viewSession };
+const TOP_VIEWFN = { programs:viewPrograms, conditioning:viewConditioning, exercises:viewExercises, history:viewProgress, session:viewSession, analysis:viewAnalysis };
 /* The live logger and the conditioning session are their own screen (S.view === 'session'). Starting one from
    anywhere remembers where it began; saving or leaving it returns there. */
 const sessionOpen = () => !!(S.sel && (S.sel.conditioningClient || S.sel.logClient));
@@ -5221,7 +5728,7 @@ let lastRouteKey = null;
 function routeKey(){
   const s = S.sel || {};
   return [S.view, S.view === 'dashboard' ? (S.sub || 'today') : '', s.client, s.clientPanel, s.program, s.programsKind, s.conditioningId,
-    s.historyClient, s.historyDay, s.logClient, s.conditioningClient].map(v => v == null ? '' : String(v)).join('|');
+    s.historyClient, s.historyDay, s.logClient, s.conditioningClient, s.analysisProgram].map(v => v == null ? '' : String(v)).join('|');
 }
 const attrSel = a => `[${a.name}="${CSS.escape(a.value)}"]`;
 function captureFocus(m){
@@ -6258,7 +6765,7 @@ function programDetail(pid){
       <label class="field" style="flex:1;min-width:200px;margin:0"><span>Program name</span><input type="text" id="p_name" value="${esc(p.name)}"></label>
       <label class="field" style="width:110px;margin:0"><span>Weeks</span><input type="number" id="p_weeks" min="1" value="${esc(p.weeks||4)}"></label>
     </div>
-    <div class="row tight"><span class="small muted" id="programSaveStatus" aria-live="polite">Changes save automatically</span><button class="btn ghost" data-back="programs">Back</button><button class="btn primary" id="saveProgram">Save</button></div>
+    <div class="row tight"><span class="small muted" id="programSaveStatus" aria-live="polite">Changes save automatically</span><button class="btn ghost" data-back="programs">Back</button><button class="btn ghost" id="analyseProgram">Analyse</button><button class="btn primary" id="saveProgram">Save</button></div>
   </div>
 
   ${programWeekBarHTML(p, wk)}
@@ -6998,6 +7505,49 @@ async function renameExerciseInLogs(exId, name){
   try { await Store.batch(async () => { await Store.bulkPut('logs', pairs, S.logs); }); } catch(e){ showSaveError(e); return 0; }
   invalidateLogIndex(); return pairs.length;
 }
+/* Muscles for program analysis, in the movement dialog: primary and secondary muscles (or "conditioning", which adds no
+   set volume), and for each secondary muscle how much of a set it gets (blank = the analysis setting, 0.5 to start).
+   Starter movements open with their starter muscles. Stored on the movement as exercise.muscles. */
+const EX_MUS_SHARES = [['0.25', 'A quarter set'], ['0.5', 'Half a set'], ['0.75', 'Three quarters'], ['1', 'A full set']];
+function exerciseMusclesFieldsHTML(ex){
+  const cur = exerciseMuscles(ex), prim = new Set(cur && !cur.none ? cur.primary : []), sec = new Set(cur && !cur.none ? cur.secondary : []);
+  const w = (cur && !cur.none && cur.weights) || {}, credit = (S.analysisSettings || analysisSettingsFrom(null)).indirectCredit, off = !!(cur && cur.none);
+  const boxes = (kind, on) => MUSCLES.map(([id, name]) => `<label class="ex-mus-chip"><input type="checkbox" data-ex-mus="${kind}" value="${id}" ${on.has(id) ? 'checked' : ''}><span>${esc(name)}</span></label>`).join('');
+  const shares = MUSCLES.map(([id, name]) => `<label class="ex-mus-w" data-ex-w-row="${id}" ${sec.has(id) && !prim.has(id) ? '' : 'hidden'}><span>${esc(name)}</span><select data-ex-w="${id}" aria-label="${esc(name)}: share of a set">
+      <option value="">Default (${esc(pcFmt(credit))} of a set)</option>${EX_MUS_SHARES.map(([v, l]) => `<option value="${v}" ${w[id] != null && String(w[id]) === v ? 'selected' : ''}>${l} (${v})</option>`).join('')}</select></label>`).join('');
+  return `<details class="ex-muscles"${ex && ex.id && !cur ? ' open' : ''}><summary>Muscles <span class="muted small">${!cur ? 'not set (needed for program analysis)' : cur.none ? 'conditioning' : esc(cur.primary.map(muscleName).join(', '))}</span></summary>
+    <fieldset ${off ? 'disabled' : ''}><legend>Primary (each set counts in full)</legend><div class="ex-mus-grid">${boxes('p', prim)}</div></fieldset>
+    <fieldset ${off ? 'disabled' : ''}><legend>Secondary (counts as part of a set)</legend><div class="ex-mus-grid">${boxes('s', sec)}</div>
+      <div class="ex-mus-shares"><p class="small muted ex-mus-shares-hint" ${sec.size ? '' : 'hidden'}>How much of each set a secondary muscle gets. An estimate for planning.</p>${shares}</div></fieldset>
+    <label class="ex-mus-none small"><input type="checkbox" id="exMusNone" ${off ? 'checked' : ''}><span>Conditioning movement (adds no muscle sets)</span></label></details>`;
+}
+/* Shows a share choice for each ticked secondary muscle (not one that is also primary); "conditioning" turns the rest off. */
+function wireExerciseMuscles(root){
+  const box = root.querySelector('.ex-muscles'); if (!box) return;
+  const sync = () => {
+    const prim = new Set([...box.querySelectorAll('[data-ex-mus="p"]:checked')].map(i => i.value)), none = box.querySelector('#exMusNone').checked;
+    let any = false;
+    box.querySelectorAll('[data-ex-w-row]').forEach(row => { const m = row.dataset.exWRow, on = !!box.querySelector(`[data-ex-mus="s"][value="${m}"]:checked`) && !prim.has(m); row.hidden = !on; if (on) any = true; });
+    box.querySelector('.ex-mus-shares-hint').hidden = !any;
+    box.querySelectorAll('fieldset').forEach(f => { f.disabled = none; });
+  };
+  box.addEventListener('change', sync);
+}
+/* The muscles to save, or undefined to leave the movement as it is (nothing set and nothing changed). */
+function readExerciseMuscles(root, ex){
+  if (!root.querySelector('.ex-muscles')) return undefined;
+  const before = exerciseMuscles(ex);
+  if (root.querySelector('#exMusNone').checked) return before && before.none ? undefined : { none:true };
+  const primary = [...root.querySelectorAll('[data-ex-mus="p"]:checked')].map(i => i.value);
+  const secondary = [...root.querySelectorAll('[data-ex-mus="s"]:checked')].map(i => i.value).filter(m => !primary.includes(m));
+  const weights = {};
+  secondary.forEach(m => { const v = root.querySelector(`[data-ex-w="${m}"]`)?.value; if (v !== '' && v != null && Number(v) >= 0 && Number(v) <= 1) weights[m] = Number(v); });
+  const key = list => list.slice().sort().join(), wkey = o => JSON.stringify(Object.entries(o || {}).sort());   // (as sets: the boxes come back in screen order)
+  const same = before && !before.none && key(before.primary) === key(primary) && key(before.secondary) === key(secondary) && wkey(before.weights) === wkey(weights);
+  if (same) return undefined;   // (a starter movement left as it was keeps following the starter map)
+  if (!primary.length && !secondary.length) return ex && ex.muscles ? { primary:[], secondary:[] } : undefined;
+  return { primary, secondary, ...(Object.keys(weights).length ? { weights } : {}) };
+}
 function openExerciseDialog(id){
   const ex = id ? S.exercises.find(e => e.id === id) : null;
   if (id && !ex) return;
@@ -7006,10 +7556,11 @@ function openExerciseDialog(id){
     ? `<p class="small muted">Used in ${plural(u.programs, 'program')} and ${plural(u.logs, 'logged session')}. Programs always show the current name.</p>` : '';
   const logsBox = ex && u.logs
     ? `<label class="row tight small" style="gap:.4rem;align-items:flex-start"><input type="checkbox" id="exRenameLogs" checked style="width:auto;margin-top:.2rem"><span style="flex:1;min-width:0">If you change the name, also update it in the ${plural(u.logs, 'past session')} that use it (recommended).</span></label>` : '';
-  const dlg = dialog(ex ? 'Edit exercise' : 'Add exercise', exerciseFieldsHTML('ex', ex || {}) + logsBox + usage, [
+  const dlg = dialog(ex ? 'Edit exercise' : 'Add exercise', exerciseFieldsHTML('ex', ex || {}) + exerciseMusclesFieldsHTML(ex) + logsBox + usage, [
     { label:'Cancel' },
     { label:ex ? 'Save' : 'Add', kind:'primary', onClick: async () => {
       const f = readExerciseFields(dlg, 'ex', ex && ex.id); if (!f) return false;
+      const mus = readExerciseMuscles(dlg, ex); if (mus !== undefined) f.muscles = mus;
       if (ex){
         if (!(await saveExerciseList(S.exercises.map(e => e.id === ex.id ? { ...e, ...f } : e)))) return false;
         let n = 0; const box = dlg.querySelector('#exRenameLogs');
@@ -7023,6 +7574,7 @@ function openExerciseDialog(id){
     }}
   ]);
   wireExerciseFields(dlg, 'ex');
+  wireExerciseMuscles(dlg);
   const first = dlg.querySelector('#exName'); if (first) first.focus();
 }
 S.search.exercises = '';
@@ -7053,6 +7605,200 @@ function viewExercises(){
     </tbody></table></div>` : ''}
   </div>` : ''}
   </div>`;
+}
+
+/* ============================ PROGRAM ANALYSIS ============================ */
+/* The screen for analyzeProgram (calculations above). Opened from a program (Analyse). Read-only, except: targets
+   and thresholds are saved as their own settings (meta analysisSettings), never on the program; and a proposed change
+   is written to the program only after the coach approves it side by side. */
+function analysisSettingsNow(){
+  if (S.analysisSettings) return S.analysisSettings;
+  if (!S.analysisSettingsLoading){
+    S.analysisSettingsLoading = true;
+    Store.getMeta('analysisSettings', null).then(v => { S.analysisSettings = analysisSettingsFrom(v); }).catch(() => { S.analysisSettings = analysisSettingsFrom(null); })
+      .finally(() => { S.analysisSettingsLoading = false; if (S.view === 'analysis') render({ keepScroll:true }); });
+  }
+  return analysisSettingsFrom(null);
+}
+/* The muscle map: a front and a back view. Each muscle is drawn once for the left side and mirrored for the right
+   (MIRROR), so both sides match; `lines` are thin inner lines (abs, quad heads) for shape only, not selectable. */
+const MIRROR = 'translate(200 0) scale(-1 1)';
+const HM_FRONT = {
+  frontDelts:{ d:['M63 71C56 73 50 78 47 86C51 90 55 97 57 105C61 95 65 86 71 79C69 75 66 72 63 71Z'] },
+  sideDelts:{ d:['M47 86C44 93 42 101 43 110C47 108 52 106 57 105C55 97 51 90 47 86Z'] },
+  chest:{ d:['M98 75L72 78C66 84 62 92 62 102C64 112 72 118 84 120C92 121 98 118 98 116Z'] },
+  biceps:{ d:['M45 113C43 125 43 139 46 151C50 154 54 153 56 149C58 137 58 123 56 113C52 110 48 110 45 113Z'] },
+  forearms:{ d:['M44 156C40 168 37 182 36 197C39 200 43 200 45 197C48 183 52 169 55 158C51 154 47 154 44 156Z'] },
+  core:{ d:['M98 123L89 123C87 141 87 159 89 177C92 183 95 186 98 188Z', 'M86 123C78 123 71 127 68 135C69 151 71 167 75 182C79 184 83 182 86 176C84 158 84 140 86 123Z'],
+    lines:['M89 140H98', 'M89 156H98', 'M89 171H97'] },
+  quads:{ d:['M70 205C66 225 66 251 70 277C76 285 86 285 92 279C96 257 97 233 97 213C90 207 78 203 70 205Z'], lines:['M84 212C82 236 82 258 84 280'] },
+  calves:{ d:['M70 307C67 323 68 341 71 357C75 361 80 361 82 357C84 341 85 323 84 307C80 303 74 303 70 307Z'] }
+};
+const HM_BACK = {
+  back:{ d:['M98 60C90 62 78 66 66 72C74 76 84 84 92 100C95 104 97 108 98 110Z', 'M64 96C62 110 64 128 68 146C76 152 86 156 98 158L98 116C90 106 78 98 64 96Z'] },
+  rearDelts:{ d:['M63 71C56 73 50 78 47 86C52 91 57 96 62 100C64 92 66 84 67 76C66 73 65 72 63 71Z'] },
+  sideDelts:{ d:['M47 86C44 93 42 101 43 110C47 108 52 106 57 105C55 97 51 90 47 86Z'] },
+  triceps:{ d:['M45 113C43 125 43 139 46 151C50 154 54 153 56 149C58 137 58 123 56 113C52 110 48 110 45 113Z'] },
+  forearms:{ d:['M44 156C40 168 37 182 36 197C39 200 43 200 45 197C48 183 52 169 55 158C51 154 47 154 44 156Z'] },
+  lowerBack:{ d:['M98 161C90 161 82 159 74 156C74 166 76 176 80 186C86 188 92 188 98 188Z'] },
+  glutes:{ d:['M98 191C88 189 76 191 68 199C66 211 70 223 80 227C88 229 96 225 98 219Z'] },
+  hamstrings:{ d:['M70 231C66 249 67 267 71 285C78 291 88 291 93 285C96 267 97 249 96 231C88 227 78 227 70 231Z'], lines:['M83 234C82 252 82 268 83 286'] },
+  calves:{ d:['M69 301C64 315 65 331 70 345C74 351 80 351 83 345C87 331 87 315 84 301C80 295 74 295 69 301Z'] }
+};
+/* The body behind the muscles (not selectable): the left half, mirrored. */
+const HM_BODY_HALF = 'M100 8C88 8 81 17 81 30C81 42 87 51 93 54L93 62C84 66 72 68 62 71C52 74 45 81 43 92C41 106 40 120 39 132C37 148 34 164 33 180C32 192 31 202 33 210C35 216 41 216 42 210C43 202 44 194 46 184C49 170 52 156 54 142C56 130 58 118 60 110C62 128 64 148 66 166C66 178 64 188 64 198C63 222 63 248 66 272C67 284 66 296 66 306C66 326 68 346 71 364C72 372 70 380 72 386C78 390 88 390 90 386C91 378 89 370 89 362C90 344 92 324 92 306C92 296 93 286 94 276C96 254 98 232 99 214L100 212Z';
+// (filled as two closed halves without an outline, then outlined as two open lines, so no seam runs down the middle)
+const HM_BODY_EDGE = HM_BODY_HALF.replace(/L100 212Z$/, '');
+const HM_BODY = `<g class="hm-body" aria-hidden="true"><path class="hm-fill" d="${HM_BODY_HALF}"/><path class="hm-fill" d="${HM_BODY_HALF}" transform="${MIRROR}"/><path class="hm-edge" d="${HM_BODY_EDGE}"/><path class="hm-edge" d="${HM_BODY_EDGE}" transform="${MIRROR}"/></g>`;
+function heatmapSVG(side, shapes, a, settings, selected){
+  const regions = Object.entries(shapes).map(([m, sh]) => {
+    const st = muscleStatus(a, m, settings), x = a.muscles[m];
+    const label = `${muscleName(m)}: ${rangeText(x.total)} sets, ${STATUS_LABEL[st].toLowerCase()}`;
+    const paths = sh.d.map(d => `<path d="${d}"/><path d="${d}" transform="${MIRROR}"/>`).join('');
+    const lines = (sh.lines || []).map(d => `<path class="hm-line" d="${d}"/><path class="hm-line" d="${d}" transform="${MIRROR}"/>`).join('');
+    return `<g class="hm-region hm-${st}${selected === m ? ' hm-on' : ''}" data-hm="${m}" role="button" tabindex="0" aria-label="${esc(label)}" aria-pressed="${selected === m}"><title>${esc(label)}</title>${paths}${lines}</g>`;
+  }).join('');
+  return `<figure class="hm-fig"><svg viewBox="22 2 156 392" role="group" aria-label="${side === 'front' ? 'Front' : 'Back'} of the body">${HM_BODY}${regions}</svg><figcaption>${side === 'front' ? 'Front' : 'Back'}</figcaption></figure>`;
+}
+function viewAnalysis(){
+  const programs = Object.entries(S.programs).map(([id, p]) => ({ id, ...p })).sort(byName);
+  if (!programs.length) return `<div class="page-head"><div><h2>Program analysis</h2></div></div><div class="empty"><p>Create a strength program first, then analyse it here.</p></div>`;
+  const pid = S.programs[S.sel.analysisProgram] ? S.sel.analysisProgram : programs[0].id, p = S.programs[pid];
+  const weeks = Number(p.weeks) || 1, week = Math.min(Math.max(0, Number(S.sel.analysisWeek) || 0), weeks);
+  const settings = analysisSettingsNow(), a = analyzeProgram(p, week, settings);
+  const clients = Object.entries(S.clients).map(([id, c]) => ({ id, ...c })).filter(c => c.status !== 'archived').sort(byName);
+  const cid = S.clients[S.sel.analysisClient] ? S.sel.analysisClient : '', client = cid ? S.clients[cid] : null;
+  const sched = cid ? clientWeeklySchedule(cid) : null;
+  const findings = analysisFindings(a, settings, { schedule:sched, clientName:client ? client.name : '' });
+  const sel = MUSCLE_IDS.includes(S.sel.analysisMuscle) ? S.sel.analysisMuscle : (MUSCLE_IDS.find(m => a.muscles[m].total.hi) || 'chest');
+  const rpes = a.rpe, rpeText = rpes.length ? rangeText({ lo:Math.min(...rpes.map(r => r.lo)), hi:Math.max(...rpes.map(r => r.hi)) }) : 'Not set';
+  const calWeek = sched && sched.perWeek > 0 && a.days.length
+    ? `${pcFmt(sched.perWeek)} session${sched.perWeek === 1 ? '' : 's'} a week <span class="muted">(${esc(client.name)}'s schedule; about ${rangeText({ lo:round2(a.total.lo * sched.perWeek / a.days.length), hi:round2(a.total.hi * sched.perWeek / a.days.length) })} sets a calendar week, an estimate)</span>`
+    : cid ? `<span class="muted">${sched && sched.ended ? 'Schedule ended' : 'No recurring schedule'}: insufficient data</span>` : '<span class="muted">Pick a client with a schedule to see it</span>';
+  const tile = (label, value) => `<div class="pa-tile"><span class="pa-tile-label">${label}</span><span class="pa-tile-value num">${value}</span></div>`;
+  const levelLabel = { below:'Below target', above:'Above target', review:'Needs review', insufficient:'Insufficient data', info:'Note' };
+  const x = a.muscles[sel], selSt = muscleStatus(a, sel, settings), tg = settings.targets[sel];
+  const scale = Math.max(4, ...MUSCLE_IDS.map(m => Math.max(a.muscles[m].total.hi, settings.targets[m].max))) * 1.08;
+  const pct = n => Math.max(0, Math.min(100, n / scale * 100)).toFixed(1) + '%';
+  const dayMax = Math.max(1, ...a.days.map(d => d.total.hi));
+  const pvc = client ? plannedVsCompleted(p, pid, analyzeProgram(p, week || client.currentWeek || 1, settings), cid, week || client.currentWeek || 1) : null;
+  const ai = S.sel.analysisAi || null;
+  return `<div class="pa">
+  <div class="panel spread pa-head"><div><h2>Program analysis</h2><span class="muted small">Planned work, read from the program. Nothing here changes it unless you approve a change.</span></div>
+    <div class="row tight pa-head-actions"><button type="button" class="btn ghost sm" id="paGoCoach">AI coach</button><button class="btn ghost" data-back="analysis">Back</button></div></div>
+  <div class="pa-pickers">
+    <label class="field"><span>Program</span><select id="paProgram">${programs.map(x => `<option value="${esc(x.id)}" ${x.id === pid ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select></label>
+    <label class="field"><span>Week</span><select id="paWeek"><option value="0">Base (every week)</option>${Array.from({ length:weeks }, (_, i) => i + 1).map(w => `<option value="${w}" ${w === week ? 'selected' : ''}>Week ${w}${weekLabelOf(p, w) ? ' · ' + esc(weekLabelOf(p, w)) : ''}</option>`).join('')}</select></label>
+    <label class="field"><span>Client (optional)</span><select id="paClient"><option value="">Program only</option>${clients.map(c => `<option value="${esc(c.id)}" ${c.id === cid ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select></label>
+  </div>
+  <div class="pa-tiles">
+    ${tile('Training days', `${a.days.length} <span class="pa-unit">a program week</span>`)}
+    ${tile('Working sets', `${rangeText(a.total)} <span class="pa-unit">a program week</span>`)}
+    ${tile('Target RPE', esc(rpeText) + (rpes.length && a.rpeMissing ? ` <span class="pa-unit">${a.rpeMissing} row${a.rpeMissing === 1 ? '' : 's'} not set</span>` : ''))}
+    ${tile('Muscles counted', `${a.countedRows} of ${a.rows} <span class="pa-unit">rows</span>`)}
+  </div>
+  <p class="small pa-cal">Weekly frequency: ${calWeek}</p>
+
+  <section class="panel pa-section" aria-labelledby="paMapH"><h3 id="paMapH">Muscle map</h3>
+    <div class="pa-map-wrap">
+      <div class="pa-map">${heatmapSVG('front', HM_FRONT, a, settings, sel)}${heatmapSVG('back', HM_BACK, a, settings, sel)}</div>
+      <div class="pa-detail" aria-live="polite">
+        <h4>${esc(muscleName(sel))} <span class="pa-status pa-${selSt}">${STATUS_LABEL[selSt]}</span></h4>
+        <p class="num"><strong>${rangeText(x.total)}</strong> sets a program week <span class="muted">· ${rangeText(x.direct)} direct + ${rangeText(x.indirect)} indirect · target ${tg.min}–${tg.max}</span></p>
+        ${x.sources.length ? `<ul class="pa-sources">${x.sources.map(s => `<li><span>${esc(s.name)} <span class="muted">· ${esc(s.dayName)}</span></span><span class="num">${s.kind === 'direct' ? rangeText(s.sets) + ' direct' : rangeText({ lo:round2(s.sets.lo * s.share), hi:round2(s.sets.hi * s.share) }) + ' indirect'}</span></li>`).join('')}</ul>` : '<p class="small muted">No counted sets for this muscle.</p>'}
+      </div>
+    </div>
+    <ul class="pa-legend" aria-label="Map key">${['below', 'within', 'above', 'review', 'insufficient'].map(k => `<li><span class="pa-swatch pa-${k}" aria-hidden="true"></span>${STATUS_LABEL[k]}</li>`).join('')}</ul>
+  </section>
+
+  <section class="panel pa-section" aria-labelledby="paVolH"><h3 id="paVolH">Sets per muscle <span class="muted small">a program week</span></h3>
+    <div class="pa-bars">${MUSCLE_IDS.map(m => { const v = a.muscles[m], st = muscleStatus(a, m, settings), t = settings.targets[m];
+      return `<button type="button" class="pa-bar-row${m === sel ? ' on' : ''}" data-hm="${m}" aria-pressed="${m === sel}">
+        <span class="pa-bar-name">${esc(muscleName(m))}</span>
+        <span class="pa-bar" aria-hidden="true"><span class="pa-target" style="left:${pct(t.min)};width:calc(${pct(t.max)} - ${pct(t.min)})"></span><span class="pa-fill pa-direct" style="width:${pct(v.direct.lo)}"></span><span class="pa-fill pa-indirect" style="left:${pct(v.direct.lo)};width:${pct(v.indirect.lo)}"></span>${v.total.hi > v.total.lo ? `<span class="pa-fill pa-range" style="left:${pct(v.total.lo)};width:calc(${pct(v.total.hi)} - ${pct(v.total.lo)})"></span>` : ''}</span>
+        <span class="pa-bar-num num">${rangeText(v.total)}</span><span class="pa-status pa-${st}">${STATUS_LABEL[st]}</span></button>`; }).join('')}</div>
+    <p class="small muted pa-key"><span class="pa-k pa-direct"></span>Direct <span class="pa-k pa-indirect"></span>Indirect (estimate) <span class="pa-k pa-target-k"></span>Target range</p>
+  </section>
+
+  <section class="panel pa-section" aria-labelledby="paDayH"><h3 id="paDayH">Sets per day</h3>
+    <div class="pa-days">${a.days.map(d => `<div class="pa-day"><span class="pa-bar-name">${esc(d.name)}</span><span class="pa-bar" aria-hidden="true"><span class="pa-fill pa-direct" style="width:${(d.total.hi / dayMax * 100).toFixed(1)}%"></span></span><span class="pa-bar-num num">${rangeText(d.total)}</span></div>`).join('')}</div>
+    <div class="tablewrap pa-table pa-moves"><table><thead><tr><th>Movement</th><th>Days</th><th>Sets</th><th>Muscles</th></tr></thead><tbody>
+      ${a.exercises.map(e => `<tr><td>${esc(e.name)}</td><td class="small">${esc(e.days.join(', '))}</td><td class="num">${rangeText(e.sets)}</td><td class="small muted">${!e.map ? '<span class="pa-status pa-insufficient">Not mapped</span>' : e.map.none ? 'Conditioning (not counted)' : esc(e.map.primary.map(muscleName).join(', ')) + (e.map.secondary.length ? ' · ' + esc(e.map.secondary.map(muscleName).join(', ').toLowerCase()) : '')}</td></tr>`).join('') || '<tr><td colspan="4" class="muted">No readable sets yet.</td></tr>'}
+    </tbody></table></div>
+  </section>
+
+  <section class="panel pa-section" aria-labelledby="paFindH"><h3 id="paFindH">Findings</h3>
+    ${findings.length ? `<ul class="pa-findings">${findings.map(f => `<li class="pa-finding"><span class="pa-status pa-${f.level}">${levelLabel[f.level]}</span><div><strong>${esc(f.title)}</strong><p class="small">${esc(f.detail)}</p><p class="small muted">Rule: ${esc(f.basis)}</p>
+      ${(f.level === 'below' || f.level === 'above') && f.muscle && proposeVolumeChange(p, week, settings, f.muscle) ? `<button type="button" class="btn ghost sm" data-pa-propose="${f.muscle}">Preview a change</button>` : ''}
+      ${f.kind === 'unmapped' ? `<div class="row tight">${[...new Map(f.rows.map(r => [String(r.exId), r])).values()].slice(0, 8).map(r => `<button type="button" class="btn ghost sm" data-editex="${esc(r.exId)}">Assign muscles: ${esc(r.name)}</button>`).join('')}</div>` : ''}</div></li>`).join('')}</ul>` : '<p class="small">No findings: every muscle is within its target and the days are balanced by the current rules.</p>'}
+  </section>
+
+  <section class="panel pa-section" aria-labelledby="paAiH"><h3 id="paAiH">AI coach <span class="muted small">optional</span></h3>
+    ${!AI_COACH.endpoint && !AI_COACH.transport ? `<p class="small"><strong>Not set up.</strong> The coach needs a server endpoint that keeps the AI provider's key private (for example a Supabase Edge Function on your project). Once it is set, it explains the findings above. The numbers on this page never come from it.</p>
+      <details class="small pa-peek"><summary>What it would receive</summary><p class="muted">Only the planned numbers and findings below: no client names, no history.</p><pre class="pa-pre">${esc(JSON.stringify(coachSummary(a, findings, settings, 'general'), null, 2))}</pre></details>`
+    : ai && ai.status === 'ok' ? coachReplyHTML(ai.reply, findings)
+    : `<p class="small">Explains the findings above for the goal you pick and suggests optional changes. The numbers come from the analysis, not from the AI, and nothing is changed for you.</p>${ai && ai.status === 'busy' ? '<p class="small muted" role="status">Asking the coach… this can take up to a minute.</p>' : ''}${ai && (ai.status === 'error' || ai.status === 'invalid') ? `<p class="small pa-error" role="alert">The coach's answer could not be used${ai.status === 'invalid' ? ' (it did not match the analysis: ' + esc(ai.errors.slice(0, 2).join('; ')) + ')' : ': ' + esc(ai.message)}. The analysis above is unaffected.</p>` : ''}
+       <label class="field pa-goal"><span>Goal</span><select id="paGoal">${[['general', 'General strength and size'], ['hypertrophy', 'Muscle size'], ['strength', 'Strength'], ['balance', 'Balance and health']].map(([v, l]) => `<option value="${v}" ${(S.sel.analysisGoal || 'general') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+       <button type="button" class="btn primary sm" id="paAskCoach" ${ai && ai.status === 'busy' ? 'disabled' : ''}>${ai && (ai.status === 'error' || ai.status === 'invalid') ? 'Try again' : 'Explain these findings'}</button>`}
+  </section>
+
+  ${pvc ? `<section class="panel pa-section" aria-labelledby="paPvcH"><h3 id="paPvcH">Planned and completed <span class="muted small">${esc(client.name)} · week ${week || client.currentWeek || 1}</span></h3>
+    <div class="tablewrap pa-table"><table><thead><tr><th>Day</th><th>Planned sets</th><th>Completed sets</th><th>Saved</th></tr></thead><tbody>
+      ${pvc.map(r => `<tr><td>${esc(r.day)}</td><td class="num">${rangeText(r.planned)}</td><td class="num">${r.completed == null ? '<span class="muted">Not logged</span>' : r.completed}</td><td class="small muted">${r.date ? esc(r.date) : ''}</td></tr>`).join('')}
+    </tbody></table></div>
+    <p class="small muted">Completed sets are ticked working sets from saved sessions of this program and week (warm-ups left out), matched to the day by name.</p></section>` : ''}
+
+  <details class="panel pa-section pa-settings" ${S.sel.analysisSettingsOpen ? 'open' : ''}><summary><h3>Targets and settings</h3></summary>
+    <p class="small muted">These are your planning targets. Changing them updates the analysis only; programs are never changed by them. Saved on this device.</p>
+    <div class="pa-targets">${MUSCLE_IDS.map(m => `<div class="pa-target-row"><span>${esc(muscleName(m))}</span><label><span class="sr-only">${esc(muscleName(m))} minimum sets</span><input type="number" inputmode="numeric" min="0" max="60" data-pa-min="${m}" value="${settings.targets[m].min}"></label><span aria-hidden="true">–</span><label><span class="sr-only">${esc(muscleName(m))} maximum sets</span><input type="number" inputmode="numeric" min="0" max="60" data-pa-max="${m}" value="${settings.targets[m].max}"></label></div>`).join('')}</div>
+    <div class="pa-thresholds">
+      <label class="field"><span>Indirect credit (share of a set for a secondary muscle)</span><input type="number" step="0.05" min="0" max="1" id="paCredit" value="${settings.indirectCredit}"></label>
+      <label class="field"><span>Uneven days: biggest day ÷ smallest day above</span><input type="number" step="0.1" min="1" max="10" id="paDayRatio" value="${settings.dayRatio}"></label>
+      <label class="field"><span>One session: direct sets for one muscle above</span><input type="number" min="1" max="40" id="paSessionMax" value="${settings.sessionMax}"></label>
+      <label class="field"><span>Opposing muscles: larger ÷ smaller above</span><input type="number" step="0.1" min="1" max="10" id="paPairRatio" value="${settings.pairRatio}"></label>
+      <label class="field"><span>Back-to-back days: direct sets on both days from</span><input type="number" min="1" max="40" id="paRecoveryMin" value="${settings.recoveryMin}"></label>
+    </div>
+    <div class="row tight"><button type="button" class="btn primary sm" id="paSaveSettings">Save targets</button><button type="button" class="btn ghost sm" id="paResetSettings">Back to the starting targets</button></div>
+  </details>
+
+  <details class="panel pa-section"><summary><h3>How this is calculated</h3></summary><ul class="small pa-rules">
+    <li>A program week is one pass through every day of the program (the week the app moves a client on after). Calendar weeks need a schedule.</li>
+    <li>Planned sets are working sets. The Sets box is read as typed: a number, or a range like 3-4 (both ends are shown). Blank or unreadable boxes count as nothing and are listed.</li>
+    <li>Each set counts fully for a movement's primary muscles (direct) and ${pcFmt(settings.indirectCredit)} of a set for its secondary muscles (indirect, an estimate). A movement can set its own weight per muscle.</li>
+    <li>Week ${week || 'Base'}: ${week ? 'that week\'s changes are applied on top of the base rows.' : 'the base rows, before any week\'s changes.'}</li>
+    <li>Reps, RPE and load are shown as written and never turned into sets. Completed sets come only from saved sessions.</li>
+    <li>Statuses: below or above when the whole range is outside the target, needs review when a range spans its edge or uncounted rows could change it.</li>
+  </ul></details>
+</div>`;
+}
+function coachReplyHTML(r, findings){
+  const byId = new Map(findings.map(f => [f.id, f]));
+  return `<div class="pa-ai"><p>${esc(r.overall)}</p>
+    ${r.strengths.length ? `<h4>Strengths</h4><ul>${r.strengths.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}
+    ${r.findings.length ? `<h4>Findings explained</h4><ul>${r.findings.map(f => `<li><strong>${esc(byId.get(f.findingId).title)}</strong>: ${esc(f.explanation)}</li>`).join('')}</ul>` : ''}
+    ${r.adjustments.length ? `<h4>Optional changes</h4><ul>${r.adjustments.map(x => `<li><strong>${esc(x.change)}</strong>: ${esc(x.rationale)}${x.expectedEffect ? ` <span class="muted num">(${esc(muscleName(x.expectedEffect.muscle))} ${esc(x.expectedEffect.fromSets)} → ${esc(x.expectedEffect.toSets)} sets)</span>` : ''}</li>`).join('')}</ul><p class="small muted">Nothing is changed automatically. Use "Preview a change" on a finding to change the program.</p>` : ''}
+    <p class="small muted">Confidence: ${esc(r.confidence)}.${r.limitations.length ? ' Limitations: ' + esc(r.limitations.join(' ')) : ''}${r.missingInformation.length ? ' Missing: ' + esc(r.missingInformation.join(' ')) : ''}</p></div>`;
+}
+/* Side by side: the program's rows now and with the proposed set counts, and what it does to the muscle totals. */
+function openAnalysisProposal(pid, week, muscle){
+  const p = S.programs[pid], settings = analysisSettingsNow(); if (!p) return;
+  const prop = proposeVolumeChange(p, week, settings, muscle);
+  if (!prop){ toast('No simple change: no row trains it as a primary muscle with a single number of sets'); return; }
+  const changed = MUSCLE_IDS.filter(m => prop.before.muscles[m].total.lo !== prop.after.muscles[m].total.lo || prop.before.muscles[m].total.hi !== prop.after.muscles[m].total.hi);
+  const body = `<p class="small muted">${week ? 'Week ' + week + ' only' : 'The base rows (every week)'} · ${esc(p.name)}. The program is not changed unless you accept.</p>
+    <div class="pa-compare"><div><h4>Now</h4><ul>${prop.changes.map(c => `<li>${esc(c.name)} <span class="muted">· ${esc(c.dayName)}</span><span class="num">${c.from} sets</span></li>`).join('')}</ul></div>
+      <div><h4>Proposed</h4><ul>${prop.changes.map(c => `<li>${esc(c.name)} <span class="muted">· ${esc(c.dayName)}</span><span class="num"><strong>${c.to} sets</strong></span></li>`).join('')}</ul></div></div>
+    <h4>Effect a program week</h4><ul class="pa-effect">${changed.map(m => `<li>${esc(muscleName(m))}<span class="num">${rangeText(prop.before.muscles[m].total)} → <strong>${rangeText(prop.after.muscles[m].total)}</strong></span></li>`).join('')}</ul>`;
+  dialog('Proposed change: ' + muscleName(muscle), body, [
+    { label:'Reject' },
+    { label:'Accept change', kind:'primary', onClick: async () => {
+      if (!(await flushProgramEditor())) return false;
+      const cur = S.programs[pid]; if (!cur) return;
+      const next = applyProgramSetChanges(JSON.parse(JSON.stringify(cur)), week, prop.changes);
+      try { await Store.put('programs', pid, next); } catch(e){ showSaveError(e); return false; }
+      S.programs[pid] = next; toast('Program updated'); render({ keepScroll:true });
+    }}
+  ], { className:'pa-dialog' });
 }
 
 /* ============================ HISTORY ============================ */
@@ -8229,6 +8975,7 @@ function wire(){
     if (el.dataset.back === 'day') delete S.sel.historyDay;
     else if (el.dataset.back === 'panel') delete S.sel.clientPanel;
     else if(el.dataset.back==='programs'){flushProgramEditor();S.view='programs';S.sel={programsKind:'strength'};}
+    else if(el.dataset.back==='analysis'){const pid=S.sel.analysisProgram;S.view='programs';S.sel=S.programs[pid]?{programsKind:'strength',program:pid}:{programsKind:'strength'};}
     else S.sel = {};
     render();
   });
@@ -8938,6 +9685,56 @@ if(event.target.closest('select,textarea,summary')||event.target.closest('button
   });
   const toggleArchived = document.getElementById('toggleArchivedExercises');
   if (toggleArchived) toggleArchived.onclick = () => { S.sel.showArchivedExercises = !S.sel.showArchivedExercises; render(); };
+  /* ---- program analysis ---- */
+  const anp = document.getElementById('analyseProgram');
+  if (anp) anp.onclick = async () => { const pid = S.sel.program; if (!(await flushProgramEditor())) return; navigateTo('analysis', null, { analysisProgram:pid }); };
+  if (S.view === 'analysis'){
+    const reAnalyse = patch => { S.sel = { ...S.sel, ...patch, analysisAi:null }; render({ keepScroll:true }); };
+    const pp = document.getElementById('paProgram'); if (pp) pp.onchange = () => reAnalyse({ analysisProgram:pp.value, analysisWeek:0, analysisMuscle:null });
+    const pw = document.getElementById('paWeek'); if (pw) pw.onchange = () => reAnalyse({ analysisWeek:Number(pw.value) || 0 });
+    const pc = document.getElementById('paClient'); if (pc) pc.onchange = () => reAnalyse({ analysisClient:pc.value });
+    const pg = document.getElementById('paGoal'); if (pg) pg.onchange = () => { S.sel.analysisGoal = pg.value; };
+    const goCoach = document.getElementById('paGoCoach'); if (goCoach) goCoach.onclick = () => { const h = document.getElementById('paAiH'); if (!h) return; h.scrollIntoView({ behavior:'smooth', block:'start' }); const b = document.getElementById('paAskCoach'); if (b) setTimeout(() => b.focus({ preventScroll:true }), 400); };
+    m.querySelectorAll('[data-hm]').forEach(el => {
+      const pick = () => { S.sel.analysisMuscle = el.dataset.hm; render({ keepScroll:true }); const again = m.querySelector(`.pa-map [data-hm="${el.dataset.hm}"]`); if (again && el.closest('.pa-map')) again.focus(); };
+      el.onclick = pick;
+      if (el.tagName !== 'BUTTON') el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pick(); } };
+    });
+    const st = m.querySelector('.pa-settings'); if (st) st.ontoggle = () => { S.sel.analysisSettingsOpen = st.open; };
+    const saveSet = document.getElementById('paSaveSettings');
+    if (saveSet) saveSet.onclick = async () => {
+      const targets = {};
+      MUSCLE_IDS.forEach(mu => { targets[mu] = { min:m.querySelector(`[data-pa-min="${mu}"]`).value, max:m.querySelector(`[data-pa-max="${mu}"]`).value }; });
+      const raw = { indirectCredit:val('paCredit'), targets, dayRatio:val('paDayRatio'), sessionMax:val('paSessionMax'), pairRatio:val('paPairRatio'), recoveryMin:val('paRecoveryMin') };
+      const next = analysisSettingsFrom(raw);
+      const fixed = MUSCLE_IDS.filter(mu => String(next.targets[mu].min) !== String(targets[mu].min).trim() || String(next.targets[mu].max) !== String(targets[mu].max).trim());
+      try { await Store.putMeta('analysisSettings', next); } catch(e){ showSaveError(e); return; }
+      S.analysisSettings = next; S.sel.analysisAi = null;
+      toast(fixed.length ? 'Targets saved (some values were out of range and were reset: ' + fixed.map(muscleName).join(', ') + ')' : 'Targets saved');
+      render({ keepScroll:true });
+    };
+    const resetSet = document.getElementById('paResetSettings');
+    if (resetSet) resetSet.onclick = async () => {
+      const next = analysisSettingsFrom(null);
+      try { await Store.putMeta('analysisSettings', next); } catch(e){ showSaveError(e); return; }
+      S.analysisSettings = next; S.sel.analysisAi = null; toast('Starting targets restored'); render({ keepScroll:true });
+    };
+    m.querySelectorAll('[data-pa-propose]').forEach(b => b.onclick = () => {
+      const p = S.programs[S.sel.analysisProgram] ? S.sel.analysisProgram : Object.keys(S.programs).sort((x, y) => byName(S.programs[x], S.programs[y]))[0];
+      openAnalysisProposal(p, Math.min(Math.max(0, Number(S.sel.analysisWeek) || 0), Number(S.programs[p].weeks) || 1), b.dataset.paPropose);
+    });
+    const ask = document.getElementById('paAskCoach');
+    if (ask) ask.onclick = async () => {
+      const pid = S.programs[S.sel.analysisProgram] ? S.sel.analysisProgram : Object.keys(S.programs).sort((x, y) => byName(S.programs[x], S.programs[y]))[0];
+      const p = S.programs[pid], week = Math.min(Math.max(0, Number(S.sel.analysisWeek) || 0), Number(p.weeks) || 1), settings = analysisSettingsNow();
+      const a = analyzeProgram(p, week, settings), cid = S.clients[S.sel.analysisClient] ? S.sel.analysisClient : '';
+      const findings = analysisFindings(a, settings, { schedule:cid ? clientWeeklySchedule(cid) : null, clientName:cid ? S.clients[cid].name : '' });
+      S.sel.analysisAi = { status:'busy' }; render({ keepScroll:true });
+      const res = await requestCoach(coachSummary(a, findings, settings, S.sel.analysisGoal || 'general'));
+      if (S.view !== 'analysis') return;
+      S.sel.analysisAi = res.status === 'unavailable' ? null : res; render({ keepScroll:true });
+    };
+  }
 
   /* ---- history ---- */
   m.querySelectorAll('[data-historyclient]').forEach(el => el.onclick = () => { S.sel = { historyClient: el.dataset.historyclient }; render(); });
@@ -9183,7 +9980,7 @@ function navigateTo(view, sub, sel){
 function navKeyNow(){
   const v = S.view === 'session' ? ((S.returnTo && S.returnTo.view) || 'dashboard') : S.view;
   if (v === 'dashboard'){ const s = S.sub || 'today'; return s === 'clients' ? 'clients' : s === 'groups' ? 'pairings' : ''; }
-  if (v === 'programs' || v === 'conditioning') return 'programs';
+  if (v === 'programs' || v === 'conditioning' || v === 'analysis') return 'programs';
   return v === 'exercises' || v === 'history' ? v : '';
 }
 function ensureMobileNav(){
@@ -9364,7 +10161,7 @@ function openQuickAttendance(){
    - Back from a workout parks it (nothing is lost; the "Workout in progress" bar resumes it).
    - An in-app Back button that leads to the previous screen steps back through history too, so both stay in step.
 ----------------------------------------------------------------*/
-const NAV_SEL_KEYS = ['client', 'clientPanel', 'program', 'programsKind', 'conditioningId', 'historyClient', 'historyDay', 'logClient', 'conditioningClient'];
+const NAV_SEL_KEYS = ['client', 'clientPanel', 'program', 'programsKind', 'conditioningId', 'historyClient', 'historyDay', 'logClient', 'conditioningClient', 'analysisProgram', 'analysisWeek', 'analysisClient'];
 const NAV_HOME = { view:'dashboard', sub:'today', ds:'', sel:{} };
 const Nav = { started:false, idx:0, keys:[], restoring:false, expectBackTo:null, ignorePop:false };
 // The app puts the scroll position back itself (navApplyRoute); the browser's own restoring ran just after and sent

@@ -37,7 +37,7 @@ module.exports = async ({ browser, base, openApp, waitReady, reporter, overrides
   });
   const go = (page, view, sub) => page.evaluate(([view, sub]) => { S.sel = {}; S.view = view; S.sub = sub; render(); }, [view, sub]);
   const SCREENS = [['dashboard', 'today', 'Today'], ['dashboard', 'calendar', 'Schedule'], ['dashboard', 'clients', 'Clients'], ['programs', '', 'Programs'],
-                   ['conditioning', '', 'Conditioning'], ['exercises', '', 'Movements'], ['history', '', 'History'], ['dashboard', 'data', 'Settings']];
+                   ['conditioning', '', 'Conditioning'], ['exercises', '', 'Movements'], ['history', '', 'History'], ['dashboard', 'data', 'Settings'], ['analysis', '', 'Program analysis']];
 
   // ---- layout at phone widths and text sizes
   for (const [width, textPct] of [[320, 100], [412, 100], [412, 130], [412, 200], [320, 200]]) {
@@ -47,6 +47,7 @@ module.exports = async ({ browser, base, openApp, waitReady, reporter, overrides
       if (textPct !== 100) await page.evaluate(pct => { document.documentElement.style.fontSize = pct + '%'; window.dispatchEvent(new Event('resize')); }, textPct);
       if (textPct >= 130) ok(`${width} px, text ${textPct} %: the app switches to its large-text layout`, await page.evaluate(() => document.documentElement.classList.contains('text-large')));
       const bad = [];
+      await page.evaluate(() => { S.programs.phA = { name:'Phone analysis', weeks:2, days:[{ name:'Day A', items:[{ exId:'seed-back-squat', sets:'4', reps:'5', rpe:'7-8' }, { exId:'seed-bench-press', sets:'3-4', reps:'8' }] }, { name:'Day B', items:[{ exId:'seed-romanian-deadlift', sets:'3', reps:'8' }, { exId:'seed-pull-up', sets:'', reps:'AMRAP' }] }] }; });
       for (const [view, sub, label] of SCREENS) {
         await go(page, view, sub); await page.waitForTimeout(80);
         const o = await overflow(page); if (o.extra > 1) bad.push(`${label}: ${o.extra} px too wide, ${o.widest}`);
