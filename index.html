@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-V8iY7ZDrRAjFGhkcANjPr1zzrmDOkzltBUPjrmATgcE=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-nUcpceWzUMMSFxVLfKxdH5EITk85of/gTTv9OdDHUoE=' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://vjibhmqinbuggeqktzzx.supabase.co; font-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#142b25" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -1660,6 +1660,7 @@ body.in-session #main .panel:has(#saveSess)>*+*{margin-top:.75rem}
 .hm-fig figcaption{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
 .hm-body .hm-fill{fill:var(--line-soft);stroke:var(--line-soft);stroke-width:.6}
 .hm-body .hm-edge{fill:none;stroke:var(--line-strong);stroke-width:1;stroke-linejoin:round}
+.hm-body .hm-mark{fill:none;stroke:var(--line-strong);stroke-width:.8;stroke-linecap:round;opacity:.7}
 .hm-region{cursor:pointer;outline:none}
 .hm-region>*{stroke-width:1.2;stroke-linejoin:round;transition:fill .15s}
 .hm-region>.hm-line{fill:none!important;stroke:rgba(0,0,0,.18)!important;stroke-width:1!important;stroke-dasharray:none!important;pointer-events:none}
@@ -7621,35 +7622,45 @@ function analysisSettingsNow(){
   return analysisSettingsFrom(null);
 }
 /* The muscle map: a front and a back view. Each muscle is drawn once for the left side and mirrored for the right
-   (MIRROR), so both sides match; `lines` are thin inner lines (abs, quad heads) for shape only, not selectable. */
+   (MIRROR), so both sides match; `lines` are thin inner lines (muscle heads, abs) for shape only, not selectable. */
 const MIRROR = 'translate(200 0) scale(-1 1)';
 const HM_FRONT = {
-  frontDelts:{ d:['M63 71C56 73 50 78 47 86C51 90 55 97 57 105C61 95 65 86 71 79C69 75 66 72 63 71Z'] },
-  sideDelts:{ d:['M47 86C44 93 42 101 43 110C47 108 52 106 57 105C55 97 51 90 47 86Z'] },
-  chest:{ d:['M98 75L72 78C66 84 62 92 62 102C64 112 72 118 84 120C92 121 98 118 98 116Z'] },
-  biceps:{ d:['M45 113C43 125 43 139 46 151C50 154 54 153 56 149C58 137 58 123 56 113C52 110 48 110 45 113Z'] },
-  forearms:{ d:['M44 156C40 168 37 182 36 197C39 200 43 200 45 197C48 183 52 169 55 158C51 154 47 154 44 156Z'] },
-  core:{ d:['M98 123L89 123C87 141 87 159 89 177C92 183 95 186 98 188Z', 'M86 123C78 123 71 127 68 135C69 151 71 167 75 182C79 184 83 182 86 176C84 158 84 140 86 123Z'],
-    lines:['M89 140H98', 'M89 156H98', 'M89 171H97'] },
-  quads:{ d:['M70 205C66 225 66 251 70 277C76 285 86 285 92 279C96 257 97 233 97 213C90 207 78 203 70 205Z'], lines:['M84 212C82 236 82 258 84 280'] },
-  calves:{ d:['M70 307C67 323 68 341 71 357C75 361 80 361 82 357C84 341 85 323 84 307C80 303 74 303 70 307Z'] }
+  frontDelts:{ d:['M78 64C70 64 62 66 56 72C53 78 54 88 57 98C59 102 61 104 63 104C64 96 67 86 72 78C74 72 77 68 78 64Z'], lines:['M70 68C65 76 62 88 61 100'] },
+  sideDelts:{ d:['M56 72C52 76 50 82 49 90C48 98 49 106 51 112C54 108 56 103 57 98C54 88 53 78 56 72Z'], lines:['M53 82C52 90 52 100 52 108'] },
+  chest:{ d:['M99 68L81 65C77 69 74 74 72 80C68 88 65 96 64 104C69 112 78 118 88 119C94 119 97 117 99 115Z'], lines:['M80 71C86 75 92 77 99 77', 'M97 90C87 94 77 99 67 104', 'M97 106C87 107 77 106 67 105'] },
+  biceps:{ d:['M60 104C55 109 51 118 50 128C50 137 52 144 56 148C60 142 62 132 62.5 120C62.5 112 62 107 60 104Z'], lines:['M57 112C55 122 55 134 56 144'] },
+  forearms:{ d:['M46 146C42 154 40 166 41 178C42 188 44 197 45 204L49 204C50 196 52 186 54 176C57 166 59 156 58 148C54 145 50 144 46 146Z'], lines:['M51 150C50 164 48 180 47 196'] },
+  core:{ d:['M98.5 121L89 121C87 140 87 162 89 182C91 194 95 202 98.5 206Z', 'M86 121C79 120 74 124 71 130C72 146 73 160 72 174C76 186 83 196 91 204C88 190 86 176 86 160C86 146 86 134 86 121Z',
+            'M66 104C69 108 72 113 76 117C74 120 72 123 70 126C68 118 67 111 66 104Z'],
+    lines:['M89 137H98.5', 'M89 153H98.5', 'M89.5 168H98.5', 'M72 140C76 142 80 146 82 150', 'M73 156C77 158 81 162 83 166'] },
+  quads:{ d:['M67 210C65 230 66 252 69 272C71 282 75 290 80 293C86 295 91 293 93 288C95 280 95 270 93 262C95 248 97 234 97 222C89 214 77 209 67 210Z'],
+    lines:['M78 214C77 236 79 258 83 282', 'M89 220C87 238 87 254 90 266'] },
+  calves:{ d:['M91 302C94 314 94 328 92 342C91 348 88 350 86 348C85 336 86 316 91 302Z', 'M71 304C68 316 68 330 70 344C72 346 74 346 75 344C76 330 75 316 71 304Z'] }
 };
 const HM_BACK = {
-  back:{ d:['M98 60C90 62 78 66 66 72C74 76 84 84 92 100C95 104 97 108 98 110Z', 'M64 96C62 110 64 128 68 146C76 152 86 156 98 158L98 116C90 106 78 98 64 96Z'] },
-  rearDelts:{ d:['M63 71C56 73 50 78 47 86C52 91 57 96 62 100C64 92 66 84 67 76C66 73 65 72 63 71Z'] },
-  sideDelts:{ d:['M47 86C44 93 42 101 43 110C47 108 52 106 57 105C55 97 51 90 47 86Z'] },
-  triceps:{ d:['M45 113C43 125 43 139 46 151C50 154 54 153 56 149C58 137 58 123 56 113C52 110 48 110 45 113Z'] },
-  forearms:{ d:['M44 156C40 168 37 182 36 197C39 200 43 200 45 197C48 183 52 169 55 158C51 154 47 154 44 156Z'] },
-  lowerBack:{ d:['M98 161C90 161 82 159 74 156C74 166 76 176 80 186C86 188 92 188 98 188Z'] },
-  glutes:{ d:['M98 191C88 189 76 191 68 199C66 211 70 223 80 227C88 229 96 225 98 219Z'] },
-  hamstrings:{ d:['M70 231C66 249 67 267 71 285C78 291 88 291 93 285C96 267 97 249 96 231C88 227 78 227 70 231Z'], lines:['M83 234C82 252 82 268 83 286'] },
-  calves:{ d:['M69 301C64 315 65 331 70 345C74 351 80 351 83 345C87 331 87 315 84 301C80 295 74 295 69 301Z'] }
+  back:{ d:['M98.5 46L94 49C93 53 92 56 90 58C83 62 75 64 68 66C74 70 80 75 84 80C89 92 94 110 98.5 132Z',
+            'M65 101C70 104 76 108 82 112C88 118 94 124 98.5 134L98.5 176C93 177 87 175 82 171C78 160 73 146 70 132C68 120 66 109 65 101Z',
+            'M65 99C68 92 72 85 76 80C79 79 82 79 84 81C88 92 91 104 94 120C90 116 86 114 82 111C76 107 70 103 65 99Z'],
+    lines:['M94 58C89 64 87 72 86 80', 'M90 100C92 110 94 118 96 126', 'M74 116C78 134 82 150 88 168', 'M82 120C86 136 90 152 95 172', 'M70 93C76 98 82 104 88 112'] },
+  rearDelts:{ d:['M68 66C61 67 56 70 53 76C54 84 58 92 63 98C65 93 69 86 75 79C73 73 71 69 68 66Z'], lines:['M65 70C62 78 61 86 62 94'] },
+  sideDelts:{ d:['M53 76C50 82 48 90 48 98C48 104 49 108 51 112C55 108 59 104 63 98C58 92 54 84 53 76Z'], lines:['M52 84C51 92 51 100 52 108'] },
+  triceps:{ d:['M51 113C48 122 47 132 48 142C51 146 56 147 60 145C62 134 63 122 62 112C59 108 55 108 51 113Z'], lines:['M56 112C55 122 55 134 56 144'] },
+  forearms:{ d:['M46 148C42 156 40 167 41 179C42 189 44 197 45 204L49 204C50 196 52 186 54 176C57 166 59 157 59 149C55 146 50 146 46 148Z'], lines:['M52 152C50 166 48 182 47 198'] },
+  lowerBack:{ d:['M98.5 179C95 179 92 179 89 178C87 186 88 193 90 199C93 201 96 202 98.5 202Z'] },
+  glutes:{ d:['M98.5 205C92 202 82 201 74 204C68 211 66 220 67 230C70 240 80 246 92 245C96 244 98.5 241 98.5 236Z'], lines:['M69 214C75 209 83 207 91 207', 'M80 213C77 224 79 236 86 244'] },
+  hamstrings:{ d:['M70 250C67 262 67 276 70 288C72 294 75 298 78 300L82 291L86 300C89 298 92 294 93 288C96 276 96 262 94 250C87 246 77 246 70 250Z'], lines:['M82 249C81 262 81 276 82 290'] },
+  calves:{ d:['M71 304C67 316 67 330 71 342C74 350 78 352 81.5 350L81.5 306C78 302 74 302 71 304Z', 'M83 306L83 350C87 352 92 348 93 340C95 328 94 314 90 304C88 302 85 302 83 306Z'] }
 };
-/* The body behind the muscles (not selectable): the left half, mirrored. */
-const HM_BODY_HALF = 'M100 8C88 8 81 17 81 30C81 42 87 51 93 54L93 62C84 66 72 68 62 71C52 74 45 81 43 92C41 106 40 120 39 132C37 148 34 164 33 180C32 192 31 202 33 210C35 216 41 216 42 210C43 202 44 194 46 184C49 170 52 156 54 142C56 130 58 118 60 110C62 128 64 148 66 166C66 178 64 188 64 198C63 222 63 248 66 272C67 284 66 296 66 306C66 326 68 346 71 364C72 372 70 380 72 386C78 390 88 390 90 386C91 378 89 370 89 362C90 344 92 324 92 306C92 296 93 286 94 276C96 254 98 232 99 214L100 212Z';
+/* The body behind the muscles (not selectable): the left half, mirrored, with a few landmarks (collarbone, knee, shin;
+   spine, back of the knee, Achilles tendon). */
+const HM_BODY_HALF = 'M100 5C91 5 85 11 85 22C85 31 87 38 90 43C91 47 91 51 91 55C85 59 76 62 68 64C59 66 52 72 50 82C48 92 47 104 47 116C47 126 46 134 45 142C42 152 40 166 40 178C40 190 41 198 42 204C40 210 39 220 41 228C42 233 47 234 49 230C50 224 51 214 52 206C54 194 57 180 58 166C58 158 59 152 60 148C61 138 62 124 62 112C62 108 63 104 65 101C67 114 69 128 71 142C72 154 72 164 70 174C68 184 66 194 66 204C65 224 66 248 69 268C70 280 71 288 72 296C70 306 68 318 68 330C69 346 73 360 76 372C75 378 72 384 74 388C80 391 90 391 93 388C94 384 92 378 91 372C91 360 93 346 93 332C93 318 91 308 91 298C91 288 93 280 94 270C96 254 98 238 99 228L100 226Z';
+const HM_LANDMARKS = {
+  front:['M93 61C87 62 81 63 76 63', 'M79 296C82 300 87 300 90 296', 'M80 302C78 322 80 346 83 368', 'M97 214C98 218 99 222 99.5 226'],
+  back:['M100 48V200', 'M78 298C82 301 87 301 90 298', 'M83 352C83 360 84 366 85 372']
+};
 // (filled as two closed halves without an outline, then outlined as two open lines, so no seam runs down the middle)
-const HM_BODY_EDGE = HM_BODY_HALF.replace(/L100 212Z$/, '');
-const HM_BODY = `<g class="hm-body" aria-hidden="true"><path class="hm-fill" d="${HM_BODY_HALF}"/><path class="hm-fill" d="${HM_BODY_HALF}" transform="${MIRROR}"/><path class="hm-edge" d="${HM_BODY_EDGE}"/><path class="hm-edge" d="${HM_BODY_EDGE}" transform="${MIRROR}"/></g>`;
+const HM_BODY_EDGE = HM_BODY_HALF.replace(/L100 \d+Z$/, '');
+const hmBody = side => `<g class="hm-body" aria-hidden="true"><path class="hm-fill" d="${HM_BODY_HALF}"/><path class="hm-fill" d="${HM_BODY_HALF}" transform="${MIRROR}"/><path class="hm-edge" d="${HM_BODY_EDGE}"/><path class="hm-edge" d="${HM_BODY_EDGE}" transform="${MIRROR}"/>${HM_LANDMARKS[side].map(d => `<path class="hm-mark" d="${d}"/><path class="hm-mark" d="${d}" transform="${MIRROR}"/>`).join('')}</g>`;
 function heatmapSVG(side, shapes, a, settings, selected){
   const regions = Object.entries(shapes).map(([m, sh]) => {
     const st = muscleStatus(a, m, settings), x = a.muscles[m];
@@ -7658,7 +7669,7 @@ function heatmapSVG(side, shapes, a, settings, selected){
     const lines = (sh.lines || []).map(d => `<path class="hm-line" d="${d}"/><path class="hm-line" d="${d}" transform="${MIRROR}"/>`).join('');
     return `<g class="hm-region hm-${st}${selected === m ? ' hm-on' : ''}" data-hm="${m}" role="button" tabindex="0" aria-label="${esc(label)}" aria-pressed="${selected === m}"><title>${esc(label)}</title>${paths}${lines}</g>`;
   }).join('');
-  return `<figure class="hm-fig"><svg viewBox="22 2 156 392" role="group" aria-label="${side === 'front' ? 'Front' : 'Back'} of the body">${HM_BODY}${regions}</svg><figcaption>${side === 'front' ? 'Front' : 'Back'}</figcaption></figure>`;
+  return `<figure class="hm-fig"><svg viewBox="22 2 156 392" role="group" aria-label="${side === 'front' ? 'Front' : 'Back'} of the body">${hmBody(side)}${regions}</svg><figcaption>${side === 'front' ? 'Front' : 'Back'}</figcaption></figure>`;
 }
 function viewAnalysis(){
   const programs = Object.entries(S.programs).map(([id, p]) => ({ id, ...p })).sort(byName);
