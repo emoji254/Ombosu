@@ -7,7 +7,9 @@ muscle map, coach-set targets and findings, side-by-side change previews saved o
 (primary, secondary, a share per secondary muscle), two calf-raise starter movements (schema v5), and an optional AI coach
 that explains the findings (needs a server endpoint; see AI_COACH in the code).
 
-Where it is: commits 8e8f0d6, 244e732, 19c4a68 and 63cbc4f, held back by commit ed41d51.
+Where it is: commits 8e8f0d6, 244e732, 19c4a68 and 63cbc4f (held back by ed41d51), brought back by 1756b83 with the
+realistic muscle map in ef605e6, and held back again by the commit that adds this line.
 
-To bring it back: `git revert ed41d51`, then `node tools/update-hashes.js` and the tests (tests/analysis.js comes back too).
+To bring it back: `git revert <that hold-back commit>` (see `git log -- design/pending/program-analysis`), then
+`node tools/update-hashes.js` and the tests (tests/analysis.js comes back too).
 Try-out copy: https://claude.ai/artifact/2CbnN3NUxPRS4jrwTXtHNm

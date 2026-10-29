@@ -66,7 +66,7 @@ function reporter(){
            note: (check, info) => results.push({ check, result: 'NOTE', info: info === undefined ? '' : String(info) }) };
 }
 
-const CONSOLE_TESTS = ['smoke', 'logger', 'movements', 'library', 'analysis'];
+const CONSOLE_TESTS = ['smoke', 'logger', 'movements', 'library'];
 const SUITES = {
   ...Object.fromEntries(CONSOLE_TESTS.map(name => [name, async (browser, base) => {
     const { ctx, page } = await openApp(browser, base);
